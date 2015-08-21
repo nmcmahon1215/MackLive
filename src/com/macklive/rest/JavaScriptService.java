@@ -28,6 +28,7 @@ public class JavaScriptService {
 
 		//Get Common Files
 		String pathName = context.getRealPath("/js/common");
+		
 		if (pathName != null){
 			File commonFiles = new File(context.getRealPath("/js/common"));
 			for (File f : commonFiles.listFiles()){
