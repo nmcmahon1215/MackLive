@@ -2,11 +2,32 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jersey"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="Jersey/aopalliance-repackaged-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="Jersey/asm-debug-all-5.0.4.jar"/>
+	<classpathentry kind="lib" path="Jersey/hk2-api-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="Jersey/hk2-locator-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="Jersey/hk2-utils-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="Jersey/javassist-3.18.1-GA.jar"/>
+	<classpathentry kind="lib" path="Jersey/javax.annotation-api-1.2.jar"/>
+	<classpathentry kind="lib" path="Jersey/javax.inject-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="Jersey/javax.servlet-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="Jersey/javax.ws.rs-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jersey/jaxb-api-2.2.7.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-client.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-common.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-container-servlet-core.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-container-servlet.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-guava-2.21.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-media-jaxb.jar"/>
+	<classpathentry kind="lib" path="Jersey/jersey-server.jar"/>
+	<classpathentry kind="lib" path="Jersey/org.osgi.core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="Jersey/osgi-resource-locator-1.0.1.jar"/>
+	<classpathentry kind="lib" path="Jersey/persistence-api-1.0.jar"/>
+	<classpathentry kind="lib" path="Jersey/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
