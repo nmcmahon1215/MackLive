@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Mack Report Live</title>
+	<link rel="Stylesheet" href="/css/console.css" type="text/css" />
+	<script language='javascript' type="text/javascript" src='/api/js/console'></script>
+	<script language='javascript' type="text/javascript">
+		var console;
+		var commentApproval;
+		var scoreBoard;
+		$j(document).ready(function() {
+			console = new LiveBlogConsole("liveBlogContainer");
+			console.render();
+			scoreBoard = new ScoreBoardConsole("scoreBoardContainer");
+			scoreBoard.render();
+		});
+	</script>
+</head>
+
+<body>
+	<div class="consoleContainer">
+		<div>
+			<img class="floatL headerImage" src="/images/MRL_logo.png">
+		</div>
+		<div class="floatL userBoxSize"
+			style="clear: left; margin-right: 10px;">
+			<div id='commentApprovalContainer' class="halfHeight userBoxStyle">
+				<h2>Comment Approvals</h2>
+				<div class="consoleScrollerComments"></div>
+			</div>
+			<div id='scoreBoardContainer' class='halfHeight userBoxStyle'>
+				<h2>Scoreboard Control</h2>
+			</div>
+		</div>
+		<div id='liveBlogContainer' class="floatR userBoxSize userBoxStyle"
+			style="clear: right; margin-left: 10px;"></div>
+	</div>
+</body>
+</html>
