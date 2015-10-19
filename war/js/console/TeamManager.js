@@ -69,7 +69,7 @@ TeamManagerConsole.prototype = {
 			xhr.addEventListener("error", function(){alert("Upload Failed!")});
 			xhr.addEventListener("abort", function(){alert("Upload Canceled!")});
 			
-			xhr.open("POST", "/mackreportlive/api/teams");
+			xhr.open("POST", "/api/teams");
 			xhr.send(formData);
 		}
 };
