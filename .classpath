@@ -29,5 +29,7 @@
 	<classpathentry kind="lib" path="Jersey/osgi-resource-locator-1.0.1.jar"/>
 	<classpathentry kind="lib" path="Jersey/persistence-api-1.0.jar"/>
 	<classpathentry kind="lib" path="Jersey/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-media-multipart-2.22.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/mimepull-1.9.6.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
