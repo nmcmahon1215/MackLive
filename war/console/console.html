@@ -7,11 +7,13 @@
 	<script language='javascript' type="text/javascript" src='/api/js/console'></script>
 	<script language='javascript' type="text/javascript">
 		var console;
+		var liveConsole
 		var commentApproval;
 		var scoreBoard;
 		$j(document).ready(function() {
-			console = new LiveBlogConsole("liveBlogContainer");
-			console.render();
+			console = new Console();
+			liveConsole = new LiveBlogConsole("liveBlogContainer");
+			liveConsole.render();
 			scoreBoard = new ScoreBoardConsole("scoreBoardContainer");
 			scoreBoard.render();
 		});
@@ -22,6 +24,17 @@
 	<div class="consoleContainer">
 		<div>
 			<img class="floatL headerImage" src="/images/MRL_logo.png">
+		</div>
+		<div style="display:inline-block; margin-left: 15px;">
+			<h1 id="gameTitle" style="color:white; font-size:25px;">Current Game: </h1>
+		</div>
+		<div class="floatR">
+			<select id="gamePicker">
+				<option>Select Recent Game</option>
+			</select>
+			<input id="loadButton" type="button" value="Load">
+			<p style="display:inline; margin:10px;">or</p>
+			<input id="createButton" class="green" type="button" value="Create New Game">
 		</div>
 		<div class="floatL userBoxSize"
 			style="clear: left; margin-right: 10px;">
