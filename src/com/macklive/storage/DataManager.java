@@ -37,7 +37,13 @@ public class DataManager {
         return dstore.put(obj.getEntity());
     }
     
-    public Team getTeamByName(String name) throws TooManyResultsException, EntityMismatchException{
+    /**
+     * Finds a team by its name in the data store
+     * @param name Unique name of the team
+     * @return The team with the given name.
+     * @throws TooManyResultsException If more than one team with the give name exists
+     */
+    public Team getTeamByName(String name) throws TooManyResultsException {
         Query q = new Query("Team");
         q.setFilter(new FilterPredicate("Name", FilterOperator.EQUAL, name));
         
@@ -47,9 +53,18 @@ public class DataManager {
             return null;
         }
         
-        return new Team(e);
+        try {
+            return new Team(e);
+        } catch (EntityMismatchException e1) {
+            e1.printStackTrace();
+            return null;
+        }
     }
 
+    /**
+     * Returns a list of all the teams in the data store
+     * @return A list of all the teams in the data store.
+     */
     public List<Team> getTeams() {
         Query q = new Query("Team");
         
@@ -65,6 +80,12 @@ public class DataManager {
         return result;
     }
     
+    /**
+     * Returns the entity with the given key
+     * @param k The key to use as the lookup value
+     * @return An entity with that unique key in the data store
+     * @throws EntityNotFoundException if the key is not in the data store.
+     */
     public Entity getEntityWithKey(Key k) throws EntityNotFoundException{
         return dstore.get(k);
     }

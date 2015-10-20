@@ -121,7 +121,7 @@ public class Team implements IBusinessObject {
         
         try {
             return DataManager.getInstance().getTeamByName(this.name).getKey();
-        } catch (TooManyResultsException | EntityMismatchException e) {
+        } catch (TooManyResultsException e) {
             e.printStackTrace();
             return null;
         }
