@@ -1,5 +1,7 @@
 package com.macklive.objects;
 
+import java.util.Date;
+
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
@@ -8,6 +10,7 @@ import com.macklive.storage.DataManager;
 
 public class Game implements IBusinessObject{
 
+    private Date created;
     private Team team1;
     private Team team2;
     private int team1goals;
@@ -33,6 +36,7 @@ public class Game implements IBusinessObject{
         this.team2sog = 0;
         this.time = "";
         this.period = 1;
+        this.created = new Date();
     }
     
     /**
@@ -57,6 +61,7 @@ public class Game implements IBusinessObject{
         e.setProperty("T2Penalty", this.team2penalty);
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
+        e.setProperty("Date", this.created);
         return null;
     }
 
@@ -75,6 +80,7 @@ public class Game implements IBusinessObject{
                 this.team2penalty = (boolean) e.getProperty("T2Penalty");
                 this.time = (String) e.getProperty("Time");
                 this.period = (int) e.getProperty("Period");
+                this.created = (Date) e.getProperty("Date");
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
                 e1.printStackTrace();

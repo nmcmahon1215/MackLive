@@ -13,7 +13,9 @@ import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.macklive.exceptions.EntityMismatchException;
+import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
 import com.macklive.objects.Team;
 
@@ -88,5 +90,35 @@ public class DataManager {
      */
     public Entity getEntityWithKey(Key k) throws EntityNotFoundException{
         return dstore.get(k);
+    }
+
+    /**
+     * Gets the 5 most recent games
+     * @return The five most recent games
+     */
+    public List<Game> getRecentGames() {
+        Query q = new Query("Game");
+        q.addSort("Date", SortDirection.DESCENDING);
+
+        Iterable<Entity> queryResults = dstore.prepare(q).asIterable();
+
+        List<Game> result = new ArrayList<Game>();
+        try {
+
+            for (int i = 0; i < 5; i++){
+                if (queryResults.iterator().hasNext()){
+                    result.add(new Game(queryResults.iterator().next()));
+                } else {
+                    break;
+                }
+            }
+
+            return result;
+
+        } catch (EntityMismatchException e) {
+            e.printStackTrace();
+            //If it fails, return an empty list
+            return new ArrayList<Game>();
+        }
     }
 }
