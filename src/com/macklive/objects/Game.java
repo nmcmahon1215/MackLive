@@ -35,7 +35,14 @@ public class Game implements IBusinessObject{
         this.period = 1;
     }
     
-    
+    /**
+     * Constructor from 
+     * @param e
+     * @throws EntityMismatchException
+     */
+    public Game (Entity e) throws EntityMismatchException{
+        this.loadEntity(e);
+    }
     
     @Override
     public Entity getEntity() {
@@ -50,27 +57,31 @@ public class Game implements IBusinessObject{
         e.setProperty("T2Penalty", this.team2penalty);
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void loadEntity(Entity e) throws EntityMismatchException {
-        try {
-            DataManager dstore = DataManager.getInstance();
-            this.team1 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team1")));
-            this.team2 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team2")));
-            this.team1goals = (int) e.getProperty("T1Score");
-            this.team2goals = (int) e.getProperty("T2Score");
-            this.team1sog = (int) e.getProperty("T1SOG");
-            this.team2sog = (int) e.getProperty("T2SOG");
-            this.team1penalty = (boolean) e.getProperty("T1Penalty");
-            this.team2penalty = (boolean) e.getProperty("T2Penalty");
-            this.time = (String) e.getProperty("Time");
-            this.period = (int) e.getProperty("Period");
-        } catch (EntityNotFoundException e1) {
-            System.err.println("Could not find team!");
-            e1.printStackTrace();
+        if (e.getKind().equals("Game")){
+            try {
+                DataManager dstore = DataManager.getInstance();
+                this.team1 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team1")));
+                this.team2 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team2")));
+                this.team1goals = (int) e.getProperty("T1Score");
+                this.team2goals = (int) e.getProperty("T2Score");
+                this.team1sog = (int) e.getProperty("T1SOG");
+                this.team2sog = (int) e.getProperty("T2SOG");
+                this.team1penalty = (boolean) e.getProperty("T1Penalty");
+                this.team2penalty = (boolean) e.getProperty("T2Penalty");
+                this.time = (String) e.getProperty("Time");
+                this.period = (int) e.getProperty("Period");
+            } catch (EntityNotFoundException e1) {
+                System.err.println("Could not find team!");
+                e1.printStackTrace();
+            }
+        } else {
+            throw new EntityMismatchException("Expected entity of type \"Team\","
+                    + "but received \"" + e.getKind());
         }
     }
 
