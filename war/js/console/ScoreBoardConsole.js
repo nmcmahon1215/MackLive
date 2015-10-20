@@ -29,10 +29,12 @@ ScoreBoardConsole.prototype = {
 		this.team1Selector = document.createElement("select");
 		this.team1Selector.id = "team1select";
 		this.team1Selector.className = "teamSelect";
+		this.initializeTeams(this.team1Selector);
 		
 		this.team2Selector = document.createElement("select");
 		this.team2Selector.id = "team2select";
 		this.team2Selector.className = "teamSelect";
+		this.initializeTeams(this.team2Selector);
 		
 		this._addRowToTable(tableBody, [this.team1Selector], [this.team2Selector], "Team");
 		
@@ -117,4 +119,24 @@ ScoreBoardConsole.prototype = {
 		tableBody.appendChild(row);
 		return row;
 	},
+	initializeTeams: function(comboBox){
+		$j.ajax({
+			url: location.protocol + '//' + location.host + "/api/teams",
+			context: this,
+			success: function(response){
+				var teams = response.split(",");
+				teams.forEach(function(team){
+					if (team != ""){
+						var element = document.createElement("option");
+						element.innerHTML = team;
+						comboBox.appendChild(element);
+					}
+				});
+			},
+			error: function (response) {
+				alert("Could not fetch teams!");
+			}
+			
+		})
+	}
 }
