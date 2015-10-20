@@ -5,7 +5,10 @@ package com.macklive.objects;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.macklive.exceptions.EntityMismatchException;
+import com.macklive.storage.DataManager;
 
 /**
  * Describes a team, which has a name, abbreviation, and logo image
@@ -15,6 +18,7 @@ public class Team implements IBusinessObject {
     private String name;
     private String abbr;
     private Blob logo;
+    private Key key;
 
     /**
      * Constructor for a team. This does not set the team's logo
@@ -51,7 +55,12 @@ public class Team implements IBusinessObject {
      */
     @Override
     public Entity getEntity() {
-        Entity e = new Entity("Team");
+        Entity e;
+        if (this.key != null){
+            e = new Entity(this.key);
+        } else {
+            e = new Entity("Team");
+        }
         
         e.setProperty("Name", this.name);
         e.setProperty("Abbr", this.abbr);
@@ -72,6 +81,7 @@ public class Team implements IBusinessObject {
             this.name = (String) e.getProperty("Name");
             this.abbr = (String) e.getProperty("Abbr");
             this.logo = (Blob) e.getProperty("Logo");
+            this.key = e.getKey();
             
         } else {
             throw new EntityMismatchException("Expected entity of type \"Team\","
@@ -102,5 +112,18 @@ public class Team implements IBusinessObject {
 
     public void setLogo(Blob logo) {
         this.logo = logo;
+    }
+
+    public Key getKey() {
+        if (this.key != null){
+            return this.key;
+        }
+        
+        try {
+            return DataManager.getInstance().getTeamByName(this.name).getKey();
+        } catch (TooManyResultsException | EntityMismatchException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

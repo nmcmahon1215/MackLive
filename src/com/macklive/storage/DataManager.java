@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
@@ -62,5 +63,9 @@ public class DataManager {
             }
         }
         return result;
+    }
+    
+    public Entity getEntityWithKey(Key k) throws EntityNotFoundException{
+        return dstore.get(k);
     }
 }
