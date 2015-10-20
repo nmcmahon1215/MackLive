@@ -7,29 +7,43 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="Jersey/aopalliance-repackaged-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="Jersey/asm-debug-all-5.0.4.jar"/>
-	<classpathentry kind="lib" path="Jersey/hk2-api-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="Jersey/hk2-locator-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="Jersey/hk2-utils-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="Jersey/javassist-3.18.1-GA.jar"/>
-	<classpathentry kind="lib" path="Jersey/javax.annotation-api-1.2.jar"/>
-	<classpathentry kind="lib" path="Jersey/javax.inject-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="Jersey/javax.servlet-api-3.0.1.jar"/>
-	<classpathentry kind="lib" path="Jersey/javax.ws.rs-api-2.0.1.jar"/>
-	<classpathentry kind="lib" path="Jersey/jaxb-api-2.2.7.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-client.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-common.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-container-servlet-core.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-container-servlet.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-guava-2.21.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-media-jaxb.jar"/>
-	<classpathentry kind="lib" path="Jersey/jersey-server.jar"/>
-	<classpathentry kind="lib" path="Jersey/org.osgi.core-4.2.0.jar"/>
-	<classpathentry kind="lib" path="Jersey/osgi-resource-locator-1.0.1.jar"/>
-	<classpathentry kind="lib" path="Jersey/persistence-api-1.0.jar"/>
-	<classpathentry kind="lib" path="Jersey/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance-repackaged-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-1.0-sdk-1.9.25.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-labs.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-endpoints-deps.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-endpoints.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-jsr107cache-1.9.25.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-4.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-debug-all-5.0.4.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-api-jdo-3.1.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-api-jpa-3.1.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-2.1.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-core-3.1.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_2.0_spec-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-api-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-locator-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-utils-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.18.1-GA.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.annotation-api-1.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.inject-2.4.0-b31.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.servlet-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.ws.rs-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jaxb-api-2.2.7.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jdo-api-3.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-common.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-container-servlet-core.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-container-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-guava-2.21.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-media-jaxb.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-media-multipart-2.22.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr107cache-1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/mimepull-1.9.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/org.osgi.core-4.2.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/osgi-resource-locator-1.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/persistence-api-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
