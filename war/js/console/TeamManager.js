@@ -65,7 +65,10 @@ TeamManagerConsole.prototype = {
 				formData.append("teamLogo", this.uploadButton.files[0]);
 			}
 			
-			xhr.addEventListener("load", function(){alert("Upload complete!")});
+			xhr.addEventListener("load", function(){
+				window.opener.location.reload();
+				window.close();
+			});
 			xhr.addEventListener("error", function(){alert("Upload Failed!")});
 			xhr.addEventListener("abort", function(){alert("Upload Canceled!")});
 			
