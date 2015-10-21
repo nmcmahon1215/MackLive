@@ -13,7 +13,7 @@ Console = function() {
 
 Console.prototype = {
 	initialize: function() {
-		this.titleElement.innerHTML = "<div style='background:red; font-weight:bold;'>No game selected.</div>";
+		this.titleElement.innerHTML = "<div style='background:red;'>No game selected.</div>";
 		this.loadRecentGames();
 		
 		$j(this.createButton).click(this.createGame.bind(this));
