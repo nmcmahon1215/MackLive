@@ -25,6 +25,14 @@ Console.prototype = {
 			this.titleElement.innerHTML = "Current Game: " + this.gameName;
 			$j(this.titleElement).slideDown();
 		}.bind(this));
+		if (this.gameId){
+			var idMessage = document.createElement("div");
+			idMessage.style.position = "absolute";
+			idMessage.style.right = "0px";
+			idMessage.style.marginTop = "5px";
+			idMessage.innerHTML = "Game id: " + this.gameId;
+			this.loadButton.parentElement.appendChild(idMessage);
+		}
 	},
 	loadRecentGames: function() {
 		$j.ajax({
