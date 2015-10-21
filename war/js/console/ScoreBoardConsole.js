@@ -80,7 +80,7 @@ ScoreBoardConsole.prototype = {
 		this.periodBox.type = "number";
 		this.periodBox.min = 0;
 		this.periodBox.max = 5;
-		this.periodBox.value = 0;
+		this.periodBox.value = 1;
 		this.periodBox.className = "shotsBox";
 		this._addRowToTable(tableBody, [this.periodBox], [], "Period");
 		
@@ -140,5 +140,44 @@ ScoreBoardConsole.prototype = {
 			}
 			
 		})
-	}
+	},
+	updateInfo: function (game) {
+		var t1id = this.getIdFromKey(game.Team1);
+		var t2id = this.getIdFromKey(game.Team2);
+		var t1found = false;
+		var t2found = false;
+		
+		for (var i = 0; i < this.team1Selector.children.length; i++){
+			if (this.team1Selector.children[i].id == t1id){
+				this.team1Selector.selectedIndex = i;
+				t1found = true;
+				break;
+			}
+		}
+		
+		for (var i = 0; i < this.team2Selector.children.length; i++){
+			if (this.team2Selector.children[i].id == t2id){
+				this.team2Selector.selectedIndex = i;
+				t2found = true;
+				break;
+			}
+		}
+		
+		if (!t1found || !t2found) {
+			alert("Error loading game: " + game.Name);
+		}
+		
+		this.team1ScoreBox.value = game.T1Score;
+		this.team2ScoreBox.value = game.T2Score;
+		this.team1ShotsBox.value = game.T1SOG;
+		this.team2ShotsBox.value = game.T2SOG;
+		this.team1PenaltyBox.checked = game.T1Penalty == "true";
+		this.team2PenaltyBox.checked = game.T2Penalty == "true";
+		this.timeBox.value = game.Time;
+		this.periodBox.value = game.Period;
+		
+	},
+	getIdFromKey: function (key){
+		return +key.substring(key.indexOf("(") + 1, key.indexOf(")"));
+	},
 }
