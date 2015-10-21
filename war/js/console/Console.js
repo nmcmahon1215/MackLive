@@ -17,6 +17,7 @@ Console.prototype = {
 		this.loadRecentGames();
 		
 		$j(this.createButton).click(this.createGame.bind(this));
+		$j(this.loadButton).click(this.loadGame.bind(this));
 	},
 
 	setGameName: function (name) {
@@ -39,20 +40,42 @@ Console.prototype = {
 	loadRecentGames: function() {
 		$j.ajax({
 			url: location.protocol + '//' + location.host + "/api/game/recent/5",
+			dataType: "json",
 			context: this,
 			success: function(response) {
-				var games = response.split(",");
+				var games = response.games;
 				this.gamePicker.innerHTML = "<option>Select A Game...</option>";
+				if (!games) {
+					return;
+				}
 				games.forEach(function (game){
 					if (game != ""){
-						this.gamePicker.innerHTML += "<option>" + game + "</option>";
+						this.gamePicker.innerHTML += "<option id=" + game.id + ">" + game.Name + "</option>";
 					}
 				});
 			},
-			failure: function(response) {
+			error: function(response, errorType, errorMessage) {
 				alert("Could not fetch recent games.");
 			}
 		})
+	},
+	loadGame: function () {
+		var game = this.gamePicker.children[this.gamePicker.selectedIndex];
+		this.gameId = game.id;
+		this.setGameName(game.value);
+		
+		$j.ajax({
+			url: location.protocol + '//' + location.host + "/api/game/" + this.gameId,
+			method:"GET",
+			dataType: "json",
+			context: this,
+			success: function (response) {
+				scoreBoard.updateInfo(response);
+			},
+			error: function (response, errorType, errorStuff) {
+				debugger;
+			},
+		});
 	},
 	createGame: function () {
 		var today = new Date();

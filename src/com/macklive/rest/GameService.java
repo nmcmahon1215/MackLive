@@ -29,14 +29,24 @@ public class GameService {
     @Path("/recent/{num}")
     public String getRecentGames(@PathParam("num") int number){
         List<Game> games = DataManager.getInstance().getRecentGames(number);
-        String result = "";
         
-        for (Game g : games){
-            result += g.toString();
-            result += ",";
+        JSONUtility jsu = new JSONUtility();
+        jsu.addProperty("games", games);
+        
+        return jsu.getJSON();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{idNum}")
+    public String getGameById(@PathParam("idNum") long idNum){
+        Key k = KeyFactory.createKey("Game", idNum);
+        try {
+            Game g = new Game(DataManager.getInstance().getEntityWithKey(k));
+            return JSONUtility.build(g).getJSON();
+        } catch (EntityMismatchException | EntityNotFoundException e) {
+            return "{}";
         }
-        
-        return result;
     }
     
     @POST
