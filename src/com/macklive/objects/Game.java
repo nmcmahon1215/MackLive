@@ -1,5 +1,6 @@
 package com.macklive.objects;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
@@ -62,7 +63,7 @@ public class Game implements IBusinessObject{
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
         e.setProperty("Date", this.created);
-        return null;
+        return e;
     }
 
     @Override
@@ -72,14 +73,14 @@ public class Game implements IBusinessObject{
                 DataManager dstore = DataManager.getInstance();
                 this.team1 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team1")));
                 this.team2 = new Team(dstore.getEntityWithKey((Key)e.getProperty("Team2")));
-                this.team1goals = (int) e.getProperty("T1Score");
-                this.team2goals = (int) e.getProperty("T2Score");
-                this.team1sog = (int) e.getProperty("T1SOG");
-                this.team2sog = (int) e.getProperty("T2SOG");
+                this.team1goals = ((Long) e.getProperty("T1Score")).intValue();
+                this.team2goals = ((Long) e.getProperty("T2Score")).intValue();
+                this.team1sog = ((Long) e.getProperty("T1SOG")).intValue();
+                this.team2sog = ((Long) e.getProperty("T2SOG")).intValue();
                 this.team1penalty = (boolean) e.getProperty("T1Penalty");
                 this.team2penalty = (boolean) e.getProperty("T2Penalty");
                 this.time = (String) e.getProperty("Time");
-                this.period = (int) e.getProperty("Period");
+                this.period = ((Long) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
@@ -91,7 +92,16 @@ public class Game implements IBusinessObject{
         }
     }
 
-
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+        String result = sdf.format(this.created);
+        result += " - ";
+        result += this.team1.getAbbr();
+        result += " - ";
+        result += this.team2.getAbbr();
+        return result;
+    }
 
     public int getTeam1goals() {
         return team1goals;
