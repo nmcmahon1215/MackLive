@@ -8,6 +8,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
+import com.macklive.utility.JSONUtility;
 
 public class Game implements IBusinessObject{
 
@@ -69,7 +70,7 @@ public class Game implements IBusinessObject{
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
         e.setProperty("Date", this.created);
-        e.setProperty("Name", this.toString());
+        e.setProperty("Name", this.getName());
         return e;
     }
 
@@ -99,9 +100,13 @@ public class Game implements IBusinessObject{
                     + "but received \"" + e.getKind());
         }
     }
-
-    @Override
-    public String toString() {
+    
+    /**
+     * Generates the name of the game based on the date it was created
+     * and the teams playing in the game
+     * @return A string that represents the name of the game.
+     */
+    public String getName() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
         String result = sdf.format(this.created);
         result += " - ";
@@ -109,6 +114,15 @@ public class Game implements IBusinessObject{
         result += " - ";
         result += this.team2.getAbbr();
         return result;
+    }
+    
+    /**
+     * Overrides the toString method to produce a JSON version
+     * of this game object.
+     */
+    @Override
+    public String toString() {
+        return JSONUtility.build(this).getJSON();
     }
 
     public int getTeam1goals() {
