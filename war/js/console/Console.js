@@ -26,12 +26,14 @@ Console.prototype = {
 			$j(this.titleElement).slideDown();
 		}.bind(this));
 		if (this.gameId){
-			var idMessage = document.createElement("div");
-			idMessage.style.position = "absolute";
-			idMessage.style.right = "0px";
-			idMessage.style.marginTop = "5px";
-			idMessage.innerHTML = "Game id: " + this.gameId;
-			this.loadButton.parentElement.appendChild(idMessage);
+			if (!this.idMessage){
+				this.idMessage = document.createElement("div");
+				this.idMessage.style.position = "absolute";
+				this.idMessage.style.right = "0px";
+				this.idMessage.style.marginTop = "5px";
+				this.loadButton.parentElement.appendChild(this.idMessage);
+			}
+			this.idMessage.innerHTML = "Game id: " + this.gameId;
 		}
 	},
 	loadRecentGames: function() {
