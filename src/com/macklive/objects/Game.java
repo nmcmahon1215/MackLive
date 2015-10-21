@@ -69,6 +69,7 @@ public class Game implements IBusinessObject{
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
         e.setProperty("Date", this.created);
+        e.setProperty("Name", this.toString());
         return e;
     }
 
