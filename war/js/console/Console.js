@@ -43,21 +43,25 @@ Console.prototype = {
 	},
 	createGame: function () {
 		var today = new Date();
-		var team1 = document.getElementById("team1select").value;
-		var team2 = document.getElementById("team2select").value;
+		var team1select = document.getElementById("team1select");
+		var team2select = document.getElementById("team2select");
+		
+		var team1 = team1select.children[team1select.selectedIndex];
+		var team2 = team2select.children[team2select.selectedIndex];
 		
 		$j.ajax({
 			url:location.protocol + '//' + location.host + "/api/game",
 			method: "POST",
 			contentType: "text/plain",
-			dataType: "application/json",
-			data: team1 + "," + team2,
+			dataType: "json",
+			data: team1.id + "," + team2.id,
 			context: this,
+			timeout: 2000,
 			success: function(response){
 				this.gameId = response.id;
-				this.setGameName(response.name);
+				this.setGameName(response.Name);
 			},
-			failure: function (response) {
+			error: function (response, errorType, errorThrown) {
 				alert("Failed to create new game.");
 			},
 		})

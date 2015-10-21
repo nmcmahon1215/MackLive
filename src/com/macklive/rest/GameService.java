@@ -1,6 +1,5 @@
 package com.macklive.rest;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,7 +10,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
@@ -40,23 +42,21 @@ public class GameService {
     @POST
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public String createNewGame(String teams){
+    public String createNewGame(String teams) throws EntityMismatchException, EntityNotFoundException{
         String[] teamNames = teams.split(",");
-        String team1Name = teamNames[0];
-        String team2Name = teamNames[1];
+        String team1Id = teamNames[0];
+        String team2Id = teamNames[1];
         
         DataManager dstore = DataManager.getInstance();
-        Team t1 = dstore.getTeamByName(team1Name);
-        Team t2 = dstore.getTeamByName(team2Name);
+        Key k1 = KeyFactory.createKey("Team", Long.parseLong(team1Id));
+        Key k2 = KeyFactory.createKey("Team", Long.parseLong(team2Id));
+        Team t1 = new Team(dstore.getEntityWithKey(k1));
+        Team t2 = new Team(dstore.getEntityWithKey(k2));
         
         Game g = new Game(t1, t2);
         
         Key k = dstore.storeItem(g);
         
-        JSONUtility jsu= new JSONUtility();
-        jsu.addProperty("id", k.getId());
-        jsu.addProperty("name", g);
-        
-        return jsu.getJSON();
+        return JSONUtility.build(g, k).getJSON();
     }
 }
