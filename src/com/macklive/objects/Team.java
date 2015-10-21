@@ -9,6 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
+import com.macklive.utility.JSONUtility;
 
 /**
  * Describes a team, which has a name, abbreviation, and logo image
@@ -125,5 +126,13 @@ public class Team implements IBusinessObject {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    /**
+     * Overrides the toString method to return the name of the team
+     */
+    @Override
+    public String toString(){
+        return JSONUtility.build(this).getJSON();
     }
 }

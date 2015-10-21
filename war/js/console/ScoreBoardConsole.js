@@ -123,12 +123,14 @@ ScoreBoardConsole.prototype = {
 		$j.ajax({
 			url: location.protocol + '//' + location.host + "/api/teams",
 			context: this,
+			dataType: "json",
 			success: function(response){
-				var teams = response.split(",");
+				var teams = response.teams;
 				teams.forEach(function(team){
 					if (team != ""){
 						var element = document.createElement("option");
-						element.innerHTML = team;
+						element.setAttribute("id", team.id);
+						element.innerHTML = team.Name;
 						comboBox.appendChild(element);
 					}
 				});
