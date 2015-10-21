@@ -22,6 +22,7 @@ public class Game implements IBusinessObject{
     private boolean team2penalty;
     private String time;
     private int period;
+    private Key key;
     
     /**
      * Constructor
@@ -51,7 +52,12 @@ public class Game implements IBusinessObject{
     
     @Override
     public Entity getEntity() {
-        Entity e = new Entity("Game");
+        Entity e;
+        if (this.key != null){
+            e = new Entity(this.key);
+        } else {
+            e = new Entity("Game");
+        }
         e.setProperty("Team1", team1.getKey());
         e.setProperty("Team2", team2.getKey());
         e.setProperty("T1Score", this.team1goals);
@@ -82,6 +88,7 @@ public class Game implements IBusinessObject{
                 this.time = (String) e.getProperty("Time");
                 this.period = ((Long) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
+                this.key = e.getKey();
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
                 e1.printStackTrace();
