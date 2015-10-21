@@ -57,6 +57,6 @@ public class GameService {
         jsu.addProperty("id", k.getId());
         jsu.addProperty("name", g);
         
-        return jsu.getJSON()3;
+        return jsu.getJSON();
     }
 }
