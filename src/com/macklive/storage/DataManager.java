@@ -94,23 +94,20 @@ public class DataManager {
 
     /**
      * Gets the 5 most recent games
+     * @param numGames The cap on games to return
      * @return The five most recent games
      */
-    public List<Game> getRecentGames() {
+    public List<Game> getRecentGames(int numGames) {
         Query q = new Query("Game");
         q.addSort("Date", SortDirection.DESCENDING);
 
-        Iterable<Entity> queryResults = dstore.prepare(q).asIterable();
+        List<Entity> queryResults = dstore.prepare(q).asList(FetchOptions.Builder.withLimit(numGames));
 
         List<Game> result = new ArrayList<Game>();
         try {
 
-            for (int i = 0; i < 5; i++){
-                if (queryResults.iterator().hasNext()){
-                    result.add(new Game(queryResults.iterator().next()));
-                } else {
-                    break;
-                }
+            for (Entity e : queryResults){
+                result.add(new Game(e));
             }
 
             return result;
