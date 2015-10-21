@@ -13,15 +13,18 @@ Console = function() {
 
 Console.prototype = {
 	initialize: function() {
-		this.setGameName("N/A");
+		this.titleElement.innerHTML = "<div style='background:red; font-weight:bold;'>No game selected.</div>";
 		this.loadRecentGames();
 		
 		$j(this.createButton).click(this.createGame.bind(this));
 	},
 
 	setGameName: function (name) {
-		this.gameName = name;
-		this.titleElement.innerHTML = "Current Game: " + this.gameName;
+		$j(this.titleElement).slideUp(500, function(){
+			this.gameName = name;
+			this.titleElement.innerHTML = "Current Game: " + this.gameName;
+			$j(this.titleElement).slideDown();
+		}.bind(this));
 	},
 	loadRecentGames: function() {
 		$j.ajax({
