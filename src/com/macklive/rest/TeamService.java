@@ -40,7 +40,7 @@ public class TeamService {
             if (DataManager.getInstance().getTeamByName(name) != null){
                 return Response.status(409).build();
             }
-        } catch (TooManyResultsException | EntityMismatchException e1) {
+        } catch (TooManyResultsException e1) {
             e1.printStackTrace();
         }
 
