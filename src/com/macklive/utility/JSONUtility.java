@@ -39,4 +39,12 @@ public class JSONUtility {
         result += " }";
         return result;
     }
+    
+    /**
+     * Defaults the string output to be the JSON output.
+     * @return a string representation of the current properties
+     */
+    public String toString(){
+        return this.getJSON();
+    }
 }
