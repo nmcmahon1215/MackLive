@@ -24,7 +24,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
-import com.macklive.objects.IBusinessObject;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
 import com.macklive.utility.JSONUtility;

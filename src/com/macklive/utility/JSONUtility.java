@@ -14,7 +14,7 @@ import com.macklive.objects.IBusinessObject;
  */
 public class JSONUtility {
 
-    Map<String, Object> values;
+    private Map<String, Object> values;
     
     public JSONUtility(){
         values = new HashMap<String, Object>();
@@ -86,6 +86,7 @@ public class JSONUtility {
      * Defaults the string output to be the JSON output.
      * @return a string representation of the current properties
      */
+    @Override
     public String toString(){
         return this.getJSON();
     }
