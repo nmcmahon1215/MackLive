@@ -1,3 +1,12 @@
+<%@ page import="com.macklive.storage.DataManager" %>
+<%@ page import="com.macklive.objects.Team" %>
+<%@ page import="java.util.List" %>
+<%
+	DataManager dm = DataManager.getInstance();
+	List<Team> teams = dm.getTeams();
+%>
+
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -28,6 +37,11 @@
 				<label for="teamPicker">Team: </label>
 				<select id="teamPicker">
 					<option>[Add New]</option>
+					<% for (Team t : teams) { %>
+					
+					<option id='<%= t.getKey().getId() %>'><%= t.getName() %></option>
+					
+					<% } %>
 				</select>
 			</div>
 			<div>

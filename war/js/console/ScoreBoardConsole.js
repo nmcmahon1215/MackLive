@@ -15,7 +15,7 @@ ScoreBoardConsole.prototype = {
 		teamManageLink.href = "#";
 		teamManageLink.className = "topRight";
 		teamManageLink.onclick = function() {
-			window.open('teamManager.html', 'newwindow', 'width=800px, height=350px');
+			window.open('teamManager.jsp', 'newwindow', 'width=800px, height=350px');
 		}
 		
 		var table = document.createElement("table");
