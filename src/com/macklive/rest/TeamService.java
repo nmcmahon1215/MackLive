@@ -23,8 +23,11 @@ import javax.ws.rs.core.StreamingOutput;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
+import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
 import com.macklive.utility.JSONUtility;
@@ -118,5 +121,19 @@ public class TeamService {
         }
         
         return builder.build();
+    }
+
+    @GET
+    @Path("/{id}")
+    public String getTeam(@PathParam("id") long id) {
+        Key k = KeyFactory.createKey("Team", id);
+        try {
+            Team t = new Team(DataManager.getInstance().getEntityWithKey(k));
+            return t.toJSON();
+        } catch (EntityMismatchException | EntityNotFoundException e) {
+            Response.status(404);
+            e.printStackTrace();
+            return "Not Found";
+        }
     }
 }
