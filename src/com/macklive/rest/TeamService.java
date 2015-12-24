@@ -23,6 +23,7 @@ import javax.ws.rs.core.StreamingOutput;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
@@ -95,11 +96,12 @@ public class TeamService {
     }
     
     @GET
-    @Path("/image/{name}")
-    public Response getImage(@PathParam("name") String teamName){
+    @Path("/image/{id}")
+    public Response getImage(@PathParam("id") long id) {
         ResponseBuilder builder = Response.status(500);
         try {
-            Team t = DataManager.getInstance().getTeamByName(teamName);
+            Team t = new Team(DataManager.getInstance()
+                    .getEntityWithKey(KeyFactory.createKey("Team", id)));
             final byte[] imageBytes = t.getLogo().getBytes();
             builder.status(200).type("image/png").entity(new StreamingOutput(){
 
