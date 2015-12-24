@@ -25,6 +25,7 @@ TeamManagerConsole.prototype = {
 			$j(this.teamAbbr).keyup(this.validateSave.bind(this));
 			$j(this.uploadButton).change(this.previewImage.bind(this));
 			$j(this.saveButton).click(this.saveTeam.bind(this));
+			$j(this.teamPicker).change(this.loadTeam.bind(this));
 		},
 		/**
 		 * Determines if the save button should be enabled and applies it
@@ -74,6 +75,31 @@ TeamManagerConsole.prototype = {
 			
 			xhr.open("POST", "/api/teams");
 			xhr.send(formData);
+		},
+		/**
+		 * Loads a team into the manager
+		 */
+		loadTeam: function() {
+			var index = this.teamPicker.selectedIndex
+			var option = this.teamPicker.children[index];
+			
+			var id = option.id;
+			if (id && id != ""){
+				
+				$j.ajax({
+					url: location.protocol + '//' + location.host + "/api/teams/" + id,
+					dataType: "json",
+					context: this,
+					success: function(result) {
+						this.teamName.value = result.name;
+						this.teamAbbr.value = result.abbr;
+						this.teamLogo.src = location.protocol + '//' + location.host + '/api/teams/' + id;
+					},
+					error: function() {
+						alert("Team loading failed.");
+					}
+				});
+			}
 		}
 };
 
