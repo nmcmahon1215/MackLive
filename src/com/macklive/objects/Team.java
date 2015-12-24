@@ -14,7 +14,7 @@ import com.macklive.utility.JSONUtility;
 /**
  * Describes a team, which has a name, abbreviation, and logo image
  */
-public class Team implements IBusinessObject {
+public class Team extends AbsBusinessObject implements IBusinessObject {
 
     private String name;
     private String abbr;

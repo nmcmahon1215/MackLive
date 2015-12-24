@@ -10,7 +10,7 @@ import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
 import com.macklive.utility.JSONUtility;
 
-public class Game implements IBusinessObject{
+public class Game extends AbsBusinessObject implements IBusinessObject {
 
     private Date created;
     private Team team1;
