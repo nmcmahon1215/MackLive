@@ -6,6 +6,7 @@ ScoreBoardConsole = function(containerId) {
 	this.containerId = containerId;
 	this.container = document.getElementById(containerId);
 	this.$container = $j(this.container);
+	this.teams = null;
 };
 
 ScoreBoardConsole.prototype = {
@@ -29,12 +30,12 @@ ScoreBoardConsole.prototype = {
 		this.team1Selector = document.createElement("select");
 		this.team1Selector.id = "team1select";
 		this.team1Selector.className = "teamSelect";
-		this.initializeTeams(this.team1Selector);
 		
 		this.team2Selector = document.createElement("select");
 		this.team2Selector.id = "team2select";
 		this.team2Selector.className = "teamSelect";
-		this.initializeTeams(this.team2Selector);
+		
+		this.initializeTeams();
 		
 		this._addRowToTable(tableBody, [this.team1Selector], [this.team2Selector], "Team");
 		
@@ -119,20 +120,52 @@ ScoreBoardConsole.prototype = {
 		tableBody.appendChild(row);
 		return row;
 	},
-	initializeTeams: function(comboBox){
+	initializeTeams: function(){
 		$j.ajax({
 			url: location.protocol + '//' + location.host + "/api/teams",
 			context: this,
 			dataType: "json",
 			success: function(response){
+				
+				this.teams = response;
+				
+				$j(this.team1Selector).on("change", function() {
+					var t1Index = this.team1Selector.selectedIndex;
+					var t2Index = this.team2Selector.selectedIndex;
+					
+					this.team2Selector.innerHTML = "";
+					
+					for (var i = 0; i < this.teams.length; i++){
+						if (i != this.team1Selector.selectedIndex){
+							var element = document.createElement("option");
+							element.setAttribute("id", this.teams[i].key.id);
+							element.innerHTML = this.teams[i].name;
+							this.team2Selector.appendChild(element);
+						}
+					};
+					
+					var index;
+					
+					if (t1Index < t2Index){
+						index = t2Index - 1;
+					} else {
+						index = Math.max(t2Index, 0);
+					}
+					
+					this.team2Selector.selectedIndex = index;
+					
+				}.bind(this))
+				
 				response.forEach(function(team){
 					if (team != ""){
 						var element = document.createElement("option");
 						element.setAttribute("id", team.key.id);
 						element.innerHTML = team.name;
-						comboBox.appendChild(element);
+						this.team1Selector.appendChild(element);
 					}
-				});
+				}.bind(this));
+				
+				$j(this.team1Selector).trigger("change");
 			},
 			error: function (response) {
 				alert("Could not fetch teams!");
