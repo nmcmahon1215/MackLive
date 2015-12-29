@@ -36,7 +36,9 @@ public class DataManager {
     }
     
     public Key storeItem(IBusinessObject obj){
-        return dstore.put(obj.getEntity());
+        Key k = dstore.put(obj.getEntity());
+        obj.setKey(k);
+        return k;
     }
     
     /**
