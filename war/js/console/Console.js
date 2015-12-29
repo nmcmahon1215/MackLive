@@ -94,8 +94,8 @@ Console.prototype = {
 			context: this,
 			timeout: 2000,
 			success: function(response){
-				this.gameId = response.id;
-				this.setGameName(response.Name);
+				this.gameId = response.key.id;
+				this.setGameName(response.name);
 			},
 			error: function (response, errorType, errorThrown) {
 				alert("Failed to create new game.");
