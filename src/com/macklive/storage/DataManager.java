@@ -11,9 +11,12 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
@@ -23,6 +26,7 @@ public class DataManager {
 
     private static DataManager instance = null;
     private DatastoreService dstore = null;
+    private UserService userService;
     
     public static DataManager getInstance(){
         if (instance == null){
@@ -33,10 +37,14 @@ public class DataManager {
     
     private DataManager(){
         this.dstore = DatastoreServiceFactory.getDatastoreService();
+        this.userService = UserServiceFactory.getUserService();
     }
     
     public Key storeItem(IBusinessObject obj){
-        Key k = dstore.put(obj.getEntity());
+        Entity toStore = obj.getEntity();
+        toStore.setIndexedProperty("owner",
+                userService.getCurrentUser().getUserId());
+        Key k = dstore.put(toStore);
         obj.setKey(k);
         return k;
     }
@@ -49,7 +57,10 @@ public class DataManager {
      */
     public Team getTeamByName(String name) throws TooManyResultsException {
         Query q = new Query("Team");
-        q.setFilter(new FilterPredicate("Name", FilterOperator.EQUAL, name));
+        q.setFilter(CompositeFilterOperator.and(
+                new FilterPredicate("Name", FilterOperator.EQUAL, name),
+                new FilterPredicate("owner", FilterOperator.EQUAL,
+                        userService.getCurrentUser().getUserId())));
         
         Entity e = dstore.prepare(q).asSingleEntity();
         
@@ -71,6 +82,8 @@ public class DataManager {
      */
     public List<Team> getTeams() {
         Query q = new Query("Team");
+        q.setFilter(new FilterPredicate("owner", FilterOperator.EQUAL,
+                userService.getCurrentUser().getUserId()));
         
         List<Entity> teams = dstore.prepare(q).asList(FetchOptions.Builder.withDefaults());
         List<Team> result = new ArrayList<Team>();
@@ -102,6 +115,8 @@ public class DataManager {
     public List<Game> getRecentGames(int numGames) {
         Query q = new Query("Game");
         q.addSort("Date", SortDirection.DESCENDING);
+        q.setFilter(new FilterPredicate("owner", FilterOperator.EQUAL,
+                userService.getCurrentUser().getUserId()));
 
         List<Entity> queryResults = dstore.prepare(q).asList(FetchOptions.Builder.withLimit(numGames));
 
