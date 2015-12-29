@@ -28,6 +28,10 @@ table, th, td {
 	border-collapse: collapse;
 }
 
+input[type='number'] {
+	text-align: center;
+}
+
 .consoleContainer {
 	padding: 15px;
 	width: 90%;
