@@ -23,7 +23,6 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private boolean team2penalty;
     private String time;
     private int period;
-    private Key key;
     
     /**
      * Constructor

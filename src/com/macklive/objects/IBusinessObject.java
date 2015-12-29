@@ -4,6 +4,7 @@
 package com.macklive.objects;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 
 /**
@@ -18,6 +19,19 @@ public interface IBusinessObject {
      * @return The Entity representation of the object.
      */
     public Entity getEntity();
+
+    /**
+     * Sets the key of the object
+     * @param k The datastore key
+     */
+    public void setKey(Key k);
+
+    /**
+     * Gets the key for the object. May return null if a key is not yet set.
+     * 
+     * @return Key Datastore key identifier.
+     */
+    public Key getKey();
 
 
     /**

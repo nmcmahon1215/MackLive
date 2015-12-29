@@ -19,7 +19,6 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
     private String name;
     private String abbr;
     private Blob logo;
-    private Key key;
 
     /**
      * Constructor for a team. This does not set the team's logo
