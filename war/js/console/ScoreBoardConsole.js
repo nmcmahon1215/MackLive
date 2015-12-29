@@ -125,12 +125,11 @@ ScoreBoardConsole.prototype = {
 			context: this,
 			dataType: "json",
 			success: function(response){
-				var teams = response.teams;
-				teams.forEach(function(team){
+				response.forEach(function(team){
 					if (team != ""){
 						var element = document.createElement("option");
-						element.setAttribute("id", team.id);
-						element.innerHTML = team.Name;
+						element.setAttribute("id", team.key.id);
+						element.innerHTML = team.name;
 						comboBox.appendChild(element);
 					}
 				});
@@ -142,8 +141,8 @@ ScoreBoardConsole.prototype = {
 		})
 	},
 	updateInfo: function (game) {
-		var t1id = this.getIdFromKey(game.Team1);
-		var t2id = this.getIdFromKey(game.Team2);
+		var t1id = game.team1.key.id;
+		var t2id = game.team2.key.id;
 		var t1found = false;
 		var t2found = false;
 		
@@ -167,17 +166,14 @@ ScoreBoardConsole.prototype = {
 			alert("Error loading game: " + game.Name);
 		}
 		
-		this.team1ScoreBox.value = game.T1Score;
-		this.team2ScoreBox.value = game.T2Score;
-		this.team1ShotsBox.value = game.T1SOG;
-		this.team2ShotsBox.value = game.T2SOG;
-		this.team1PenaltyBox.checked = game.T1Penalty == "true";
-		this.team2PenaltyBox.checked = game.T2Penalty == "true";
-		this.timeBox.value = game.Time;
-		this.periodBox.value = game.Period;
+		this.team1ScoreBox.value = game.t1Score;
+		this.team2ScoreBox.value = game.t2Score;
+		this.team1ShotsBox.value = game.t1SOG;
+		this.team2ShotsBox.value = game.t2SOG;
+		this.team1PenaltyBox.checked = game.t1Penalty;
+		this.team2PenaltyBox.checked = game.t2Penalty;
+		this.timeBox.value = game.time;
+		this.periodBox.value = game.period;
 		
-	},
-	getIdFromKey: function (key){
-		return +key.substring(key.indexOf("(") + 1, key.indexOf(")"));
 	},
 }

@@ -13,11 +13,11 @@ import javax.ws.rs.core.MediaType;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
-import com.macklive.utility.JSONUtility;
 
 /**
  * Rest endpoint for getting Game information
@@ -29,11 +29,8 @@ public class GameService {
     @Path("/recent/{num}")
     public String getRecentGames(@PathParam("num") int number){
         List<Game> games = DataManager.getInstance().getRecentGames(number);
-        
-        JSONUtility jsu = new JSONUtility();
-        jsu.addProperty("games", games);
-        
-        return jsu.getJSON();
+        Gson gs = new Gson();
+        return gs.toJson(games);
     }
     
     @GET
@@ -43,7 +40,7 @@ public class GameService {
         Key k = KeyFactory.createKey("Game", idNum);
         try {
             Game g = new Game(DataManager.getInstance().getEntityWithKey(k));
-            return JSONUtility.build(g).getJSON();
+            return g.toJSON();
         } catch (EntityMismatchException | EntityNotFoundException e) {
             return "{}";
         }
@@ -65,8 +62,8 @@ public class GameService {
         
         Game g = new Game(t1, t2);
         
-        Key k = dstore.storeItem(g);
+        dstore.storeItem(g);
         
-        return JSONUtility.build(g, k).getJSON();
+        return g.toJSON();
     }
 }

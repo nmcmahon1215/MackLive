@@ -43,14 +43,14 @@ Console.prototype = {
 			dataType: "json",
 			context: this,
 			success: function(response) {
-				var games = response.games;
+				var games = response;
 				this.gamePicker.innerHTML = "<option>Select A Game...</option>";
 				if (!games) {
 					return;
 				}
 				games.forEach(function (game){
 					if (game != ""){
-						this.gamePicker.innerHTML += "<option id=" + game.id + ">" + game.Name + "</option>";
+						this.gamePicker.innerHTML += "<option id=" + game.key.id + ">" + game.name + "</option>";
 					}
 				});
 			},

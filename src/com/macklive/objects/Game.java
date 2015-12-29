@@ -8,7 +8,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
-import com.macklive.utility.JSONUtility;
 
 public class Game extends AbsBusinessObject implements IBusinessObject {
 
@@ -23,6 +22,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private boolean team2penalty;
     private String time;
     private int period;
+    @SuppressWarnings("unused")
+    private String name;
     
     /**
      * Constructor
@@ -39,6 +40,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         this.time = "";
         this.period = 1;
         this.created = new Date();
+        this.name = this.getName();
     }
     
     /**
@@ -48,6 +50,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
      */
     public Game (Entity e) throws EntityMismatchException{
         this.loadEntity(e);
+        this.name = this.getName();
     }
     
     @Override
@@ -114,14 +117,14 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         result += this.team2.getAbbr();
         return result;
     }
-    
+
     /**
-     * Overrides the toString method to produce a JSON version
-     * of this game object.
+     * Overrides the toString method to produce a JSON version of this game
+     * object.
      */
     @Override
     public String toString() {
-        return JSONUtility.build(this).getJSON();
+        return this.toJSON();
     }
 
     public int getTeam1goals() {

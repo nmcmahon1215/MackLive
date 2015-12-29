@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 
 public abstract class AbsBusinessObject implements IBusinessObject {
 
-    private Gson gs = new Gson();
+    protected Gson gs = new Gson();
     protected Key key;
 
     @Override

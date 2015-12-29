@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,10 +26,10 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
+import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
-import com.macklive.utility.JSONUtility;
 
 @Path("/teams")
 public class TeamService {
@@ -87,15 +86,8 @@ public class TeamService {
             }
             
         });
-        
-        List<JSONUtility> jsuList = new ArrayList<JSONUtility>();
-        for (Team t : teams){
-            jsuList.add(JSONUtility.build(t));
-        }
-        
-        JSONUtility jsu = new JSONUtility();
-        jsu.addProperty("teams", teams);
-        return jsu.toString();
+        Gson gs = new Gson();
+        return gs.toJson(teams);
     }
     
     @GET
