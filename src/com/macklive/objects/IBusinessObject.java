@@ -27,4 +27,11 @@ public interface IBusinessObject {
      * @throws EntityMismatchException if an unexpected entity is passed
      */
     public void loadEntity(Entity e) throws EntityMismatchException;
+
+    /**
+     * Converts the Java object to JSON representation
+     * 
+     * @return JSON representation of the object.
+     */
+    public String toJSON();
 }
