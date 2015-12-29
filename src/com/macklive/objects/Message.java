@@ -5,6 +5,9 @@ import java.util.Date;
 import com.google.appengine.api.datastore.Entity;
 import com.macklive.exceptions.EntityMismatchException;
 
+/**
+ * Describes a message in a game.
+ */
 public class Message extends AbsBusinessObject {
 
     private String author;
