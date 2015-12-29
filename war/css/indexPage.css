@@ -5,6 +5,7 @@ body {
 	font-family: "Open Sans", Arial;
 	font-size: 12px;
 	min-width: 700px;
+	text-align: center;
 }
 
 .mainContainer {
@@ -27,4 +28,29 @@ body {
     background-color: white;
     height: 40px;
     margin: 10px;
+}
+
+#login {
+	width: 191px;
+	height: 46px;
+	display: block;
+	background-repeat: no-repeat;
+	background-image: url("/images/btn_google_signin_light_normal_web.png");
+	margin: auto;
+}
+
+#login:hover {
+	cursor: pointer;
+}
+
+#login:focus {
+	background-image: url("/images/btn_google_signin_light_focus_web.png");
+}
+
+#login:disabled {
+	background-image: url("/images/btn_google_signin_light_disabled_web.png");
+}
+
+#login:active {
+	background-image: url("/images/btn_google_signin_light_pressed_web.png");
 }
