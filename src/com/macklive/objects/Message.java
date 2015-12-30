@@ -13,15 +13,15 @@ public class Message extends AbsBusinessObject {
     private String author;
     private String text;
     private Date time;
-    private Game game;
+    private long gameId;
     private boolean approved;
 
-    public Message(String author, String text, Game game, boolean approved) {
+    public Message(String author, String text, long gameId, boolean approved) {
         this.author = author;
         this.text = text;
-        this.game = game;
         this.approved = approved;
         this.time = new Date();
+        this.gameId = gameId;
     }
 
     public Message(Entity e) throws EntityMismatchException {
@@ -40,7 +40,7 @@ public class Message extends AbsBusinessObject {
         e.setProperty("author", author);
         e.setProperty("text", text);
         e.setProperty("time", time);
-        e.setProperty("game", game);
+        e.setProperty("game", gameId);
         e.setProperty("approved", approved);
         return e;
     }
@@ -52,7 +52,7 @@ public class Message extends AbsBusinessObject {
             this.author = (String) e.getProperty("author");
             this.text = (String) e.getProperty("text");
             this.time = (Date) e.getProperty("time");
-            this.game = (Game) e.getProperty("game");
+            this.gameId = (long) e.getProperty("game");
             this.approved = (boolean) e.getProperty("approved");
             this.key = e.getKey();
 
