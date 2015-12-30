@@ -12,22 +12,22 @@ Console = function() {
 }
 
 Console.prototype = {
-	initialize: function() {
+	initialize : function() {
 		this.titleElement.innerHTML = "<div style='background:red;'>No game selected.</div>";
 		this.loadRecentGames();
-		
+
 		$j(this.createButton).click(this.createGame.bind(this));
 		$j(this.loadButton).click(this.loadGame.bind(this));
 	},
 
-	setGameName: function (name) {
-		$j(this.titleElement).slideUp(500, function(){
+	setGameName : function(name) {
+		$j(this.titleElement).slideUp(500, function() {
 			this.gameName = name;
-			this.titleElement.innerHTML = "Current Game: " + this.gameName;
+			this.titleElement.innerHTML = this.gameName;
 			$j(this.titleElement).slideDown();
 		}.bind(this));
-		if (this.gameId){
-			if (!this.idMessage){
+		if (this.gameId) {
+			if (!this.idMessage) {
 				this.idMessage = document.createElement("div");
 				this.idMessage.style.position = "absolute";
 				this.idMessage.style.right = "0px";
@@ -37,67 +37,73 @@ Console.prototype = {
 			this.idMessage.innerHTML = "Game id: " + this.gameId;
 		}
 	},
-	loadRecentGames: function() {
-		$j.ajax({
-			url: location.protocol + '//' + location.host + "/api/game/recent/5",
-			dataType: "json",
-			context: this,
-			success: function(response) {
-				var games = response;
-				this.gamePicker.innerHTML = "<option>Select A Game...</option>";
-				if (!games) {
-					return;
-				}
-				games.forEach(function (game){
-					if (game != ""){
-						this.gamePicker.innerHTML += "<option id=" + game.key.id + ">" + game.name + "</option>";
+	loadRecentGames : function() {
+		$j
+				.ajax({
+					url : location.protocol + '//' + location.host
+							+ "/api/game/recent/5",
+					dataType : "json",
+					context : this,
+					success : function(response) {
+						var games = response;
+						this.gamePicker.innerHTML = "<option>Select A Game...</option>";
+						if (!games) {
+							return;
+						}
+						games.forEach(function(game) {
+							if (game != "") {
+								this.gamePicker.innerHTML += "<option id="
+										+ game.key.id + ">" + game.name
+										+ "</option>";
+							}
+						});
+					},
+					error : function(response, errorType, errorMessage) {
+						alert("Could not fetch recent games.");
 					}
-				});
-			},
-			error: function(response, errorType, errorMessage) {
-				alert("Could not fetch recent games.");
-			}
-		})
+				})
 	},
-	loadGame: function () {
+	loadGame : function() {
 		var game = this.gamePicker.children[this.gamePicker.selectedIndex];
 		this.gameId = game.id;
 		this.setGameName(game.value);
-		
+
 		$j.ajax({
-			url: location.protocol + '//' + location.host + "/api/game/" + this.gameId,
-			method:"GET",
-			dataType: "json",
-			context: this,
-			success: function (response) {
+			url : location.protocol + '//' + location.host + "/api/game/"
+					+ this.gameId,
+			method : "GET",
+			dataType : "json",
+			context : this,
+			success : function(response) {
 				scoreBoard.updateInfo(response);
+				liveConsole.initialize();
 			},
-			error: function (response, errorType, errorStuff) {
-				debugger;
+			error : function(response, errorType, errorStuff) {
+				alert("Error loading game!");
 			},
 		});
 	},
-	createGame: function () {
+	createGame : function() {
 		var today = new Date();
 		var team1select = document.getElementById("team1select");
 		var team2select = document.getElementById("team2select");
-		
+
 		var team1 = team1select.children[team1select.selectedIndex];
 		var team2 = team2select.children[team2select.selectedIndex];
-		
+
 		$j.ajax({
-			url:location.protocol + '//' + location.host + "/api/game",
-			method: "POST",
-			contentType: "text/plain",
-			dataType: "json",
-			data: team1.id + "," + team2.id,
-			context: this,
-			timeout: 2000,
-			success: function(response){
+			url : location.protocol + '//' + location.host + "/api/game",
+			method : "POST",
+			contentType : "text/plain",
+			dataType : "json",
+			data : team1.id + "," + team2.id,
+			context : this,
+			timeout : 2000,
+			success : function(response) {
 				this.gameId = response.key.id;
 				this.setGameName(response.name);
 			},
-			error: function (response, errorType, errorThrown) {
+			error : function(response, errorType, errorThrown) {
 				alert("Failed to create new game.");
 			},
 		})
