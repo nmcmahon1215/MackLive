@@ -32,6 +32,24 @@ input[type='number'] {
 	text-align: center;
 }
 
+label {
+	font-weight: bold;
+}
+
+#nameLabel {
+	margin-left: 10px;
+}
+
+#nameInput {
+	margin: 5px;
+	width: 50%;
+}
+
+.fadeBG {
+	background-color: initial !important;
+	transition: 1.5s background-color ease-out;
+}
+
 .consoleContainer {
 	padding: 15px;
 	width: 90%;
@@ -76,7 +94,7 @@ input[type='number'] {
 }
 
 .consoleScrollerFeed {
-	height: calc(97% - 151px);
+	height: calc(97% - 186px);
 }
 
 .liveInput {
@@ -85,6 +103,7 @@ input[type='number'] {
 	margin: auto;
 	resize: none;
 	height: 4em;
+	background-color: lightgreen;
 }
 
 .floatL {
