@@ -87,6 +87,7 @@ label {
 	margin: 10px;
 	border: 1px solid black;
 	overflow: auto;
+	background-color: #eaeaea;
 }
 
 .consoleScrollerComments {
