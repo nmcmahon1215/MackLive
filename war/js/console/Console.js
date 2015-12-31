@@ -13,7 +13,8 @@ Console = function() {
 
 Console.prototype = {
 	initialize : function() {
-		this.titleElement.innerHTML = "<div style='background:red;'>No game selected.</div>";
+		this.titleElement.innerHTML = "No game selected.";
+		this.titleElement.style.backgroundColor = "red";
 		this.loadRecentGames();
 
 		$j(this.createButton).click(this.createGame.bind(this));
@@ -23,6 +24,9 @@ Console.prototype = {
 	setGameName : function(name) {
 		$j(this.titleElement).slideUp(500, function() {
 			this.gameName = name;
+			this.titleElement.style.backgroundColor = "";
+			this.titleElement.style.border = "1px solid white";
+			this.titleElement.style.borderRadius = '5px';
 			this.titleElement.innerHTML = this.gameName;
 			$j(this.titleElement).slideDown();
 		}.bind(this));

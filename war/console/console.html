@@ -3,6 +3,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Mack Report Live</title>
+	<link rel="Stylesheet" href="/css/bootstrap.min.css" />
 	<link rel="Stylesheet" href="/css/console.css" type="text/css" />
 	<script language='javascript' type="text/javascript" src='/api/js/console'></script>
 	<script language='javascript' type="text/javascript">
@@ -25,16 +26,14 @@
 		<div>
 			<img class="floatL headerImage" src="/images/MRL_logo.png">
 		</div>
-		<div style="display:inline-block; margin-left: 15px;">
-			<h1 id="gameTitle" style="color:white; font-size:25px; font-weight:bold; padding: 10px; margin: 5px;">Current Game: </h1>
-		</div>
-		<div class="floatR">
-			<select id="gamePicker">
+		<h1 id="gameTitle">Current Game: </h1>
+		<div class="floatR form-inline">
+			<select id="gamePicker" class='form-control'>
 				<option>Select Recent Game</option>
 			</select>
-			<input id="loadButton" type="button" value="Load">
+			<input id="loadButton" type="button" class="btn" value="Load">
 			<p style="display:inline; margin:10px;">or</p>
-			<input id="createButton" class="green" type="button" value="Create New Game">
+			<input id="createButton" type="button" class='btn btn-success' value="Create New Game">
 		</div>
 		<div class="floatL userBoxSize"
 			style="clear: left; margin-right: 10px;">

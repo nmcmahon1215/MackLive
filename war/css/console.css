@@ -1,5 +1,3 @@
-@import url(google.css);
-
 body {
 	background-color: #fff5b7;
 	font-family: "Open Sans", Arial;
@@ -12,6 +10,7 @@ h2 {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: 18px;
 }
 
 div {
@@ -36,13 +35,14 @@ label {
 	font-weight: bold;
 }
 
-#nameLabel {
-	margin-left: 10px;
-}
-
-#nameInput {
+#gameTitle {
+	color:white;
+	font-size:25px;
+	font-weight:bold;
+	padding: 10px;
 	margin: 5px;
-	width: 50%;
+	position: absolute;
+	left: 265px;
 }
 
 .fadeBG {
@@ -54,7 +54,7 @@ label {
 	padding: 15px;
 	width: 90%;
 	border: 1px solid black;
-	border-radius: 10px;
+	border-radius: 5px;
 	margin: auto;
 	margin-top: 10px;
 	background-color: #0769AD;
@@ -75,7 +75,7 @@ label {
 	margin: 25px;
 	margin-bottom: 0px;
 	margin-top: 10px;
-	border-radius: 15px;
+	border-radius: 5px;
 	overflow: auto;
 }
 .halfHeight {
@@ -95,7 +95,7 @@ label {
 }
 
 .consoleScrollerFeed {
-	height: calc(97% - 186px);
+	height: calc(97% - 203px);
 }
 
 .liveInput {
@@ -132,14 +132,18 @@ label {
     margin: 10px;
 }
 .scoreBox {
-	font-size: 30px;
-	height: 40px;
 	width: 60px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	margin: auto;
+	height: auto;
 }
 .shotsBox {
-	font-size: 12px;
-	height: 20px;
 	width: 60px;
+	height: auto;
+	margin: auto;
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
 .absoluteVerticalCentered{
 	position:absolute;

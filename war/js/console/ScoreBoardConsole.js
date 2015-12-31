@@ -26,14 +26,15 @@ ScoreBoardConsole.prototype = {
 		table.style.width = "95%";
 		table.style.tableLayout = "fixed";
 		table.style.margin = "auto";
+		table.className = "table-bordered";
 		
 		this.team1Selector = document.createElement("select");
 		this.team1Selector.id = "team1select";
-		this.team1Selector.className = "teamSelect";
+		this.team1Selector.className = "teamSelect form-control";
 		
 		this.team2Selector = document.createElement("select");
 		this.team2Selector.id = "team2select";
-		this.team2Selector.className = "teamSelect";
+		this.team2Selector.className = "teamSelect form-control";
 		
 		this.initializeTeams();
 		
@@ -43,13 +44,13 @@ ScoreBoardConsole.prototype = {
 		this.team1ScoreBox.type = "Number";
 		this.team1ScoreBox.min = 0;
 		this.team1ScoreBox.value = 0
-		this.team1ScoreBox.className = "scoreBox";
+		this.team1ScoreBox.className = "scoreBox form-control";
 		
 		this.team2ScoreBox = document.createElement("input");
 		this.team2ScoreBox.type = "number";
 		this.team2ScoreBox.min = 0;
 		this.team2ScoreBox.value = 0
-		this.team2ScoreBox.className = "scoreBox";
+		this.team2ScoreBox.className = "scoreBox form-control";
 		
 		this._addRowToTable(tableBody, [this.team1ScoreBox], [this.team2ScoreBox], "Score");
 		
@@ -57,13 +58,13 @@ ScoreBoardConsole.prototype = {
 		this.team1ShotsBox.type = "number";
 		this.team1ShotsBox.min = 0;
 		this.team1ShotsBox.value = 0
-		this.team1ShotsBox.className = "shotsBox";
+		this.team1ShotsBox.className = "shotsBox form-control";
 		
 		this.team2ShotsBox = document.createElement("input");
 		this.team2ShotsBox.type = "number";
 		this.team2ShotsBox.min = 0;
 		this.team2ShotsBox.value = 0
-		this.team2ShotsBox.className = "shotsBox";
+		this.team2ShotsBox.className = "shotsBox form-control";
 		
 		this._addRowToTable(tableBody, [this.team1ShotsBox], [this.team2ShotsBox], "SOG");
 		
@@ -75,6 +76,12 @@ ScoreBoardConsole.prototype = {
 		
 		this.timeBox = document.createElement("input");
 		this.timeBox.style.width = "100px";
+		this.timeBox.style.margin = "auto";
+		this.timeBox.style.paddingTop = "3px";
+		this.timeBox.style.paddingBottom = "3px";
+		this.timeBox.style.height = "auto";
+		this.timeBox.className = "form-control";
+		this.timeBox.pattern = "\d{2}:\d{2}";
 		this._addRowToTable(tableBody, [this.timeBox], [], "Time");
 		
 		this.periodBox = document.createElement("input");
@@ -82,7 +89,7 @@ ScoreBoardConsole.prototype = {
 		this.periodBox.min = 0;
 		this.periodBox.max = 5;
 		this.periodBox.value = 1;
-		this.periodBox.className = "shotsBox";
+		this.periodBox.className = "shotsBox form-control";
 		this._addRowToTable(tableBody, [this.periodBox], [], "Period");
 		
 		this.$container.append(teamManageLink, table);
