@@ -199,12 +199,12 @@ ScoreBoardConsole.prototype = {
 			alert("Error loading game: " + game.Name);
 		}
 		
-		this.team1ScoreBox.value = game.t1Score;
-		this.team2ScoreBox.value = game.t2Score;
-		this.team1ShotsBox.value = game.t1SOG;
-		this.team2ShotsBox.value = game.t2SOG;
-		this.team1PenaltyBox.checked = game.t1Penalty;
-		this.team2PenaltyBox.checked = game.t2Penalty;
+		this.team1ScoreBox.value = game.team1goals;
+		this.team2ScoreBox.value = game.team2goals;
+		this.team1ShotsBox.value = game.team1sog;
+		this.team2ShotsBox.value = game.team2sog;
+		this.team1PenaltyBox.checked = game.team1penalty;
+		this.team2PenaltyBox.checked = game.team2penalty;
 		this.timeBox.value = game.time;
 		this.periodBox.value = game.period;
 		
