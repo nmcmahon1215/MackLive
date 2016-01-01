@@ -38,7 +38,7 @@ public class Message extends AbsBusinessObject {
         }
 
         e.setProperty("author", author);
-        e.setProperty("text", text);
+        e.setUnindexedProperty("text", text);
         e.setProperty("time", time);
         e.setProperty("game", gameId);
         e.setProperty("approved", approved);
