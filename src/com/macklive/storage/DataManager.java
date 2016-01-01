@@ -10,7 +10,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
@@ -43,10 +42,12 @@ public class DataManager {
         this.userService = UserServiceFactory.getUserService();
     }
 
-    public Key storeItem(IBusinessObject obj){
+    public Key storeItem(IBusinessObject obj) {
         Entity toStore = obj.getEntity();
-        toStore.setIndexedProperty("owner",
-                userService.getCurrentUser().getUserId());
+        if (!(obj instanceof Message)) {
+            toStore.setIndexedProperty("owner",
+                    userService.getCurrentUser().getUserId());
+        }
         Key k = dstore.put(toStore);
         obj.setKey(k);
         return k;
@@ -148,11 +149,7 @@ public class DataManager {
      */
     public List<Message> getMessagesForGame(long gameId) {
         Query q = new Query("Message");
-        Key game = KeyFactory.createKey("Game", gameId);
-        q.setFilter(CompositeFilterOperator.and(
-                new FilterPredicate("game", FilterOperator.EQUAL, game),
-                new FilterPredicate("owner", FilterOperator.EQUAL,
-                        userService.getCurrentUser().getUserId())));
+        q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
         q.addSort("time", SortDirection.ASCENDING);
 
         return getMessageByQuery(q);
@@ -171,11 +168,9 @@ public class DataManager {
      */
     public List<Message> getMessagesForGameAfterDate(long gameId, Date date) {
         Query q = new Query("Message");
-        Key game = KeyFactory.createKey("Game", gameId);
 
         q.setFilter(CompositeFilterOperator.and(
-                new FilterPredicate("owner", FilterOperator.EQUAL, userService.getCurrentUser().getUserId()),
-                new FilterPredicate("game", FilterOperator.EQUAL, game),
+                new FilterPredicate("game", FilterOperator.EQUAL, gameId),
                 new FilterPredicate("time", FilterOperator.GREATER_THAN,
                         date)));
         q.addSort("time", SortDirection.ASCENDING);
