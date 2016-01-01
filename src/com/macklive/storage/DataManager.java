@@ -186,8 +186,7 @@ public class DataManager {
      * @return A list of messages satisfying the query
      */
     private List<Message> getMessageByQuery(Query q) {
-        List<Entity> queryResults = dstore.prepare(q)
-                .asList(FetchOptions.Builder.withDefaults());
+        Iterable<Entity> queryResults = dstore.prepare(q).asIterable();
 
         List<Message> messages = new ArrayList<Message>();
         try {
