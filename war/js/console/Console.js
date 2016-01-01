@@ -69,18 +69,18 @@ Console.prototype = {
 	},
 	loadGame : function() {
 		var game = this.gamePicker.children[this.gamePicker.selectedIndex];
-		this.gameId = game.id;
-		this.setGameName(game.value);
-
+		
 		$j.ajax({
 			url : location.protocol + '//' + location.host + "/api/game/"
-					+ this.gameId,
+					+ game.id,
 			method : "GET",
 			dataType : "json",
 			context : this,
 			success : function(response) {
 				scoreBoard.updateInfo(response);
 				liveConsole.initialize();
+				this.gameId = game.id;
+				this.setGameName(game.value);
 			},
 			error : function(response, errorType, errorStuff) {
 				alert("Error loading game!");
