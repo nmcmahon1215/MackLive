@@ -9,6 +9,7 @@ LiveBlogFeed = function(container, blogId) {
 
 LiveBlogFeed.prototype = {
 	render: function() {
+		this.container.className = "consoleScrollerFeed";
 		
 	},
 };

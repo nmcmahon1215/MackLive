@@ -16,8 +16,8 @@ LiveBlogConsole.prototype = {
 			
 			var liveBlogFeedElement = document.createElement("div");
 			liveBlogFeedElement.id = 'liveBlogFeed';
-			liveBlogFeedElement.className = 'consoleScrollerFeed';
 			this.liveBlogFeed = new LiveBlogFeed(liveBlogFeedElement);
+			this.liveBlogFeed.render();
 			
 			this.form = document.createElement("form");
 			$j(this.form).on("submit", function(event){
@@ -31,6 +31,12 @@ LiveBlogConsole.prototype = {
 			this.textArea.id = "liveBlogInput";
 			this.textArea.className = "liveInput fadeBG form-control";
 			this.textArea.placeholder = "Enter a post";
+			this.textArea.addEventListener("keypress", function(event){
+				if (event.keyCode == 13) {
+		            this.submitMessage();
+		            return false;
+		         }
+			}.bind(this));
 			
 			var nameDiv = document.createElement("div");
 			nameDiv.className = "input-group";
