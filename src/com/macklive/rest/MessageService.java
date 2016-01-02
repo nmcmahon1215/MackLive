@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.Gson;
+import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Message;
 import com.macklive.storage.DataManager;
 
@@ -56,7 +57,7 @@ public class MessageService {
     @Path("/{gameId}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGameMessages(@PathParam("gameId") long gameId) {
-        Gson gs = new Gson();
+        Gson gs = GsonUtility.getGson();
         return gs.toJson(DataManager.getInstance().getMessagesForGame(gameId));
     }
 
@@ -65,7 +66,7 @@ public class MessageService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getGameMessagesAfterDate(@PathParam("gameId") long gameId,
             @PathParam("date") long millis) {
-        Gson gs = new Gson();
+        Gson gs = GsonUtility.getGson();
         return gs.toJson(DataManager.getInstance()
                 .getMessagesForGameAfterDate(gameId, new Date(millis)));
     }

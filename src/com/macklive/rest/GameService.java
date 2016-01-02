@@ -16,6 +16,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
+import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
 
@@ -29,7 +30,7 @@ public class GameService {
     @Path("/recent/{num}")
     public String getRecentGames(@PathParam("num") int number){
         List<Game> games = DataManager.getInstance().getRecentGames(number);
-        Gson gs = new Gson();
+        Gson gs = GsonUtility.getGson();
         return gs.toJson(games);
     }
     
