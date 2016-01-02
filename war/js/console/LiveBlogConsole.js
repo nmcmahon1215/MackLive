@@ -69,6 +69,7 @@ LiveBlogConsole.prototype = {
 		},
 		initialize: function () {
 			this.submitButton.disabled = false;
+			this.liveBlogFeed.initialize();
 		},
 		submitMessage: function () {
 			var message = {
