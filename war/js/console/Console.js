@@ -77,10 +77,10 @@ Console.prototype = {
 			dataType : "json",
 			context : this,
 			success : function(response) {
-				scoreBoard.updateInfo(response);
-				liveConsole.initialize();
 				this.gameId = game.id;
 				this.setGameName(game.value);
+				scoreBoard.updateInfo(response);
+				liveConsole.initialize();
 			},
 			error : function(response, errorType, errorStuff) {
 				alert("Error loading game!");
