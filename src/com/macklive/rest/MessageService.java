@@ -1,6 +1,8 @@
 package com.macklive.rest;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -27,14 +29,13 @@ public class MessageService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String postMessage(String messageJSON,
-            @Context HttpServletResponse servletResponse) {
+    public String postMessage(String messageJSON, @Context HttpServletResponse servletResponse) {
         try {
             JSONObject jso = new JSONObject(messageJSON);
             boolean approved = true;
 
-            Message newMessage = new Message(jso.getString("author"),
-                    jso.getString("text"), jso.getLong("game"), approved);
+            Message newMessage = new Message(jso.getString("author"), jso.getString("text"), jso.getLong(
+                    "game"), approved);
 
             DataManager.getInstance().storeItem(newMessage);
 
@@ -57,17 +58,32 @@ public class MessageService {
     @Path("/{gameId}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGameMessages(@PathParam("gameId") long gameId) {
-        Gson gs = GsonUtility.getGson();
-        return gs.toJson(DataManager.getInstance().getMessagesForGame(gameId));
+        return formResponse(DataManager.getInstance().getMessagesForGame(gameId));
     }
 
     @GET
     @Path("/{gameId}/{date}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getGameMessagesAfterDate(@PathParam("gameId") long gameId,
-            @PathParam("date") long millis) {
+    public String getGameMessagesAfterDate(@PathParam("gameId") long gameId, @PathParam("date") long millis) {
+        return formResponse(DataManager.getInstance().getMessagesForGameAfterDate(gameId, new Date(millis)));
+    }
+
+    /**
+     * Forms a response with a list of messages
+     * 
+     * @param messages
+     *            The list of messages to include, sorted oldest first
+     * @return A JSON representation of the messages and the timestamp in ms.
+     */
+    private String formResponse(List<Message> messages) {
         Gson gs = GsonUtility.getGson();
-        return gs.toJson(DataManager.getInstance()
-                .getMessagesForGameAfterDate(gameId, new Date(millis)));
+
+        HashMap<String, Object> hm = new HashMap<String, Object>();
+        hm.put("messages", messages);
+        if (messages.size() > 0) {
+            hm.put("latestTime", messages.get(messages.size() - 1).getTime().getTime());
+        }
+
+        return gs.toJson(hm);
     }
 }

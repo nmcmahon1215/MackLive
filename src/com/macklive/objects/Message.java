@@ -62,4 +62,8 @@ public class Message extends AbsBusinessObject {
                             + e.getKind());
         }
     }
+
+    public Date getTime() {
+        return time;
+    }
 }

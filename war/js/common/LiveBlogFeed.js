@@ -40,11 +40,15 @@ LiveBlogFeed.prototype = {
 		$j.ajax({
 			url: location.protocol + '//' + location.host + "/api/messages/" + adminConsole.gameId,
 			success: function(result) {
-				var messages = result;
+				var messages = result.messages;
 				messages.forEach(function(message){
 					this.addMessage(message);
-					this.lastMessageDate = new Date(message.time);
 				}.bind(this));
+				
+				if (result.latestTime){
+					this.lastMessageDate = new Date(result.latestTime);
+				}
+				
 			}.bind(this),
 			error: function (result, error, desc){
 				alert("Error: " + desc);
@@ -56,11 +60,15 @@ LiveBlogFeed.prototype = {
 		$j.ajax({
 			url: location.protocol + "//" + location.host + "/api/messages/" + adminConsole.gameId + "/" + this.lastMessageDate.getTime(),
 			success: function(result) {
-				var messages = result;
+				var messages = result.messages;
 				messages.forEach(function(message){
 					this.addMessage(message);
-					this.lastMessageDate = new Date(message.time);
 				}.bind(this));
+				
+				if (result.latestTime){ 
+					this.lastMessageDate = new Date(result.latestTime);
+				}
+				
 			}.bind(this),
 			error: function (result, error, desc){
 				alert("Error: " + desc)
