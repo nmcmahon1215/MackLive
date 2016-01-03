@@ -8,7 +8,7 @@ import com.macklive.exceptions.EntityMismatchException;
 /**
  * Describes a message in a game.
  */
-public class Message extends AbsBusinessObject {
+public class Message extends AbsCacheableObject {
 
     private String author;
     private String text;
@@ -86,6 +86,16 @@ public class Message extends AbsBusinessObject {
     @Override
     public boolean hasOwner() {
         return false;
+    }
+
+    @Override
+    public boolean isGame() {
+        return false;
+    }
+
+    @Override
+    public boolean isMessage() {
+        return true;
     }
 
     /**

@@ -27,4 +27,9 @@ public abstract class AbsBusinessObject implements IBusinessObject {
     public boolean hasOwner() {
         return true;
     }
+
+    @Override
+    public boolean isCacheable() {
+        return false;
+    }
 }

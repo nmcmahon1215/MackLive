@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
 
-public class Game extends AbsBusinessObject implements IBusinessObject {
+public class Game extends AbsCacheableObject implements IBusinessObject {
 
     private Date created;
     private Team team1;
@@ -103,6 +103,16 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         }
     }
     
+    @Override
+    public boolean isGame() {
+        return true;
+    }
+
+    @Override
+    public boolean isMessage() {
+        return false;
+    }
+
     /**
      * Generates the name of the game based on the date it was created
      * and the teams playing in the game
