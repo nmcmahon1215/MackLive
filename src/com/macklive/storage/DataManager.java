@@ -10,6 +10,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
@@ -21,6 +22,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
+import com.macklive.objects.ICacheableObject;
 import com.macklive.objects.Message;
 import com.macklive.objects.Team;
 
@@ -29,6 +31,7 @@ public class DataManager {
     private static DataManager instance = null;
     private DatastoreService dstore = null;
     private UserService userService;
+    private CacheManager cacheManager;
 
     public static DataManager getInstance(){
         if (instance == null){
@@ -40,6 +43,7 @@ public class DataManager {
     private DataManager(){
         this.dstore = DatastoreServiceFactory.getDatastoreService();
         this.userService = UserServiceFactory.getUserService();
+        this.cacheManager = CacheManager.getInstance();
     }
 
     public Key storeItem(IBusinessObject obj) {
@@ -50,6 +54,11 @@ public class DataManager {
         }
         Key k = dstore.put(toStore);
         obj.setKey(k);
+
+        if (obj.isCacheable()) {
+            cacheManager.load((ICacheableObject) obj);
+        }
+
         return k;
     }
 
@@ -148,11 +157,17 @@ public class DataManager {
      * @return A list of messages for the game.
      */
     public List<Message> getMessagesForGame(long gameId) {
-        Query q = new Query("Message");
-        q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
-        q.addSort("time", SortDirection.ASCENDING);
+        if (this.cacheManager.hasMessages(gameId)) {
+            return this.cacheManager.getMessages(gameId);
+        } else {
+            Query q = new Query("Message");
+            q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
+            q.addSort("time", SortDirection.ASCENDING);
 
-        return getMessageByQuery(q);
+            this.cacheManager.load(getMessageByQuery(q));
+
+            return getMessagesForGame(gameId);
+        }
 
     }
 
@@ -167,15 +182,32 @@ public class DataManager {
      * @return A list of messages for the game posted after the given date.
      */
     public List<Message> getMessagesForGameAfterDate(long gameId, Date date) {
-        Query q = new Query("Message");
+        if (this.cacheManager.hasMessages(gameId)) {
+            List<Message> messages = this.cacheManager.getMessages(gameId);
+            List<Message> result = new ArrayList<Message>();
 
-        q.setFilter(CompositeFilterOperator.and(
-                new FilterPredicate("game", FilterOperator.EQUAL, gameId),
-                new FilterPredicate("time", FilterOperator.GREATER_THAN,
-                        date)));
-        q.addSort("time", SortDirection.ASCENDING);
+            for (int i = messages.size() - 1; i >= 0; i--) {
+                Message m = messages.get(i);
+                if (m.getTime().compareTo(date) > 0) {
+                    result.add(m);
+                } else {
+                    break;
+                }
+            }
 
-        return getMessageByQuery(q);
+            return result;
+
+        } else {
+            Query q = new Query("Message");
+
+            q.setFilter(CompositeFilterOperator.and(new FilterPredicate("game", FilterOperator.EQUAL, gameId),
+                    new FilterPredicate("time", FilterOperator.GREATER_THAN, date)));
+            q.addSort("time", SortDirection.ASCENDING);
+
+            this.cacheManager.load(getMessageByQuery(q));
+
+            return getMessagesForGameAfterDate(gameId, date);
+        }
     }
 
     /**
@@ -199,5 +231,27 @@ public class DataManager {
         }
 
         return messages;
+    }
+
+    /**
+     * Gets the game with the given id number
+     * 
+     * @param idNum
+     *            The id number of the game to fetch.
+     * @return The game with the given id number
+     */
+    public Game getGame(long idNum) {
+        if (this.cacheManager.hasGame(idNum)) {
+            return this.cacheManager.getGame(idNum);
+        } else {
+            try {
+                Game g = new Game(this.getEntityWithKey(KeyFactory.createKey("Game", idNum)));
+                this.cacheManager.load(g);
+            } catch (EntityMismatchException | EntityNotFoundException e) {
+                return null;
+            }
+
+            return getGame(idNum);
+        }
     }
 }

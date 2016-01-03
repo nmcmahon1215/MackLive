@@ -37,14 +37,15 @@ public class GameService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{idNum}")
-    public String getGameById(@PathParam("idNum") long idNum){
+    public String getGameById(@PathParam("idNum") long idNum) {
         Key k = KeyFactory.createKey("Game", idNum);
-        try {
-            Game g = new Game(DataManager.getInstance().getEntityWithKey(k));
-            return g.toJSON();
-        } catch (EntityMismatchException | EntityNotFoundException e) {
+        Game g = DataManager.getInstance().getGame(idNum);
+
+        if (g == null) {
             return "{}";
         }
+
+        return g.toJSON();
     }
     
     @POST
