@@ -83,6 +83,11 @@ public class Message extends AbsBusinessObject {
         }
     }
 
+    @Override
+    public boolean hasOwner() {
+        return false;
+    }
+
     /**
      * Gets the time of the message
      * 

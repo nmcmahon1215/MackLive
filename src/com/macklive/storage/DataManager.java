@@ -44,7 +44,7 @@ public class DataManager {
 
     public Key storeItem(IBusinessObject obj) {
         Entity toStore = obj.getEntity();
-        if (!(obj instanceof Message)) {
+        if (obj.hasOwner()) {
             toStore.setIndexedProperty("owner",
                     userService.getCurrentUser().getUserId());
         }

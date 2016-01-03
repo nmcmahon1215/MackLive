@@ -48,4 +48,9 @@ public interface IBusinessObject {
      * @return JSON representation of the object.
      */
     public String toJSON();
+
+    /**
+     * @return True if the object has an owner (a User). False otherwise.
+     */
+    public boolean hasOwner();
 }

@@ -23,4 +23,8 @@ public abstract class AbsBusinessObject implements IBusinessObject {
         return key;
     }
 
+    @Override
+    public boolean hasOwner() {
+        return true;
+    }
 }
