@@ -16,6 +16,7 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
     private Date time;
     private long gameId;
     private boolean approved;
+    private boolean isUserComment;
 
     /**
      * Constructor.
@@ -29,12 +30,13 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
      * @param approved
      *            Whether or not the message is approved for public use
      */
-    public Message(String author, String text, long gameId, boolean approved) {
+    public Message(String author, String text, long gameId, boolean isUserComment) {
         this.author = author;
         this.text = text;
-        this.approved = approved;
+        this.isUserComment = isUserComment;
         this.time = new Date();
         this.gameId = gameId;
+        this.approved = false;
     }
 
     /**
@@ -110,6 +112,23 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
      */
     public long getGameId() {
         return gameId;
+    }
+
+    /**
+     * Getter for approval status
+     * 
+     * @return True if the comment should be in the live feed, false otherwise.
+     *         Non User Comments do not require approval.
+     */
+    public boolean isApproved() {
+        return !isUserComment || approved;
+    }
+
+    /**
+     * Approves a comment for viewing in the live feed.
+     */
+    public void approve() {
+        this.approved = true;
     }
 
     @Override
