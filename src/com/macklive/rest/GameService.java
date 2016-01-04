@@ -38,7 +38,6 @@ public class GameService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{idNum}")
     public String getGameById(@PathParam("idNum") long idNum) {
-        Key k = KeyFactory.createKey("Game", idNum);
         Game g = DataManager.getInstance().getGame(idNum);
 
         if (g == null) {
