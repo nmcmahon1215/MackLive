@@ -14,8 +14,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Message;
