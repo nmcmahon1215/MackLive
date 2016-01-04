@@ -25,6 +25,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject, ICacheab
     private int period;
     @SuppressWarnings("unused")
     private String name;
+    private String ownerId;
     
     /**
      * Constructor
@@ -42,6 +43,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject, ICacheab
         this.period = 1;
         this.created = new Date();
         this.name = this.getName();
+        this.ownerId = "";
     }
     
     /**
@@ -94,6 +96,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject, ICacheab
                 this.period = ((Long) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
                 this.key = e.getKey();
+                this.ownerId = (String) e.getProperty("owner");
+
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
                 e1.printStackTrace();
@@ -237,6 +241,10 @@ public class Game extends AbsBusinessObject implements IBusinessObject, ICacheab
 
     public Team getTeam2() {
         return team2;
+    }
+
+    public String getOwnerId() {
+        return this.ownerId;
     }
 
     @Override
