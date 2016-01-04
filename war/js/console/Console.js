@@ -15,7 +15,16 @@ Console.prototype = {
 	initialize : function() {
 		this.titleElement.innerHTML = "No game selected.";
 		this.titleElement.style.backgroundColor = "red";
+		this.loadButton.disabled = true;
 		this.loadRecentGames();
+		
+		$j(this.gamePicker).on("change", function(event) {
+			if (this.gamePicker.selectedIndex != 0){
+				this.loadButton.disabled = false;
+			} else {
+				this.loadButton.disabled = true;
+			}
+		}.bind(this))
 
 		$j(this.createButton).click(this.createGame.bind(this));
 		$j(this.loadButton).click(this.loadGame.bind(this));
