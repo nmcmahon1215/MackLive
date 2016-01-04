@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.macklive.objects.Game;
-import com.macklive.objects.ICacheableObject;
+import com.macklive.objects.IBusinessObject;
 import com.macklive.objects.Message;
 
 /**
@@ -187,10 +187,10 @@ public class CacheManager {
      *            Object to load into the cache
      * @return True if the object was loaded, false otherwise
      */
-    public boolean load(ICacheableObject obj) {
-        if (obj.isMessage()) {
+    public boolean load(IBusinessObject obj) {
+        if (obj instanceof Message) {
             load((Message) obj);
-        } else if (obj.isGame()) {
+        } else if (obj instanceof Game) {
             load((Game) obj);
         } else {
             return false;
@@ -205,10 +205,10 @@ public class CacheManager {
      *            Objects to load into the cache.
      * @return True if the objects were loaded, false if one or more failed.
      */
-    public boolean load(List<? extends ICacheableObject> objs) {
+    public boolean load(List<? extends IBusinessObject> objs) {
         boolean result = true;
 
-        for (ICacheableObject obj : objs) {
+        for (IBusinessObject obj : objs) {
             result = load(obj) && result;
         }
 

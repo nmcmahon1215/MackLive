@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
 
-public class Game extends AbsCacheableObject implements IBusinessObject {
+public class Game extends AbsBusinessObject implements IBusinessObject {
 
     private Date created;
     private Team team1;
@@ -102,15 +102,10 @@ public class Game extends AbsCacheableObject implements IBusinessObject {
                     + "but received \"" + e.getKind());
         }
     }
-    
-    @Override
-    public boolean isGame() {
-        return true;
-    }
 
     @Override
-    public boolean isMessage() {
-        return false;
+    public boolean isCacheable() {
+        return true;
     }
 
     /**
