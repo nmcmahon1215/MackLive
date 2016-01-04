@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.macklive.objects.Game;
-import com.macklive.objects.IBusinessObject;
+import com.macklive.objects.ICacheableObject;
 import com.macklive.objects.Message;
 
 /**
@@ -106,7 +106,7 @@ public class CacheManager {
      * @param g
      *            Game to load into cache
      */
-    private void load(Game g) {
+    public void load(Game g) {
         long gameId = g.getKey().getId();
         CacheObject item;
         boolean exists;
@@ -132,7 +132,7 @@ public class CacheManager {
      * @param m
      *            Message to add to the list.
      */
-    private void load(Message m){
+    public void load(Message m) {
         long gameId = m.getGameId();
         CacheObject item;
         boolean exists;
@@ -181,38 +181,27 @@ public class CacheManager {
     }
 
     /**
-     * Attempts to load the business object into the cache.
+     * Loads the cacheblae object into the cache.
      * 
      * @param obj
      *            Object to load into the cache
      * @return True if the object was loaded, false otherwise
      */
-    public boolean load(IBusinessObject obj) {
-        if (obj instanceof Message) {
-            load((Message) obj);
-        } else if (obj instanceof Game) {
-            load((Game) obj);
-        } else {
-            return false;
-        }
-        return true;
+    public void load(ICacheableObject obj) {
+        obj.cache(this);
     }
 
     /**
-     * Attempts to load a list of business objects into the cache
+     * Loads the list of cacheable objects into the cache.
      * 
      * @param objs
      *            Objects to load into the cache.
      * @return True if the objects were loaded, false if one or more failed.
      */
-    public boolean load(List<? extends IBusinessObject> objs) {
-        boolean result = true;
-
-        for (IBusinessObject obj : objs) {
-            result = load(obj) && result;
+    public void load(List<? extends ICacheableObject> objs) {
+        for (ICacheableObject obj : objs) {
+            obj.cache(this);
         }
-
-        return result;
     }
 
 }

@@ -22,6 +22,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
+import com.macklive.objects.ICacheableObject;
 import com.macklive.objects.Message;
 import com.macklive.objects.Team;
 
@@ -55,7 +56,7 @@ public class DataManager {
         obj.setKey(k);
 
         if (obj.isCacheable()) {
-            cacheManager.load(obj);
+            cacheManager.load((ICacheableObject) obj);
         }
 
         return k;

@@ -4,11 +4,12 @@ import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
 import com.macklive.exceptions.EntityMismatchException;
+import com.macklive.storage.CacheManager;
 
 /**
  * Describes a message in a game.
  */
-public class Message extends AbsBusinessObject {
+public class Message extends AbsBusinessObject implements ICacheableObject {
 
     private String author;
     private String text;
@@ -109,5 +110,10 @@ public class Message extends AbsBusinessObject {
      */
     public long getGameId() {
         return gameId;
+    }
+
+    @Override
+    public void cache(CacheManager cm) {
+        cm.load(this);
     }
 }

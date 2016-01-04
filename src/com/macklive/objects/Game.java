@@ -7,9 +7,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
+import com.macklive.storage.CacheManager;
 import com.macklive.storage.DataManager;
 
-public class Game extends AbsBusinessObject implements IBusinessObject {
+public class Game extends AbsBusinessObject implements IBusinessObject, ICacheableObject {
 
     private Date created;
     private Team team1;
@@ -236,6 +237,11 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
 
     public Team getTeam2() {
         return team2;
+    }
+
+    @Override
+    public void cache(CacheManager cm) {
+        cm.load(this);
     }
 
 }
