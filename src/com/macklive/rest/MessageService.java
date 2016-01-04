@@ -1,5 +1,6 @@
 package com.macklive.rest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Message;
@@ -33,10 +35,16 @@ public class MessageService {
     public String postMessage(String messageJSON, @Context HttpServletResponse servletResponse) {
         try {
             JSONObject jso = new JSONObject(messageJSON);
-            boolean approved = true;
 
-            Message newMessage = new Message(jso.getString("author"), jso.getString("text"), jso.getLong(
-                    "game"), approved);
+            long gameId = jso.getLong("game");
+            String currentUID = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+            String gameOwnerUID = DataManager.getInstance().getGame(gameId).getOwnerId();
+
+            boolean userComment = !currentUID.equals(gameOwnerUID);
+
+
+            Message newMessage = new Message(jso.getString("author"), jso.getString("text"), gameId,
+                    userComment);
 
             DataManager.getInstance().storeItem(newMessage);
 
@@ -80,9 +88,18 @@ public class MessageService {
         Gson gs = GsonUtility.getGson();
 
         HashMap<String, Object> hm = new HashMap<String, Object>();
-        hm.put("messages", messages);
-        if (messages.size() > 0) {
-            hm.put("latestTime", messages.get(messages.size() - 1).getTime().getTime());
+        
+        List<Message> responseMessages = new ArrayList<Message>();
+        
+        for (Message m : messages) {
+            if (m.isApproved()) {
+                responseMessages.add(m);
+            }
+        }
+
+        hm.put("messages", responseMessages);
+        if (responseMessages.size() > 0) {
+            hm.put("latestTime", responseMessages.get(responseMessages.size() - 1).getTime().getTime());
         }
 
         return gs.toJson(hm);
