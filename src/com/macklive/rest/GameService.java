@@ -68,4 +68,36 @@ public class GameService {
 		return g.toJSON();
 	}
 
+	/**
+	 * Updates the team for a game
+	 * 
+	 * @param gameId
+	 *            ID of the game to update
+	 * @param team
+	 *            Team number to update (team 1 or team 2)
+	 * @param teamId
+	 *            Id of the new team
+	 * @return A JSON representation of the updated game.
+	 * @throws EntityMismatchException
+	 *             An error occurred when reading the entity
+	 * @throws EntityNotFoundException
+	 *             The game or team could not be found.
+	 */
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{id}/{teamNum}")
+	public String updateTeam(@PathParam("id") long gameId, @PathParam("teamNum") int team, long teamId)
+			throws EntityMismatchException, EntityNotFoundException {
+		DataManager dstore = DataManager.getInstance();
+		Game game = dstore.getGame(gameId);
+		Team newTeam = new Team(dstore.getEntityWithKey(KeyFactory.createKey("Team", teamId)));
+		if (team == 1) {
+			game.setTeam1(newTeam);
+		} else if (team == 2) {
+			game.setTeam2(newTeam);
+		}
+		dstore.storeItem(game);
+		return game.toJSON();
+	}
 }
