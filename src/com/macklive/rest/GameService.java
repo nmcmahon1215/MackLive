@@ -26,45 +26,46 @@ import com.macklive.storage.DataManager;
 @Path("/game")
 public class GameService {
 
-    @GET
-    @Path("/recent/{num}")
-    public String getRecentGames(@PathParam("num") int number){
-        List<Game> games = DataManager.getInstance().getRecentGames(number);
-        Gson gs = GsonUtility.getGson();
-        return gs.toJson(games);
-    }
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{idNum}")
-    public String getGameById(@PathParam("idNum") long idNum) {
-        Game g = DataManager.getInstance().getGame(idNum);
+	@GET
+	@Path("/recent/{num}")
+	public String getRecentGames(@PathParam("num") int number) {
+		List<Game> games = DataManager.getInstance().getRecentGames(number);
+		Gson gs = GsonUtility.getGson();
+		return gs.toJson(games);
+	}
 
-        if (g == null) {
-            return "{}";
-        }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{idNum}")
+	public String getGameById(@PathParam("idNum") long idNum) {
+		Game g = DataManager.getInstance().getGame(idNum);
 
-        return g.toJSON();
-    }
-    
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String createNewGame(String teams) throws EntityMismatchException, EntityNotFoundException{
-        String[] teamNames = teams.split(",");
-        String team1Id = teamNames[0];
-        String team2Id = teamNames[1];
-        
-        DataManager dstore = DataManager.getInstance();
-        Key k1 = KeyFactory.createKey("Team", Long.parseLong(team1Id));
-        Key k2 = KeyFactory.createKey("Team", Long.parseLong(team2Id));
-        Team t1 = new Team(dstore.getEntityWithKey(k1));
-        Team t2 = new Team(dstore.getEntityWithKey(k2));
-        
-        Game g = new Game(t1, t2);
-        
-        dstore.storeItem(g);
-        
-        return g.toJSON();
-    }
+		if (g == null) {
+			return "{}";
+		}
+
+		return g.toJSON();
+	}
+
+	@POST
+	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String createNewGame(String teams) throws EntityMismatchException, EntityNotFoundException {
+		String[] teamNames = teams.split(",");
+		String team1Id = teamNames[0];
+		String team2Id = teamNames[1];
+
+		DataManager dstore = DataManager.getInstance();
+		Key k1 = KeyFactory.createKey("Team", Long.parseLong(team1Id));
+		Key k2 = KeyFactory.createKey("Team", Long.parseLong(team2Id));
+		Team t1 = new Team(dstore.getEntityWithKey(k1));
+		Team t2 = new Team(dstore.getEntityWithKey(k2));
+
+		Game g = new Game(t1, t2);
+
+		dstore.storeItem(g);
+
+		return g.toJSON();
+	}
+
 }
