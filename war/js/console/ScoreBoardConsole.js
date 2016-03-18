@@ -31,10 +31,12 @@ ScoreBoardConsole.prototype = {
 		this.team1Selector = document.createElement("select");
 		this.team1Selector.id = "team1select";
 		this.team1Selector.className = "teamSelect form-control";
+		$j(this.team1Selector).on("change", this.updateTeam);
 		
 		this.team2Selector = document.createElement("select");
 		this.team2Selector.id = "team2select";
 		this.team2Selector.className = "teamSelect form-control";
+		$j(this.team2Selector).on("change", this.updateTeam);
 		
 		this.initializeTeams();
 		
@@ -216,4 +218,38 @@ ScoreBoardConsole.prototype = {
 		this.periodBox.value = game.period;
 		
 	},
+	updateTeam: function(){
+		if (!adminConsole || !adminConsole.gameId){
+			return;
+		}
+		
+		var teamNum;
+		if (this.id == "team1select"){
+			teamNum = 1;
+		} else if (this.id == "team2select"){
+			teamNum = 2;
+		} else {
+			return;
+		}
+		
+		var team = this.children[this.selectedIndex];
+		console.log(location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum);
+		$j.ajax({
+			url : location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum,
+			method : "POST",
+			contentType : "text/plain",
+			dataType : "json",
+			data : team.id,
+			context : this,
+			timeout : 2000,
+			success : function(response) {
+				console.log(response);
+				adminConsole.gameId = response.key.id;
+				adminConsole.setGameName(response.name);
+			},
+			error : function(response, errorType, errorThrown) {
+				alert("Failed to update Game.");
+			},
+		})
+	}
 }
