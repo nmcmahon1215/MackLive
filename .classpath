@@ -6,44 +6,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance-repackaged-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-labs.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-endpoints-deps.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-endpoints.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-4.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/asm-debug-all-5.0.4.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-api-jdo-3.1.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-api-jpa-3.1.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-2.1.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-core-3.1.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/geronimo-jpa_2.0_spec-1.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-api-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-locator-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/hk2-utils-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.18.1-GA.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.annotation-api-1.2.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.inject-2.4.0-b31.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.servlet-api-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.ws.rs-api-2.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jaxb-api-2.2.7.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jdo-api-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-client.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-common.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-container-servlet-core.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-container-servlet.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-guava-2.21.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-media-jaxb.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-media-multipart-2.22.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jersey-server.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr107cache-1.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/mimepull-1.9.6.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/org.osgi.core-4.2.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/osgi-resource-locator-1.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/persistence-api-1.0.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-2.5.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/java-json.jar"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=MackLive&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;acceptedTypes=jar%2Cbundle&amp;alphaOrder=false&amp;resolveInWorkspace=false&amp;transitiveResolve=true&amp;readOSGiMetadata=false&amp;retrievedClasspath=true&amp;retrievedClasspathPattern=war%2FWEB-INF%2Flib%2F%5Bartifact%5D-%5Btype%5D-%5Brevision%5D.%5Bext%5D&amp;retrievedClasspathSync=false&amp;retrievedClasspathTypes=bundle"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
