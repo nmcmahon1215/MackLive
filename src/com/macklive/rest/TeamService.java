@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class TeamService {
             )
     public String getTeamNames(){
         List<Team> teams = DataManager.getInstance().getTeams();
-        teams.sort(new Comparator<Team>(){
+        Collections.sort(teams, new Comparator<Team>(){
 
             @Override
             public int compare(Team t1, Team t2) {
