@@ -11,7 +11,7 @@ public class BusinessObjectFactory {
     }
 
     public static AbsBusinessObject getBusinessObject(String JSON,
-            Class<?> type) {
+            Class<? extends AbsBusinessObject> type) {
         return gs.fromJson(JSON, type);
     }
 }
