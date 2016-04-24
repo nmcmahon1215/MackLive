@@ -1,5 +1,6 @@
 <ivy-module version="2.0">
   <info organisation="com.macklive" module="maclive"/>
+	<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="1.9.36"/>
 	<dependency org="org.glassfish.hk2" name="hk2-api" rev="2.4.0"/>
 	<dependency org="org.glassfish.hk2" name="hk2-locator" rev="2.4.0"/>
 	<dependency org="org.glassfish.hk2" name="hk2-utils" rev="2.4.0"/>
