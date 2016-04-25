@@ -80,7 +80,7 @@ TeamManagerConsole.prototype = {
 		 * Loads a team into the manager
 		 */
 		loadTeam: function() {
-			var index = this.teamPicker.selectedIndex
+			var index = this.teamPicker.selectedIndex;
 			var option = this.teamPicker.children[index];
 			
 			var id = option.id;

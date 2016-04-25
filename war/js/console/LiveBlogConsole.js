@@ -25,7 +25,7 @@ LiveBlogConsole.prototype = {
 				callEvent.preventDefault();
 				this.submitMessage();
 				return false;
-			}.bind(this))
+			}.bind(this));
 			
 			this.textArea = document.createElement("textarea");
 			this.textArea.id = "liveBlogInput";
@@ -63,7 +63,7 @@ LiveBlogConsole.prototype = {
 			this.submitButton.style.margin = "10px";
 			this.submitButton.disabled = true;
 			
-			$j(this.form).append(nameDiv, this.textArea, this.submitButton)
+			$j(this.form).append(nameDiv, this.textArea, this.submitButton);
 			
 			this.$container.append(header, liveBlogFeedElement, this.form);
 		},

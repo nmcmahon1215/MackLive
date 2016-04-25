@@ -9,7 +9,7 @@ Console = function() {
 	this.loadButton = document.getElementById("loadButton");
 	this.createButton = document.getElementById("createButton");
 	this.initialize();
-}
+};
 
 Console.prototype = {
 	initialize : function() {
@@ -24,7 +24,7 @@ Console.prototype = {
 			} else {
 				this.loadButton.disabled = true;
 			}
-		}.bind(this))
+		}.bind(this));
 
 		$j(this.createButton).click(this.createGame.bind(this));
 		$j(this.loadButton).click(this.loadGame.bind(this));
@@ -121,4 +121,4 @@ Console.prototype = {
 			},
 		})
 	}
-}
+};
