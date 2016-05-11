@@ -51,30 +51,29 @@ Console.prototype = {
 		}
 	},
 	loadRecentGames : function() {
-		$j
-				.ajax({
-					url : location.protocol + '//' + location.host
-							+ "/api/game/recent/5",
-					dataType : "json",
-					context : this,
-					success : function(response) {
-						var games = response;
-						this.gamePicker.innerHTML = "<option>Select A Game...</option>";
-						if (!games) {
-							return;
-						}
-						games.forEach(function(game) {
-							if (game != "") {
-								this.gamePicker.innerHTML += "<option id="
-										+ game.key.id + ">" + game.name
-										+ "</option>";
-							}
-						});
-					},
-					error : function(response, errorType, errorMessage) {
-						alert("Could not fetch recent games.");
+		$j.ajax({
+			url: location.protocol + '//' + location.host
+			+ "/api/game/recent/5",
+			dataType: "json",
+			context: this,
+			success: function (response) {
+				var games = response;
+				this.gamePicker.innerHTML = "<option>Select A Game...</option>";
+				if (!games) {
+					return;
+				}
+				games.forEach(function (game) {
+					if (game != "") {
+						this.gamePicker.innerHTML += "<option id="
+							+ game.key.id + ">" + game.name
+							+ "</option>";
 					}
-				})
+				});
+			},
+			error: function (response, errorType, errorMessage) {
+				alert("Could not fetch recent games.");
+			}
+		})
 	},
 	loadGame : function() {
 		var game = this.gamePicker.children[this.gamePicker.selectedIndex];
