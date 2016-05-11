@@ -1,158 +1,181 @@
 body {
-	background-color: #fff5b7;
-	font-family: "Open Sans", Arial;
-	font-size: 12px;
-	min-width: 700px;
+    background-color: #333;
+    font-family: "Open Sans", Arial;
+    font-size: 12px;
+    min-width: 700px;
+    padding: 25px;
+    color: white;
 }
 
 h2 {
-	margin: 10px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	font-size: 18px;
+    margin: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 div {
-	position: relative;
+    position: relative;
 }
 
 td {
-	padding: 5px;
-	text-align: center;
+    padding: 5px;
+    text-align: center;
 }
 
 table, th, td {
-	border: 1px solid black;
-	border-collapse: collapse;
+    border: 2px solid white !important;
+    border-collapse: collapse;
 }
 
 input[type='number'] {
-	text-align: center;
+    text-align: center;
 }
 
 label {
-	font-weight: bold;
+    font-weight: bold;
+}
+
+a {
+    color: lightskyblue;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: white;
 }
 
 #gameTitle {
-	color:white;
-	font-size:25px;
-	font-weight:bold;
-	padding: 10px;
-	margin: 5px;
-	position: absolute;
-	left: 265px;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 10px;
+    margin: 0px;
+    border-radius: 5px;
+    position: absolute;
+    left: 265px;
 }
 
 .fadeBG {
-	background-color: initial !important;
-	transition: 1.5s background-color ease-out;
+    background-color: white !important;
+    transition: 1.5s background-color ease-out;
 }
 
 .consoleContainer {
-	padding: 15px;
-	width: 90%;
-	border: 1px solid black;
-	border-radius: 5px;
-	margin: auto;
-	margin-top: 10px;
-	background-color: #0769AD;
-	height:90%;
-	box-shadow: 0px 0px 40px black;
+    padding: 15px;
+    width: 90%;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: auto;
+    margin-top: 10px;
+    background-color: #0769AD;
+    height: 90%;
+    box-shadow: 0px 0px 40px black;
 }
 
 .contentArea {
-	width: 90%;
+    width: 90%;
 }
+
 .userBoxSize {
-	height: calc(100% - 76px);
-	width: calc(50% - 40px);
+    height: calc(100% - 76px);
+    width: calc(50% - 40px);
 }
+
 .userBoxStyle {
-	border: 1px solid white;
-	background-color: white;
-	margin: 25px;
-	margin-bottom: 0px;
-	margin-top: 10px;
-	border-radius: 5px;
-	overflow: auto;
+    background-color: #777777;
+    margin: 25px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow: auto;
 }
+
 .halfHeight {
-	height: calc(50% - 5px);
-	width: 100%
+    height: calc(50% - 5px);
+    width: 100%
 }
+
 .consoleScrollerComments,
 .consoleScrollerFeed {
-	margin: 10px;
-	border: 1px solid black;
-	overflow: auto;
-	background-color: #eaeaea;
+    margin: 10px;
+    border: 1px solid black;
+    overflow: auto;
+    background-color: #eeeeee;
+    border-radius: 5px;
 }
 
 .consoleScrollerComments {
-	height: calc(95% - 50px);
+    height: calc(95% - 50px);
 }
 
 .consoleScrollerFeed {
-	height: calc(97% - 203px);
+    height: calc(97% - 203px);
 }
 
 .liveInput {
-	display:block;
-	width: calc(100% - 20px);
-	margin: auto;
-	resize: none;
-	height: 4em;
-	background-color: lightgreen;
+    display: block;
+    width: calc(100% - 20px);
+    margin: 0px 10px 0px 10px;
+    resize: none;
+    height: 4em;
+    background-color: lightgreen;
 }
 
 .floatL {
-	float: left;
+    float: left;
 }
 
 .floatR {
-	float: right;
+    float: right;
+}
+
+.marginR {
+    margin-right: 25px;
 }
 
 .teamSelect {
-	width: 100%;
+    width: 100%;
 }
 
 .topRight {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .headerImage {
-	box-shadow: 0px 0px 10px 10px white;
-    background-color: white;
-    height: 40px;
-    margin: 10px;
+    height: 50px;
+    margin-left: 25px;
 }
+
 .scoreBox {
-	width: 60px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	margin: auto;
-	height: auto;
+    width: 60px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: auto;
+    height: auto;
 }
+
 .shotsBox {
-	width: 60px;
-	height: auto;
-	margin: auto;
-	padding-top: 3px;
-	padding-bottom: 3px;
+    width: 60px;
+    height: auto;
+    margin: auto;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
-.absoluteVerticalCentered{
-	position:absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	white-space:nowrap;
+
+.absoluteVerticalCentered {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
 }
+
 .absoluteBottomRight {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }

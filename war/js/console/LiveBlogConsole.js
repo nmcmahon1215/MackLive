@@ -4,7 +4,7 @@
 
 LiveBlogConsole = function(containerId) {
 	this.containerId = containerId;
-	this.container = document.getElementById(containerId);
+    this.container = document.getElementById(this.containerId);
 	this.form = null;
 	this.$container = $j(this.container);
 };
@@ -25,7 +25,7 @@ LiveBlogConsole.prototype = {
 				callEvent.preventDefault();
 				this.submitMessage();
 				return false;
-			}.bind(this))
+			}.bind(this));
 			
 			this.textArea = document.createElement("textarea");
 			this.textArea.id = "liveBlogInput";
@@ -37,6 +37,8 @@ LiveBlogConsole.prototype = {
 		            return false;
 		         }
 			}.bind(this));
+
+            this.textArea.addEventListener("keyup", this.validateButton.bind(this));
 			
 			var nameDiv = document.createElement("div");
 			nameDiv.className = "input-group";
@@ -53,6 +55,8 @@ LiveBlogConsole.prototype = {
 			this.nameField.className = "form-control";
 			this.nameField.placeholder = "(Optional) Your name";
 			this.nameField.setAttribute("aria-describedby", "nameLabel");
+
+            this.nameField.addEventListener("keyup", this.validateButton.bind(this));
 			
 			$j(nameDiv).append(this.nameLabel, this.nameField);
 			
@@ -63,15 +67,20 @@ LiveBlogConsole.prototype = {
 			this.submitButton.style.margin = "10px";
 			this.submitButton.disabled = true;
 			
-			$j(this.form).append(nameDiv, this.textArea, this.submitButton)
+			$j(this.form).append(nameDiv, this.textArea, this.submitButton);
 			
 			this.$container.append(header, liveBlogFeedElement, this.form);
 		},
 		initialize: function () {
-			this.submitButton.disabled = false;
+            this.initialized = true;
+            this.validateButton();
 			this.liveBlogFeed.initialize();
-		},
+        },
 		submitMessage: function () {
+            if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "") {
+                return;
+            }
+
 			var message = {
 				author: this.nameField.value,
 				text: this.textArea.value,
@@ -96,5 +105,12 @@ LiveBlogConsole.prototype = {
 					alert("Could not post message!");
 				}
 			})
-		}
+        },
+    validateButton: function () {
+        if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "" || !this.initialized) {
+            this.submitButton.disabled = true;
+        } else {
+            this.submitButton.disabled = false;
+        }
+    }
 };

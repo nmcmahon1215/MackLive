@@ -17,7 +17,7 @@ ScoreBoardConsole.prototype = {
 		teamManageLink.className = "topRight";
 		teamManageLink.onclick = function() {
 			window.open('teamManager.jsp', 'newwindow', 'width=800px, height=350px');
-		}
+		};
 		
 		var table = document.createElement("table");
 		var tableBody = document.createElement("tbody");
@@ -45,13 +45,13 @@ ScoreBoardConsole.prototype = {
 		this.team1ScoreBox = document.createElement("input");
 		this.team1ScoreBox.type = "Number";
 		this.team1ScoreBox.min = 0;
-		this.team1ScoreBox.value = 0
+		this.team1ScoreBox.value = 0;
 		this.team1ScoreBox.className = "scoreBox form-control";
 		
 		this.team2ScoreBox = document.createElement("input");
 		this.team2ScoreBox.type = "number";
 		this.team2ScoreBox.min = 0;
-		this.team2ScoreBox.value = 0
+		this.team2ScoreBox.value = 0;
 		this.team2ScoreBox.className = "scoreBox form-control";
 		
 		this._addRowToTable(tableBody, [this.team1ScoreBox], [this.team2ScoreBox], "Score");
@@ -59,13 +59,13 @@ ScoreBoardConsole.prototype = {
 		this.team1ShotsBox = document.createElement("input");
 		this.team1ShotsBox.type = "number";
 		this.team1ShotsBox.min = 0;
-		this.team1ShotsBox.value = 0
+		this.team1ShotsBox.value = 0;
 		this.team1ShotsBox.className = "shotsBox form-control";
 		
 		this.team2ShotsBox = document.createElement("input");
 		this.team2ShotsBox.type = "number";
 		this.team2ShotsBox.min = 0;
-		this.team2ShotsBox.value = 0
+		this.team2ShotsBox.value = 0;
 		this.team2ShotsBox.className = "shotsBox form-control";
 		
 		this._addRowToTable(tableBody, [this.team1ShotsBox], [this.team2ShotsBox], "SOG");
@@ -151,8 +151,7 @@ ScoreBoardConsole.prototype = {
 							element.innerHTML = this.teams[i].name;
 							this.team2Selector.appendChild(element);
 						}
-					};
-					
+					}
 					var index;
 					
 					if (t1Index < t2Index){
@@ -163,7 +162,7 @@ ScoreBoardConsole.prototype = {
 					
 					this.team2Selector.selectedIndex = index;
 					
-				}.bind(this))
+				}.bind(this));
 				
 				response.forEach(function(team){
 					if (team != ""){
@@ -252,4 +251,4 @@ ScoreBoardConsole.prototype = {
 			},
 		})
 	}
-}
+};

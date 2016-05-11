@@ -1,10 +1,6 @@
 package com.macklive.storage;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.macklive.objects.Game;
@@ -165,7 +161,7 @@ public class CacheManager {
 
         currentCache.addAll(dataMap.entrySet());
 
-        currentCache.sort(new Comparator<Entry<Long, CacheObject>>() {
+        Collections.sort(currentCache, new Comparator<Entry<Long, CacheObject>>() {
 
             @Override
             public int compare(Entry<Long, CacheObject> o1, Entry<Long, CacheObject> o2) {

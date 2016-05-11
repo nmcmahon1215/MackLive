@@ -29,7 +29,7 @@ LiveBlogFeed.prototype = {
 		content.className = "panel-body";
 		
 		header.innerHTML = message.author;
-		content.innerHTML = message.text
+		content.innerHTML = message.text;
 		
 		panel.appendChild(header);
 		panel.appendChild(content);

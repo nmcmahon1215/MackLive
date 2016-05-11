@@ -1,7 +1,7 @@
 @import url(google.css);
 
 body {
-	background-color: #fff5b7;
+	background-color: #333;
 	font-family: "Open Sans", Arial;
 	font-size: 12px;
 	min-width: 700px;
@@ -10,13 +10,9 @@ body {
 
 .mainContainer {
 	padding: 15px;
-	border: 1px solid black;
-	border-radius: 10px;
 	margin: auto;
-	background-color: #0769AD;
-	box-shadow: 0px 0px 40px black;
-	width:30%;
-	height:30%;
+	width:50%;
+	height:50%;
 	position:absolute;
 	top:50%;
 	left: 50%;
@@ -24,10 +20,8 @@ body {
 }
 
 .headerImage {
-	box-shadow: 0px 0px 10px 10px white;
-    background-color: white;
-    height: 40px;
-    margin: 10px;
+    height: 120px;
+    margin: auto;
 }
 
 #login {
