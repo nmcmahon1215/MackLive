@@ -118,7 +118,7 @@ a:hover {
 .liveInput {
     display: block;
     width: calc(100% - 20px);
-    margin: auto;
+    margin: 0px 10px 0px 10px;
     resize: none;
     height: 4em;
     background-color: lightgreen;
@@ -130,6 +130,10 @@ a:hover {
 
 .floatR {
     float: right;
+}
+
+.marginR {
+    margin-right: 25px;
 }
 
 .teamSelect {
