@@ -20,7 +20,7 @@
     </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$MODULE_DIR$/../../SDKs/appengine-java-sdk-1.9.36</sdk-home-path>
+        <sdk-home-path>$USER_HOME$/SDKs/appengine-java-sdk-1.9.37</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src" />
@@ -88,7 +88,7 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.jvnet.mimepull/mimepull/jars/mimepull-1.9.6.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.google.code.gson/gson/jars/gson-2.6.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.json/json/bundles/json-20160212.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.36.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.37.jar!/" />
         </CLASSES>
         <JAVADOC>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-api/javadocs/hk2-api-2.4.0-javadoc.jar!/" />
