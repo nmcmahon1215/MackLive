@@ -150,7 +150,7 @@ public class DataCache {
 
     Entity get(Key id) {
         Object obj = cache.get(id);
-        log.info("Retrieving object from cache: " + obj);
+        log.info("Retrieving object from cache: " + id.getKind() + " " + id.getId());
         return (Entity) obj;
     }
 }

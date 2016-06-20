@@ -71,7 +71,7 @@ LiveBlogFeed.prototype = {
 				
 			}.bind(this),
 			error: function (result, error, desc){
-				alert("Error: " + desc)
+				Console.log("Error fetching new messages");
 			},
 		})
 	},
