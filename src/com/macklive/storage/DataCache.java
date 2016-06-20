@@ -130,7 +130,7 @@ public class DataCache {
      * @param obj Object to load into the cache
      */
     void load(IBusinessObject obj) {
-        cache.put(obj.getKey(), obj);
+        cache.put(obj.getKey(), obj.getEntity());
     }
 
     void load(Key k, Entity e) {
