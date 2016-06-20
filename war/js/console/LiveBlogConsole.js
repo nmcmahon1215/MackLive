@@ -100,6 +100,8 @@ LiveBlogConsole.prototype = {
 					setTimeout(function(){
 						this.textArea.classList.add("fadeBG");
 					}.bind(this), 100);
+
+					this.liveBlogFeed.fetchNewMessages();
 				},
 				error: function(result) {
 					alert("Could not post message!");
