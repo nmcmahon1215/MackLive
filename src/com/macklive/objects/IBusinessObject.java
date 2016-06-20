@@ -54,8 +54,4 @@ public interface IBusinessObject {
      */
     public boolean hasOwner();
 
-    /**
-     * @return True if the item is cacheable, false otherwise
-     */
-    public boolean isCacheable();
 }

@@ -28,8 +28,4 @@ public abstract class AbsBusinessObject implements IBusinessObject {
         return true;
     }
 
-    @Override
-    public boolean isCacheable() {
-        return false;
-    }
 }
