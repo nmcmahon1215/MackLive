@@ -46,7 +46,20 @@
         <h2>Scoreboard Control</h2>
     </div>
 </div>
-<div id='liveBlogContainer' class="floatR userBoxSize userBoxStyle"
-     style="clear: right; margin-left: 10px;"></div>
+<div id='liveBlogContainer' class="floatR userBoxSize userBoxStyle" style="clear: right; margin-left: 10px;">
+    <h2>Live Feed</h2>
+    <div id="liveBlogFeed" class="consoleScrollerFeed">
+    </div>
+    <form id="liveBlogForm">
+        <div class="input-group" style="margin: 10px">
+            <span id="nameLabel" class="input-group-addon">Posting as:</span>
+            <input id="nameInput" type="text" class="form-control" placeholder="Your name"
+                   aria-describedby="nameLabel"/>
+        </div>
+        <textarea id="liveBlogInput" class="liveInput fadeBG form-control" placeholder="Enter a post"></textarea>
+        <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
+               style="margin:10px" disabled/>
+    </form>
+</div>
 </body>
 </html>

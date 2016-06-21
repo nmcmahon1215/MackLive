@@ -11,65 +11,25 @@ LiveBlogConsole = function(containerId) {
 
 LiveBlogConsole.prototype = {
 		render: function() {
-			var header = document.createElement("h2");
-			header.innerHTML = "Live Feed";
-			
-			var liveBlogFeedElement = document.createElement("div");
-			liveBlogFeedElement.id = 'liveBlogFeed';
+
+			var liveBlogFeedElement = document.getElementById("liveBlogFeed");
 			this.liveBlogFeed = new LiveBlogFeed(liveBlogFeedElement);
 			this.liveBlogFeed.render();
-			
-			this.form = document.createElement("form");
-			$j(this.form).on("submit", function(event){
-				var callEvent = event || window.event;
-				callEvent.preventDefault();
-				this.submitMessage();
-				return false;
-			}.bind(this));
-			
-			this.textArea = document.createElement("textarea");
-			this.textArea.id = "liveBlogInput";
-			this.textArea.className = "liveInput fadeBG form-control";
-			this.textArea.placeholder = "Enter a post";
+
+			this.form = document.getElementById("liveBlogForm");
+			this.textArea = document.getElementById("liveBlogInput");
+
 			this.textArea.addEventListener("keypress", function(event){
 				if (event.keyCode == 13) {
-		            this.submitMessage();
-		            return false;
-		         }
+					this.submitMessage();
+					return false;
+				}
 			}.bind(this));
 
-            this.textArea.addEventListener("keyup", this.validateButton.bind(this));
-			
-			var nameDiv = document.createElement("div");
-			nameDiv.className = "input-group";
-			nameDiv.style.margin = "10px";
-			
-			this.nameLabel = document.createElement("span");
-			this.nameLabel.id = "nameLabel";
-			this.nameLabel.innerHTML = "Posting as: ";
-			this.nameLabel.className = "input-group-addon";
-			
-			this.nameField = document.createElement("input");
-			this.nameField.id = "nameInput";
-			this.nameField.type = "text";
-			this.nameField.className = "form-control";
-			this.nameField.placeholder = "(Optional) Your name";
-			this.nameField.setAttribute("aria-describedby", "nameLabel");
-
-            this.nameField.addEventListener("keyup", this.validateButton.bind(this));
-			
-			$j(nameDiv).append(this.nameLabel, this.nameField);
-			
-			this.submitButton = document.createElement("input");
-			this.submitButton.type = "submit";
-			this.submitButton.value = "Submit";
-			this.submitButton.className = "action floatR btn btn-primary";
-			this.submitButton.style.margin = "10px";
-			this.submitButton.disabled = true;
-			
-			$j(this.form).append(nameDiv, this.textArea, this.submitButton);
-			
-			this.$container.append(header, liveBlogFeedElement, this.form);
+			this.textArea.addEventListener("keyup", this.validateButton.bind(this));
+			this.nameField = document.getElementById("nameInput");
+			this.nameField.addEventListener("keyup", this.validateButton.bind(this));
+			this.submitButton = document.getElementById("liveBlogSubmitButton");
 		},
 		initialize: function () {
             this.initialized = true;
