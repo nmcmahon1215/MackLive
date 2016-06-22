@@ -13,7 +13,7 @@ ScoreBoardConsole.prototype = {
 	render: function() {
 		var teamManageLink = document.getElementById("teamManageLink");
 		teamManageLink.onclick = function() {
-			window.open('teamManager.jsp', 'newwindow', 'width=800px, height=350px');
+			window.open('teamManager.jsp', 'newwindow', 'width=650px, height=350px');
 		};
 
 		this.team1Selector = document.getElementById("team1select");
@@ -98,6 +98,8 @@ ScoreBoardConsole.prototype = {
 				break;
 			}
 		}
+
+		$j(this.team1Selector).trigger("change");
 		
 		for (var i = 0; i < this.team2Selector.children.length; i++){
 			if (this.team2Selector.children[i].id == t2id){
@@ -108,7 +110,7 @@ ScoreBoardConsole.prototype = {
 		}
 		
 		if (!t1found || !t2found) {
-			alert("Error loading game: " + game.Name);
+			alert("Error loading game: " + game.name);
 		}
 		
 		this.team1ScoreBox.value = game.team1goals;
