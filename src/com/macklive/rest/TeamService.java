@@ -59,7 +59,7 @@ public class TeamService {
         Team t = new Team(name, abbr);
 
 
-        if (logoStream != null){
+        if (teamLogo != null) {
             t.setLogo(teamLogo);
         }
 

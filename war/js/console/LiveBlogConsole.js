@@ -28,6 +28,7 @@ LiveBlogConsole.prototype = {
 			this.nameField = document.getElementById("nameInput");
 			this.nameField.addEventListener("keyup", this.validateButton.bind(this));
 			this.submitButton = document.getElementById("liveBlogSubmitButton");
+			$j(this.submitButton).click(this.submitMessage().bind(this))
 		},
 		initialize: function () {
             this.initialized = true;
