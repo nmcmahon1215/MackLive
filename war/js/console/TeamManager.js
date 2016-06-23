@@ -23,7 +23,8 @@ TeamManagerConsole.prototype = {
 		render: function() {
 			$j(this.teamName).keyup(this.validateSave.bind(this));
 			$j(this.teamAbbr).keyup(this.validateSave.bind(this));
-			$j(this.uploadButton).change(this.previewImage.bind(this));
+			$j(this.uploadButton).on("change", this.previewImage.bind(this));
+			$j(this.uploadButton).on("change", this.validateSave.bind(this));
 			$j(this.saveButton).click(this.saveTeam.bind(this));
 			$j(this.teamPicker).change(this.loadTeam.bind(this));
 		},
@@ -32,7 +33,8 @@ TeamManagerConsole.prototype = {
 		 * to the save button
 		 */
 		validateSave: function() {
-			if (this.teamName.value.length > 0 && this.teamAbbr.value.length > 0){
+			if (this.teamName.value.length > 0 && this.teamAbbr.value.length > 0 &&
+				((this.uploadButton.files && this.uploadButton.files[0]) || this.teamId)) {
 				this.saveButton.disabled = false;
 			} else {
 				this.saveButton.disabled = true;
@@ -59,6 +61,12 @@ TeamManagerConsole.prototype = {
 		saveTeam: function() {
 			var xhr = new XMLHttpRequest();
 			var formData = new FormData();
+
+			debugger;
+
+			if (this.teamId) {
+				formData.append("teamId", this.teamId);
+			}
 			
 			formData.append("teamName", this.teamName.value.trim());
 			formData.append("teamAbbr", this.teamAbbr.value.trim());
@@ -91,14 +99,25 @@ TeamManagerConsole.prototype = {
 					dataType: "json",
 					context: this,
 					success: function(result) {
+						this.teamId = id;
 						this.teamName.value = result.name;
 						this.teamAbbr.value = result.abbr;
-						this.teamLogo.src = location.protocol + '//' + location.host + '/api/teams/' + id;
+						this.teamLogo.src = location.protocol + '//' + location.host + '/api/teams/image/' + id;
 					},
 					error: function() {
 						alert("Team loading failed.");
 					}
 				});
+			} else {
+				//Reset values
+				this.teamName.value = "";
+				this.teamAbbr.value = "";
+				this.teamLogo.src = "/images/placeholderImage.png";
+				this.teamId = null;
+				this.uploadButton.value = null;
+
+				//Update button
+				this.validateSave();
 			}
 		}
 };
