@@ -38,7 +38,7 @@ LiveBlogFeed.prototype = {
 	},
 	fetchAllMessages: function() {
 		$j.ajax({
-			url: location.protocol + '//' + location.host + "/api/messages/" + adminConsole.gameId,
+			url: location.protocol + '//' + location.host + "/api/messages/" + this.blogId,
 			success: function(result) {
 				var messages = result.messages;
 				messages.forEach(function(message){
@@ -58,7 +58,7 @@ LiveBlogFeed.prototype = {
 	},
 	fetchNewMessages: function() {
 		$j.ajax({
-			url: location.protocol + "//" + location.host + "/api/messages/" + adminConsole.gameId + "/" + this.lastMessageDate.getTime(),
+			url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.lastMessageDate.getTime(),
 			success: function(result) {
 				var messages = result.messages;
 				messages.forEach(function(message){
@@ -68,7 +68,11 @@ LiveBlogFeed.prototype = {
 				if (result.latestTime){ 
 					this.lastMessageDate = new Date(result.latestTime);
 				}
-				
+
+				if (messages.length > 0) {
+					window.scrollTo(0, document.body.scrollHeight);
+				}
+
 			}.bind(this),
 			error: function (result, error, desc){
 				Console.log("Error fetching new messages");

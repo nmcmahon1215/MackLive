@@ -138,7 +138,7 @@ ScoreBoardConsole.prototype = {
 		}
 		
 		var team = this.children[this.selectedIndex];
-		console.log(location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum);
+
 		$j.ajax({
 			url : location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum,
 			method : "POST",
@@ -148,7 +148,6 @@ ScoreBoardConsole.prototype = {
 			context : this,
 			timeout : 2000,
 			success : function(response) {
-				console.log(response);
 				adminConsole.gameId = response.key.id;
 				adminConsole.setGameName(response.name);
 			},

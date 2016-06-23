@@ -12,9 +12,7 @@ LiveBlogConsole = function(containerId) {
 LiveBlogConsole.prototype = {
 		render: function() {
 
-			var liveBlogFeedElement = document.getElementById("liveBlogFeed");
-			this.liveBlogFeed = new LiveBlogFeed(liveBlogFeedElement);
-			this.liveBlogFeed.render();
+			this.liveBlogFeed = document.getElementById("liveBlogFeed");
 
 			this.form = document.getElementById("liveBlogForm");
 			this.textArea = document.getElementById("liveBlogInput");
@@ -34,7 +32,7 @@ LiveBlogConsole.prototype = {
 		initialize: function () {
             this.initialized = true;
             this.validateButton();
-			this.liveBlogFeed.initialize();
+			this.liveBlogFeed.src = "/liveBlogFeed.html?gameId=" + adminConsole.gameId;
         },
 		submitMessage: function () {
             if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "") {
@@ -61,7 +59,7 @@ LiveBlogConsole.prototype = {
 						this.textArea.classList.add("fadeBG");
 					}.bind(this), 100);
 
-					this.liveBlogFeed.fetchNewMessages();
+					this.liveBlogFeed.contentWindow.liveFeed.fetchNewMessages();
 				},
 				error: function(result) {
 					alert("Could not post message!");

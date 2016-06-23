@@ -1,5 +1,30 @@
+body {
+	background-color: transparent;
+	padding: 0px;
+	min-width: 200px;
+	min-height: 400px;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
+
+.feedSize {
+	width: 100%;
+	height: 100%;
+}
+
+.consoleScrollerFeed {
+	height: 100%;
+	background-color: #eeeeee;
+}
+
 .panel {
-    margin: 10px 5px 0px 5px;
+	margin: 10px 5px 10px 5px;
 	color: black;
 }
 

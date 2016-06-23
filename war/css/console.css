@@ -113,6 +113,7 @@ a:hover {
 
 .consoleScrollerFeed {
     height: calc(97% - 203px);
+    width: calc(100% - 20px);
 }
 
 .liveInput {
