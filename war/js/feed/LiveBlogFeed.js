@@ -29,6 +29,7 @@ LiveBlogFeed.prototype = {
 		this.container.innerHTML = "";
 		this.fetchAllMessages();
 		setInterval(this.fetchNewMessages.bind(this), 5000);
+        setInterval(this.refreshScore.bind(this), 10000);
 		this.initScoreboard();
 	},
 	initScoreboard: function () {
@@ -44,24 +45,37 @@ LiveBlogFeed.prototype = {
 				$j(this.team2).boxfit({multiline: true});
 
 
-				this.score1.innerHTML = response.team1goals;
-				this.score2.innerHTML = response.team2goals;
-
-				this.shots1.innerHTML = "Shots: " + response.team1sog;
-				this.shots2.innerHTML = "Shots: " + response.team2sog;
-
-				response.team1pp ? $j(this.t1pp).slideDown() : $j(this.t1pp).slideUp();
-				response.team2pp ? $j(this.t2pp).slideDown() : $j(this.t2pp).slideUp();
-
-				this.timer.innerHTML = response.time;
-				this.period.innerHTML = "Per " + response.period;
+                this.updateScore(response);
 				
 			}.bind(this),
 			error: function () {
-				alert("Failed to get scoreboard information.");
+                console.error("Failed to get scoreboard information.");
 			}
 		})
 	},
+    refreshScore: function () {
+        $j.ajax({
+            url: location.protocol + '//' + location.host + "/api/game/" + this.blogId,
+            context: this,
+            success: this.updateScore,
+            error: function () {
+                console.error("Failed to refresh scoreboard information.");
+            }
+        })
+    },
+    updateScore: function (gameObject) {
+        this.score1.innerHTML = gameObject.team1goals;
+        this.score2.innerHTML = gameObject.team2goals;
+
+        this.shots1.innerHTML = "Shots: " + gameObject.team1sog;
+        this.shots2.innerHTML = "Shots: " + gameObject.team2sog;
+
+        gameObject.team1pp ? $j(this.t1pp).slideDown() : $j(this.t1pp).slideUp();
+        gameObject.team2pp ? $j(this.t2pp).slideDown() : $j(this.t2pp).slideUp();
+
+        this.timer.innerHTML = gameObject.time;
+        this.period.innerHTML = "Per " + gameObject.period;
+    },
 	addMessage: function (message) {
 		var panel = document.createElement("div");
 		var header = document.createElement("div");
@@ -91,10 +105,14 @@ LiveBlogFeed.prototype = {
 				if (result.latestTime){
 					this.lastMessageDate = new Date(result.latestTime);
 				}
+
+                $j(this.container).animate({
+                    scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+                });
 				
 			}.bind(this),
 			error: function (result, error, desc){
-				alert("Error: " + desc);
+                console.error("Error: " + desc);
 			}
 				
 		});
@@ -113,12 +131,14 @@ LiveBlogFeed.prototype = {
 				}
 
 				if (messages.length > 0) {
-					window.scrollTo(0, document.body.scrollHeight);
+                    $j(this.container).animate({
+                        scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+                    });
 				}
 
 			}.bind(this),
 			error: function (result, error, desc){
-				Console.log("Error fetching new messages");
+                console.error("Error fetching new messages");
 			},
 		})
 	},

@@ -142,6 +142,22 @@ a:hover {
     width: 100%;
 }
 
+.fa-check {
+    color: #5cb85c;
+}
+
+.fa-refresh {
+    animation: spin 1s linear infinite;
+}
+
+.fa-times {
+    color: red;
+}
+
+.fa-code {
+    text-decoration: underline;
+}
+
 .topRight {
     position: absolute;
     top: 10px;

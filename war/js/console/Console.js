@@ -45,9 +45,14 @@ AdminConsole.prototype = {
 				this.idMessage.style.position = "absolute";
 				this.idMessage.style.right = "0px";
 				this.idMessage.style.marginTop = "5px";
+				this.idMessage.style.textDecoration = "underline";
+				this.idMessage.style.cursor = "pointer";
 				this.loadButton.parentElement.appendChild(this.idMessage);
 			}
-			this.idMessage.innerHTML = "Game id: " + this.gameId;
+			this.idMessage.innerHTML = "Game id: " + this.gameId + " <i class='fa fa-code' aria-hidden='true'></i>";
+			$j(this.idMessage).click(function () {
+				$j('#embedModal').modal();
+			});
 		}
 	},
 	loadRecentGames : function() {
@@ -87,7 +92,8 @@ AdminConsole.prototype = {
 			success : function(response) {
 				this.gameId = game.id;
 				this.setGameName(game.value);
-				scoreBoard.updateInfo(response);
+				scoreBoard.loadTeams(response);
+				scoreBoard.loadScoreInfo(response);
 				liveConsole.initialize();
 			},
 			error : function(response, errorType, errorStuff) {

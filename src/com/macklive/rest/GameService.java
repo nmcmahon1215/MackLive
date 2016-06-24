@@ -1,7 +1,5 @@
 package com.macklive.rest;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
@@ -19,6 +18,7 @@ import com.macklive.objects.Game;
 import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
+import org.json.JSONObject;
 
 /**
  * Rest endpoint for getting Game information
@@ -32,6 +32,28 @@ public class GameService {
 		List<Game> games = DataManager.getInstance().getRecentGames(number);
 		Gson gs = GsonUtility.getGson();
 		return gs.toJson(games);
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/{gameId}")
+	public String updateGame(@PathParam("gameId") long gameId, String data) {
+		DataManager dm = DataManager.getInstance();
+
+		JSONObject jso = new JSONObject(data);
+		Game game = dm.getGame(gameId);
+		game.setTeam1goals(jso.getInt("team1goals"));
+		game.setTeam2goals(jso.getInt("team2goals"));
+		game.setTeam1pp(jso.getBoolean("team1pp"));
+		game.setTeam2pp(jso.getBoolean("team2pp"));
+		game.setTeam1sog(jso.getInt("team1sog"));
+		game.setTeam2sog(jso.getInt("team2sog"));
+		game.setTime(jso.getString("time"));
+		game.setPeriod(jso.getInt("period"));
+
+		dm.storeItem(game);
+
+		return game.toJSON();
 	}
 
 	@GET
