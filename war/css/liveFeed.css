@@ -84,7 +84,7 @@ body {
     position: absolute;
     bottom: 0px;
     left: 0px;
-    visibility: hidden;
+    display: none;
 }
 
 .teamWrapper {
