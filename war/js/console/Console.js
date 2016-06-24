@@ -2,7 +2,7 @@
  * This JS controls functions for the Console as a whole
  */
 
-Console = function() {
+AdminConsole = function () {
 	this.gameName = null;
 	this.titleElement = document.getElementById("gameTitle");
 	this.gamePicker = document.getElementById("gamePicker");
@@ -11,7 +11,7 @@ Console = function() {
 	this.initialize();
 };
 
-Console.prototype = {
+AdminConsole.prototype = {
 	initialize : function() {
 		this.titleElement.innerHTML = "No game selected.";
 		this.titleElement.style.backgroundColor = "red";
