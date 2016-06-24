@@ -13,7 +13,6 @@ LiveBlogConsole.prototype = {
 		render: function() {
 
 			this.liveBlogFeed = document.getElementById("liveBlogFeed");
-
 			this.form = document.getElementById("liveBlogForm");
 			this.textArea = document.getElementById("liveBlogInput");
 
@@ -28,7 +27,7 @@ LiveBlogConsole.prototype = {
 			this.nameField = document.getElementById("nameInput");
 			this.nameField.addEventListener("keyup", this.validateButton.bind(this));
 			this.submitButton = document.getElementById("liveBlogSubmitButton");
-			$j(this.submitButton).click(this.submitMessage().bind(this))
+			$j(this.submitButton).click(this.submitMessage.bind(this))
 		},
 		initialize: function () {
             this.initialized = true;

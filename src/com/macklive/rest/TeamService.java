@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -32,6 +33,8 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/teams")
 public class TeamService {
+
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -98,6 +101,11 @@ public class TeamService {
         try {
             Team t = new Team(DataManager.getInstance()
                     .getEntityWithKey(KeyFactory.createKey("Team", id)));
+            if (t.getLogo() == null) {
+                logger.warning("No logo for team " + id);
+                builder.status(404);
+                return builder.build();
+            }
             final byte[] imageBytes = t.getLogo().getBytes();
             builder.status(200).type("image/png").entity(new StreamingOutput(){
 
