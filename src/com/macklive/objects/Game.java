@@ -18,8 +18,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private int team2goals;
     private int team1sog;
     private int team2sog;
-    private boolean team1penalty;
-    private boolean team2penalty;
+    private boolean team1pp;
+    private boolean team2pp;
     private String time;
     private int period;
     private String name;
@@ -70,8 +70,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         e.setProperty("T2Score", this.team2goals);
         e.setProperty("T1SOG", this.team1sog);
         e.setProperty("T2SOG", this.team2sog);
-        e.setProperty("T1Penalty", this.team1penalty);
-        e.setProperty("T2Penalty", this.team2penalty);
+        e.setProperty("T1PP", this.team1pp);
+        e.setProperty("T2PP", this.team2pp);
         e.setProperty("Time", this.time);
         e.setProperty("Period", this.period);
         e.setProperty("Date", this.created);
@@ -90,8 +90,14 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
                 this.team2goals = ((Number) e.getProperty("T2Score")).intValue();
                 this.team1sog = ((Number) e.getProperty("T1SOG")).intValue();
                 this.team2sog = ((Number) e.getProperty("T2SOG")).intValue();
-                this.team1penalty = (boolean) e.getProperty("T1Penalty");
-                this.team2penalty = (boolean) e.getProperty("T2Penalty");
+                try {
+                    this.team1pp = (boolean) e.getProperty("T1PP");
+                    this.team2pp = (boolean) e.getProperty("T2PP");
+                } catch (Exception ex) {
+                    this.team1pp = (boolean) e.getProperty("T1Penalty");
+                    this.team2pp = (boolean) e.getProperty("T2Penalty");
+                }
+
                 this.time = (String) e.getProperty("Time");
                 this.period = ((Number) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
@@ -164,20 +170,20 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         this.team2sog = team2sog;
     }
 
-    public boolean isTeam1penalty() {
-        return team1penalty;
+    public boolean isTeam1pp() {
+        return team1pp;
     }
 
-    public void setTeam1penalty(boolean team1penalty) {
-        this.team1penalty = team1penalty;
+    public void setTeam1pp(boolean team1pp) {
+        this.team1pp = team1pp;
     }
 
-    public boolean isTeam2penalty() {
-        return team2penalty;
+    public boolean isTeam2pp() {
+        return team2pp;
     }
 
-    public void setTeam2penalty(boolean team2penalty) {
-        this.team2penalty = team2penalty;
+    public void setTeam2pp(boolean team2pp) {
+        this.team2pp = team2pp;
     }
 
     public String getTime() {
