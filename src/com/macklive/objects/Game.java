@@ -23,7 +23,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private String time;
     private int period;
     private String name;
-    private String ownerId;
+    private transient String ownerId;
 
     /**
      * Constructor
@@ -64,16 +64,16 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         } else {
             e = new Entity("Game");
         }
-        e.setProperty("Team1", team1.getKey());
-        e.setProperty("Team2", team2.getKey());
-        e.setProperty("T1Score", this.team1goals);
-        e.setProperty("T2Score", this.team2goals);
-        e.setProperty("T1SOG", this.team1sog);
-        e.setProperty("T2SOG", this.team2sog);
-        e.setProperty("T1PP", this.team1pp);
-        e.setProperty("T2PP", this.team2pp);
-        e.setProperty("Time", this.time);
-        e.setProperty("Period", this.period);
+        e.setUnindexedProperty("Team1", team1.getKey());
+        e.setUnindexedProperty("Team2", team2.getKey());
+        e.setUnindexedProperty("T1Score", this.team1goals);
+        e.setUnindexedProperty("T2Score", this.team2goals);
+        e.setUnindexedProperty("T1SOG", this.team1sog);
+        e.setUnindexedProperty("T2SOG", this.team2sog);
+        e.setUnindexedProperty("T1PP", this.team1pp);
+        e.setUnindexedProperty("T2PP", this.team2pp);
+        e.setUnindexedProperty("Time", this.time);
+        e.setUnindexedProperty("Period", this.period);
         e.setProperty("Date", this.created);
         e.setProperty("Name", this.getName());
         return e;

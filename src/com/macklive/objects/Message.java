@@ -13,8 +13,8 @@ public class Message extends AbsBusinessObject {
     private String author;
     private String text;
     private Date time;
-    private long gameId;
-    private boolean approved;
+    private transient long gameId;
+    private transient boolean approved;
     private boolean isUserComment;
 
     /**
