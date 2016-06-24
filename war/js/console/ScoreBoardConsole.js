@@ -11,123 +11,27 @@ ScoreBoardConsole = function(containerId) {
 
 ScoreBoardConsole.prototype = {
 	render: function() {
-		var teamManageLink = document.createElement("a");
-		teamManageLink.innerHTML = "Manage Teams";
-		teamManageLink.href = "#";
-		teamManageLink.className = "topRight";
+		var teamManageLink = document.getElementById("teamManageLink");
 		teamManageLink.onclick = function() {
-			window.open('teamManager.jsp', 'newwindow', 'width=800px, height=350px');
+			window.open('teamManager.jsp', 'newwindow', 'width=650px, height=350px');
 		};
-		
-		var table = document.createElement("table");
-		var tableBody = document.createElement("tbody");
-		table.appendChild(tableBody);
-		table.style.fontSize = "12px";
-		table.style.width = "95%";
-		table.style.tableLayout = "fixed";
-		table.style.margin = "auto";
-		table.className = "table-bordered";
-		
-		this.team1Selector = document.createElement("select");
-		this.team1Selector.id = "team1select";
-		this.team1Selector.className = "teamSelect form-control";
+
+		this.team1Selector = document.getElementById("team1select");
 		$j(this.team1Selector).on("change", this.updateTeam);
-		
-		this.team2Selector = document.createElement("select");
-		this.team2Selector.id = "team2select";
-		this.team2Selector.className = "teamSelect form-control";
+
+		this.team2Selector = document.getElementById("team2select");
 		$j(this.team2Selector).on("change", this.updateTeam);
 		
 		this.initializeTeams();
-		
-		this._addRowToTable(tableBody, [this.team1Selector], [this.team2Selector], "Team");
-		
-		this.team1ScoreBox = document.createElement("input");
-		this.team1ScoreBox.type = "Number";
-		this.team1ScoreBox.min = 0;
-		this.team1ScoreBox.value = 0;
-		this.team1ScoreBox.className = "scoreBox form-control";
-		
-		this.team2ScoreBox = document.createElement("input");
-		this.team2ScoreBox.type = "number";
-		this.team2ScoreBox.min = 0;
-		this.team2ScoreBox.value = 0;
-		this.team2ScoreBox.className = "scoreBox form-control";
-		
-		this._addRowToTable(tableBody, [this.team1ScoreBox], [this.team2ScoreBox], "Score");
-		
-		this.team1ShotsBox = document.createElement("input");
-		this.team1ShotsBox.type = "number";
-		this.team1ShotsBox.min = 0;
-		this.team1ShotsBox.value = 0;
-		this.team1ShotsBox.className = "shotsBox form-control";
-		
-		this.team2ShotsBox = document.createElement("input");
-		this.team2ShotsBox.type = "number";
-		this.team2ShotsBox.min = 0;
-		this.team2ShotsBox.value = 0;
-		this.team2ShotsBox.className = "shotsBox form-control";
-		
-		this._addRowToTable(tableBody, [this.team1ShotsBox], [this.team2ShotsBox], "SOG");
-		
-		this.team1PenaltyBox = document.createElement("input");
-		this.team1PenaltyBox.type = "checkbox";
-		this.team2PenaltyBox = document.createElement("input");
-		this.team2PenaltyBox.type = "checkbox";
-		this._addRowToTable(tableBody, [this.team1PenaltyBox], [this.team2PenaltyBox], "Penalty?");
-		
-		this.timeBox = document.createElement("input");
-		this.timeBox.style.width = "100px";
-		this.timeBox.style.margin = "auto";
-		this.timeBox.style.paddingTop = "3px";
-		this.timeBox.style.paddingBottom = "3px";
-		this.timeBox.style.height = "auto";
-		this.timeBox.className = "form-control";
-		this.timeBox.pattern = "\d{2}:\d{2}";
-		this._addRowToTable(tableBody, [this.timeBox], [], "Time");
-		
-		this.periodBox = document.createElement("input");
-		this.periodBox.type = "number";
-		this.periodBox.min = 0;
-		this.periodBox.max = 5;
-		this.periodBox.value = 1;
-		this.periodBox.className = "shotsBox form-control";
-		this._addRowToTable(tableBody, [this.periodBox], [], "Period");
-		
-		this.$container.append(teamManageLink, table);
-	},
-	_addRowToTable: function(tableBody, leftItems, rightItems, label){
-		var row = document.createElement("tr");
-		if (label){
-			var labelData = document.createElement("td");
-			labelData.innerHTML = label;
-			labelData.style.fontWeight = "bold";
-			row.appendChild(labelData);
-		}
-		var dataLeft = document.createElement("td");
-		if (leftItems && leftItems.length > 0){
-			leftItems.forEach(function(item) {
-				dataLeft.appendChild(item);
-			});
-			if (!rightItems || rightItems.length == 0){
-				dataLeft.setAttribute("colspan", "2");
-			}
-			row.appendChild(dataLeft);
-		}
 
-		var dataRight = document.createElement("td");
-		if (rightItems && rightItems.length > 0){
-			rightItems.forEach(function(item){
-				dataRight.appendChild(item);
-			});
-			if (!leftItems || leftItems.length == 0){
-				dataRight.setAttribute("colspan", "2");
-			}
-			row.appendChild(dataRight);
-		}
-		
-		tableBody.appendChild(row);
-		return row;
+		this.team1ScoreBox = document.getElementById("team1scorebox");
+		this.team2ScoreBox = document.getElementById("team2scorebox");
+		this.team1ShotsBox = document.getElementById("team1shotsbox");
+		this.team2ShotsBox = document.getElementById("team2shotsbox");
+		this.team1PowerPlay = document.getElementById("team1pp");
+		this.team2PowerPlay = document.getElementById("team2pp");
+		this.timeBox = document.getElementById("timeControl");
+		this.periodBox = document.getElementById("periodControl");
 	},
 	initializeTeams: function(){
 		$j.ajax({
@@ -194,6 +98,8 @@ ScoreBoardConsole.prototype = {
 				break;
 			}
 		}
+
+		$j(this.team1Selector).trigger("change");
 		
 		for (var i = 0; i < this.team2Selector.children.length; i++){
 			if (this.team2Selector.children[i].id == t2id){
@@ -204,15 +110,15 @@ ScoreBoardConsole.prototype = {
 		}
 		
 		if (!t1found || !t2found) {
-			alert("Error loading game: " + game.Name);
+			alert("Error loading game: " + game.name);
 		}
 		
 		this.team1ScoreBox.value = game.team1goals;
 		this.team2ScoreBox.value = game.team2goals;
 		this.team1ShotsBox.value = game.team1sog;
 		this.team2ShotsBox.value = game.team2sog;
-		this.team1PenaltyBox.checked = game.team1penalty;
-		this.team2PenaltyBox.checked = game.team2penalty;
+		this.team1PowerPlay.checked = game.team1penalty;
+		this.team2PowerPlay.checked = game.team2penalty;
 		this.timeBox.value = game.time;
 		this.periodBox.value = game.period;
 		
@@ -232,7 +138,7 @@ ScoreBoardConsole.prototype = {
 		}
 		
 		var team = this.children[this.selectedIndex];
-		console.log(location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum);
+
 		$j.ajax({
 			url : location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId + "/" + teamNum,
 			method : "POST",
@@ -242,7 +148,6 @@ ScoreBoardConsole.prototype = {
 			context : this,
 			timeout : 2000,
 			success : function(response) {
-				console.log(response);
 				adminConsole.gameId = response.key.id;
 				adminConsole.setGameName(response.name);
 			},

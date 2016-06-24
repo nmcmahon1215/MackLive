@@ -22,7 +22,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
-import com.macklive.objects.ICacheableObject;
 import com.macklive.objects.Message;
 import com.macklive.objects.Team;
 
@@ -31,19 +30,19 @@ public class DataManager {
     private static DataManager instance = null;
     private DatastoreService dstore = null;
     private UserService userService;
-    private CacheManager cacheManager;
+    private DataCache cacheManager;
 
-    public static DataManager getInstance(){
-        if (instance == null){
+    public static DataManager getInstance() {
+        if (instance == null) {
             instance = new DataManager();
         }
         return instance;
     }
 
-    private DataManager(){
+    private DataManager() {
         this.dstore = DatastoreServiceFactory.getDatastoreService();
         this.userService = UserServiceFactory.getUserService();
-        this.cacheManager = CacheManager.getInstance();
+        this.cacheManager = DataCache.getInstance();
     }
 
     public Key storeItem(IBusinessObject obj) {
@@ -54,16 +53,14 @@ public class DataManager {
         }
         Key k = dstore.put(toStore);
         obj.setKey(k);
-
-        if (obj.isCacheable()) {
-            cacheManager.load((ICacheableObject) obj);
-        }
+        cacheManager.load(k, toStore);
 
         return k;
     }
 
     /**
      * Finds a team by its name in the data store
+     *
      * @param name Unique name of the team
      * @return The team with the given name.
      * @throws TooManyResultsException If more than one team with the give name exists
@@ -74,16 +71,28 @@ public class DataManager {
                 new FilterPredicate("Name", FilterOperator.EQUAL, name),
                 new FilterPredicate("owner", FilterOperator.EQUAL,
                         userService.getCurrentUser().getUserId())));
+        q.setKeysOnly();
+        //Keys only queries are free, so we will check the cache and fetch entity only if necessary.
 
         Entity e = dstore.prepare(q).asSingleEntity();
 
-        if (e == null){
+        if (e == null) {
             return null;
         }
 
+        Key key = e.getKey();
+
+
         try {
-            return new Team(e);
-        } catch (EntityMismatchException e1) {
+            Entity entity = cacheManager.get(key);
+            if (entity != null) {
+                return new Team(entity);
+            }
+
+            Team t = new Team(getEntityWithKey(key));
+            cacheManager.load(t);
+            return t;
+        } catch (EntityMismatchException | EntityNotFoundException e1) {
             e1.printStackTrace();
             return null;
         }
@@ -91,37 +100,52 @@ public class DataManager {
 
     /**
      * Returns a list of all the teams in the data store
+     *
      * @return A list of all the teams in the data store.
      */
     public List<Team> getTeams() {
         Query q = new Query("Team");
         q.setFilter(new FilterPredicate("owner", FilterOperator.EQUAL,
                 userService.getCurrentUser().getUserId()));
+        q.setKeysOnly();
 
         List<Entity> teams = dstore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-        List<Team> result = new ArrayList<Team>();
-        for (Entity e : teams){
+        List<Team> result = new ArrayList<>();
+        for (Entity e : teams) {
+            Key key = e.getKey();
             try {
-                result.add(new Team(e));
-            } catch (EntityMismatchException e1) {
+                Entity entity = cacheManager.get(key);
+                if (entity != null) {
+                    result.add(new Team(entity));
+                } else {
+                    Team t = new Team(getEntityWithKey(key));
+                    result.add(t);
+                    cacheManager.load(t);
+                }
+            } catch (EntityMismatchException | EntityNotFoundException e1) {
                 e1.printStackTrace();
             }
         }
+
         return result;
     }
 
     /**
      * Returns the entity with the given key
+     *
      * @param k The key to use as the lookup value
      * @return An entity with that unique key in the data store
      * @throws EntityNotFoundException if the key is not in the data store.
      */
-    public Entity getEntityWithKey(Key k) throws EntityNotFoundException{
-        return dstore.get(k);
+    public Entity getEntityWithKey(Key k) throws EntityNotFoundException {
+        Entity e = dstore.get(k);
+        cacheManager.load(k, e);
+        return e;
     }
 
     /**
      * Gets the 5 most recent games
+     *
      * @param numGames The cap on games to return
      * @return The five most recent games
      */
@@ -130,104 +154,105 @@ public class DataManager {
         q.addSort("Date", SortDirection.DESCENDING);
         q.setFilter(new FilterPredicate("owner", FilterOperator.EQUAL,
                 userService.getCurrentUser().getUserId()));
+        q.setKeysOnly();
 
         List<Entity> queryResults = dstore.prepare(q).asList(FetchOptions.Builder.withLimit(numGames));
 
-        List<Game> result = new ArrayList<Game>();
+        List<Game> result = new ArrayList<>();
         try {
 
-            for (Entity e : queryResults){
-                result.add(new Game(e));
-            }
-
-            return result;
-
-        } catch (EntityMismatchException e) {
-            e.printStackTrace();
-            //If it fails, return an empty list
-            return new ArrayList<Game>();
-        }
-    }
-
-    /**
-     * Gets all the messages belonging to a particular game.
-     * 
-     * @param gameId
-     *            The ID of the game
-     * @return A list of messages for the game.
-     */
-    public List<Message> getMessagesForGame(long gameId) {
-        if (this.cacheManager.hasMessages(gameId)) {
-            return this.cacheManager.getMessages(gameId);
-        } else {
-            Query q = new Query("Message");
-            q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
-            q.addSort("time", SortDirection.ASCENDING);
-
-            this.cacheManager.load(getMessageByQuery(q));
-
-            return getMessagesForGame(gameId);
-        }
-
-    }
-
-    /**
-     * Gets all the messages belonging to a particular game, and time-stamped
-     * after the given date (and time).
-     * 
-     * @param gameId
-     *            The ID of the game
-     * @param date
-     *            Date starting date
-     * @return A list of messages for the game posted after the given date.
-     */
-    public List<Message> getMessagesForGameAfterDate(long gameId, Date date) {
-        if (this.cacheManager.hasMessages(gameId)) {
-            List<Message> messages = this.cacheManager.getMessages(gameId);
-            List<Message> result = new ArrayList<Message>();
-
-            for (int i = messages.size() - 1; i >= 0; i--) {
-                Message m = messages.get(i);
-                if (m.getTime().compareTo(date) > 0) {
-                    result.add(m);
+            for (Entity e : queryResults) {
+                Key key = e.getKey();
+                Game g = cacheManager.getGame(key);
+                if (g != null) {
+                    result.add(g);
                 } else {
-                    break;
+                    g = new Game(getEntityWithKey(key));
+                    cacheManager.load(g);
+                    result.add(g);
                 }
             }
 
             return result;
 
-        } else {
-            Query q = new Query("Message");
-
-            q.setFilter(CompositeFilterOperator.and(new FilterPredicate("game", FilterOperator.EQUAL, gameId),
-                    new FilterPredicate("time", FilterOperator.GREATER_THAN, date)));
-            q.addSort("time", SortDirection.ASCENDING);
-
-            this.cacheManager.load(getMessageByQuery(q));
-
-            return getMessagesForGameAfterDate(gameId, date);
+        } catch (EntityMismatchException | EntityNotFoundException e) {
+            e.printStackTrace();
+            //If it fails, return an empty list
+            return new ArrayList<>();
         }
     }
 
     /**
+     * Gets all the messages belonging to a particular game.
+     *
+     * @param gameId The ID of the game
+     * @return A list of messages for the game.
+     */
+    public List<Message> getMessagesForGame(long gameId) {
+        Query q = new Query("Message");
+        q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
+        q.addSort("time", SortDirection.ASCENDING);
+
+        return getMessageByQuery(q);
+    }
+
+    /**
+     * Gets all the messages belonging to a particular game, and time-stamped
+     * after the given date (and time).
+     *
+     * @param gameId The ID of the game
+     * @param date   Date starting date
+     * @return A list of messages for the game posted after the given date.
+     */
+    public List<Message> getMessagesForGameAfterDate(long gameId, Date date) {
+        List<Message> messages;
+        List<Message> result = new ArrayList<>();
+
+        Query q = new Query("Message");
+
+        q.setFilter(CompositeFilterOperator.and(new FilterPredicate("game", FilterOperator.EQUAL, gameId),
+                new FilterPredicate("time", FilterOperator.GREATER_THAN, date)));
+        q.addSort("time", SortDirection.ASCENDING);
+
+        messages = getMessageByQuery(q);
+
+        for (int i = messages.size() - 1; i >= 0; i--) {
+            Message m = messages.get(i);
+            if (m.getTime().compareTo(date) > 0) {
+                result.add(m);
+            } else {
+                break;
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
      * Gets a list of messages based on the given query
-     * 
-     * @param q
-     *            Query to use to fetch messages
+     *
+     * @param q Query to use to fetch messages
      * @return A list of messages satisfying the query
      */
     private List<Message> getMessageByQuery(Query q) {
+        q.setKeysOnly();
         Iterable<Entity> queryResults = dstore.prepare(q).asIterable();
 
-        List<Message> messages = new ArrayList<Message>();
+        List<Message> messages = new ArrayList<>();
         try {
             for (Entity e : queryResults) {
-                messages.add(new Message(e));
+                Key k = e.getKey();
+                Entity result = cacheManager.get(k);
+                if (result != null) {
+                    messages.add(new Message(result));
+                } else {
+                    messages.add(new Message(getEntityWithKey(k)));
+                }
             }
-        } catch (EntityMismatchException e) {
+        } catch (EntityMismatchException | EntityNotFoundException e) {
             e.printStackTrace();
-            return new ArrayList<Message>();
+            return new ArrayList<>();
         }
 
         return messages;
@@ -235,23 +260,22 @@ public class DataManager {
 
     /**
      * Gets the game with the given id number
-     * 
-     * @param idNum
-     *            The id number of the game to fetch.
+     *
+     * @param idNum The id number of the game to fetch.
      * @return The game with the given id number
      */
     public Game getGame(long idNum) {
-        if (this.cacheManager.hasGame(idNum)) {
-            return this.cacheManager.getGame(idNum);
-        } else {
-            try {
-                Game g = new Game(this.getEntityWithKey(KeyFactory.createKey("Game", idNum)));
-                this.cacheManager.load(g);
-            } catch (EntityMismatchException | EntityNotFoundException e) {
-                return null;
-            }
+        try {
+            Key k = KeyFactory.createKey("Game", idNum);
+            Entity e = cacheManager.get(k);
 
-            return getGame(idNum);
+            if (e != null) {
+                return new Game(e);
+            } else {
+                return new Game(this.getEntityWithKey(k));
+            }
+        } catch (EntityMismatchException | EntityNotFoundException e) {
+            return null;
         }
     }
 }

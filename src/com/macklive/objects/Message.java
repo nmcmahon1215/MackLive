@@ -4,12 +4,11 @@ import java.util.Date;
 
 import com.google.appengine.api.datastore.Entity;
 import com.macklive.exceptions.EntityMismatchException;
-import com.macklive.storage.CacheManager;
 
 /**
  * Describes a message in a game.
  */
-public class Message extends AbsBusinessObject implements ICacheableObject {
+public class Message extends AbsBusinessObject {
 
     private String author;
     private String text;
@@ -20,15 +19,10 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
 
     /**
      * Constructor.
-     * 
-     * @param author
-     *            Author of the message
-     * @param text
-     *            Text of the message
-     * @param gameId
-     *            ID of the game the message belongs to.
-     * @param approved
-     *            Whether or not the message is approved for public use
+     *
+     * @param author   Author of the message
+     * @param text     Text of the message
+     * @param gameId   ID of the game the message belongs to.
      */
     public Message(String author, String text, long gameId, boolean isUserComment) {
         this.author = author;
@@ -41,11 +35,9 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
 
     /**
      * Alternate constructor
-     * 
-     * @param e
-     *            Entity from the data store to load the object from.
-     * @throws EntityMismatchException
-     *             if the Entity is of the wrong type.
+     *
+     * @param e Entity from the data store to load the object from.
+     * @throws EntityMismatchException if the Entity is of the wrong type.
      */
     public Message(Entity e) throws EntityMismatchException {
         this.loadEntity(e);
@@ -91,14 +83,9 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
         return false;
     }
 
-    @Override
-    public boolean isCacheable() {
-        return true;
-    }
-
     /**
      * Gets the time of the message
-     * 
+     *
      * @return Time of the message
      */
     public Date getTime() {
@@ -107,7 +94,7 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
 
     /**
      * Getter for game id.
-     * 
+     *
      * @return GameID which this message belongs to.
      */
     public long getGameId() {
@@ -116,9 +103,9 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
 
     /**
      * Getter for approval status
-     * 
+     *
      * @return True if the comment should be in the live feed, false otherwise.
-     *         Non User Comments do not require approval.
+     * Non User Comments do not require approval.
      */
     public boolean isApproved() {
         return !isUserComment || approved;
@@ -131,8 +118,4 @@ public class Message extends AbsBusinessObject implements ICacheableObject {
         this.approved = true;
     }
 
-    @Override
-    public void cache(CacheManager cm) {
-        cm.load(this);
-    }
 }

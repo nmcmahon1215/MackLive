@@ -1,13 +1,5 @@
 package com.macklive.rest;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,36 +11,34 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
-
-import org.glassfish.jersey.media.multipart.FormDataParam;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Team;
 import com.macklive.storage.DataManager;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/teams")
 public class TeamService {
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response createTeam(@FormDataParam("teamName") String name,
-            @FormDataParam("teamAbbr") String abbr,
-            @FormDataParam("teamLogo") InputStream logoStream){
-
-        try {
-            if (DataManager.getInstance().getTeamByName(name) != null){
-                return Response.status(409).build();
-            }
-        } catch (TooManyResultsException e1) {
-            e1.printStackTrace();
-        }
+    public Response createTeam(@FormDataParam("teamId") long teamId,
+                               @FormDataParam("teamName") String name,
+                               @FormDataParam("teamAbbr") String abbr,
+                               @FormDataParam("teamLogo") InputStream logoStream) {
 
         byte[] buffer = new byte[8192];
         Blob teamLogo = null;
@@ -65,12 +55,21 @@ public class TeamService {
                 return Response.status(500).build();
             }
         }
-        
-        if (logoStream != null){
-            DataManager.getInstance().storeItem(new Team(name, abbr, teamLogo));
-        } else {
-            DataManager.getInstance().storeItem(new Team(name, abbr));
+
+        Team t = new Team(name, abbr);
+
+
+        if (teamLogo != null) {
+            t.setLogo(teamLogo);
         }
+
+        //0 is the default value for a long
+        //Replace item with given id
+        if (teamId != 0) {
+            t.setKey(KeyFactory.createKey("Team", teamId));
+        }
+
+        DataManager.getInstance().storeItem(t);
 
         return Response.status(204).build();
     }

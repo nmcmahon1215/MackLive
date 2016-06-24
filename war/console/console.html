@@ -5,7 +5,6 @@
     <title>Mack Report Live</title>
     <link rel="Stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="Stylesheet" href="/css/console.css" type="text/css"/>
-    <link rel="Stylesheet" href="/css/liveFeed.css" type="text/css"/>
     <script language='javascript' type="text/javascript" src='/api/js/console'></script>
     <script language='javascript' type="text/javascript">
         var adminConsole;
@@ -44,9 +43,67 @@
     </div>
     <div id='scoreBoardContainer' class='halfHeight userBoxStyle'>
         <h2>Scoreboard Control</h2>
+        <a id="teamManageLink" href="#" class="topRight">Manage Teams</a>
+        <table class="table-bordered" style="font-size:12px; width: 95%; table-layout: fixed; margin:auto;">
+            <tbody>
+            <tr>
+                <td>Team</td>
+                <td colspan="2">
+                    <select id="team1select" class="teamSelect form-control"></select>
+                </td>
+                <td colspan="2">
+                    <select id="team2select" class="teamSelect form-control"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>Score</td>
+                <td colspan="2"><input id="team1scorebox" class="scoreBox form-control" type="number" min="0"
+                                       value="0"/></td>
+                <td colspan="2"><input id="team2scorebox" class="scoreBox form-control" type="number" min="0"
+                                       value="0"/></td>
+            </tr>
+            <tr>
+                <td>Shots</td>
+                <td colspan="2"><input id="team1shotsbox" class="shotsBox form-control" type="number" min="0"
+                                       value="0"/></td>
+                <td colspan="2"><input id="team2shotsbox" class="shotsBox form-control" type="number" min="0"
+                                       value="0"/></td>
+            </tr>
+            <tr>
+                <td>Power Play</td>
+                <td colspan="2"><input id="team1pp" type="checkbox"/></td>
+                <td colspan="2"><input id="team2pp" type="checkbox"/></td>
+            </tr>
+            <tr>
+                <td>Time</td>
+                <td colspan="4"><input id="timeControl" class="form-control" pattern="\d{2}:\d{2}" type="text"
+                                       style="width: 100px; margin: auto; padding-top: 3px; padding-bottom: 3px; height: auto;"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Period</td>
+                <td colspan="4"><input id="periodControl" class="shotsBox form-control" type="number" min="1"
+                                       max="5" value="1" title="Pattern must be: MM:SS"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
-<div id='liveBlogContainer' class="floatR userBoxSize userBoxStyle"
-     style="clear: right; margin-left: 10px;"></div>
+<div id='liveBlogContainer' class="floatR userBoxSize userBoxStyle" style="clear: right; margin-left: 10px;">
+    <h2>Live Feed</h2>
+    <iframe id="liveBlogFeed" class="consoleScrollerFeed">
+    </iframe>
+    <form id="liveBlogForm">
+        <div class="input-group" style="margin: 10px">
+            <span id="nameLabel" class="input-group-addon">Posting as:</span>
+            <input id="nameInput" type="text" class="form-control" placeholder="Your name"
+                   aria-describedby="nameLabel"/>
+        </div>
+        <textarea id="liveBlogInput" class="liveInput fadeBG form-control" placeholder="Enter a post"></textarea>
+        <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
+               style="margin:10px" disabled/>
+    </form>
+</div>
 </body>
 </html>
