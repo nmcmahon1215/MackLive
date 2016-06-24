@@ -56,6 +56,10 @@ a:hover {
     border-radius: 5px;
     position: absolute;
     left: 265px;
+    max-width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .fadeBG {
@@ -81,7 +85,7 @@ a:hover {
 
 .userBoxSize {
     height: calc(100% - 76px);
-    width: calc(50% - 40px);
+    width: calc(50% - 30px);
 }
 
 .userBoxStyle {
