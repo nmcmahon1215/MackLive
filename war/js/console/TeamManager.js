@@ -62,8 +62,6 @@ TeamManagerConsole.prototype = {
 			var xhr = new XMLHttpRequest();
 			var formData = new FormData();
 
-			debugger;
-
 			if (this.teamId) {
 				formData.append("teamId", this.teamId);
 			}
