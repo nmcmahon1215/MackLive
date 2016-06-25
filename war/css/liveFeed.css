@@ -4,7 +4,6 @@ body {
 	background-color: transparent;
 	padding: 0px;
     min-width: 395px;
-	min-height: 400px;
 }
 
 html {
@@ -22,10 +21,10 @@ body {
 }
 
 .consoleScrollerFeed {
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
 	background-color: #eeeeee;
     overflow-y: auto;
-    padding-bottom: 25px;
+    padding-bottom: 10px;
     border-top: 1px solid black;
 }
 
