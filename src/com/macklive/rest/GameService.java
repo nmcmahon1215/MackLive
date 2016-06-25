@@ -15,8 +15,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
-import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Team;
+import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
 import org.json.JSONObject;
 
