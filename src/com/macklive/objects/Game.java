@@ -12,6 +12,7 @@ import com.macklive.storage.DataManager;
 public class Game extends AbsBusinessObject implements IBusinessObject {
 
     private Date created;
+    private Date lastUpdated;
     private Team team1;
     private Team team2;
     private int team1goals;
@@ -42,6 +43,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         this.period = 1;
         this.created = new Date();
         this.name = this.getName();
+        this.lastUpdated = new Date();
         this.ownerId = "";
     }
 
@@ -75,6 +77,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         e.setUnindexedProperty("Time", this.time);
         e.setUnindexedProperty("Period", this.period);
         e.setProperty("Date", this.created);
+        e.setProperty("LastUpdated", this.lastUpdated);
         e.setProperty("Name", this.getName());
         return e;
     }
@@ -101,6 +104,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
                 this.time = (String) e.getProperty("Time");
                 this.period = ((Number) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
+                this.lastUpdated = (Date) e.getProperty("LastUpdated");
                 this.key = e.getKey();
                 this.ownerId = (String) e.getProperty("owner");
 
@@ -138,76 +142,44 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         return this.toJSON();
     }
 
-    public int getTeam1goals() {
-        return team1goals;
-    }
-
     public void setTeam1goals(int team1goals) {
+        this.lastUpdated = new Date();
         this.team1goals = team1goals;
     }
 
-    public int getTeam2goals() {
-        return team2goals;
-    }
-
     public void setTeam2goals(int team2goals) {
+        this.lastUpdated = new Date();
         this.team2goals = team2goals;
     }
 
-    public int getTeam1sog() {
-        return team1sog;
-    }
-
     public void setTeam1sog(int team1sog) {
+        this.lastUpdated = new Date();
         this.team1sog = team1sog;
     }
 
-    public int getTeam2sog() {
-        return team2sog;
-    }
-
     public void setTeam2sog(int team2sog) {
+        this.lastUpdated = new Date();
         this.team2sog = team2sog;
     }
 
-    public boolean isTeam1pp() {
-        return team1pp;
-    }
-
     public void setTeam1pp(boolean team1pp) {
+        this.lastUpdated = new Date();
         this.team1pp = team1pp;
     }
 
-    public boolean isTeam2pp() {
-        return team2pp;
-    }
-
     public void setTeam2pp(boolean team2pp) {
+        this.lastUpdated = new Date();
         this.team2pp = team2pp;
     }
 
-    public String getTime() {
-        return time;
-    }
-
     public void setTime(String time) {
+        this.lastUpdated = new Date();
         this.time = time;
     }
 
-    public int getPeriod() {
-        return period;
-    }
-
     public void setPeriod(int period) {
+        this.lastUpdated = new Date();
         this.period = period;
-    }
-
-    public Team getTeam1() {
-        return team1;
-    }
-
-    public Team getTeam2() {
-        return team2;
     }
 
     public String getOwnerId() {
@@ -215,11 +187,16 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     }
 
     public void setTeam1(Team team) {
+        this.lastUpdated = new Date();
         this.team1 = team;
     }
 
     public void setTeam2(Team team) {
+        this.lastUpdated = new Date();
         this.team2 = team;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
 }

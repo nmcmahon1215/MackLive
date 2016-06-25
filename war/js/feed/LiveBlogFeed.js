@@ -6,6 +6,7 @@ LiveBlogFeed = function(container, blogId) {
 	this.container = container;
 	this.$container = $j(this.container);
 	this.latestMessageDate = new Date(0);
+    this.latestGameDate = new Date(0);
 };
 
 LiveBlogFeed.prototype = {
@@ -55,7 +56,7 @@ LiveBlogFeed.prototype = {
 	},
     refreshScore: function () {
         $j.ajax({
-            url: location.protocol + '//' + location.host + "/api/game/" + this.blogId,
+            url: location.protocol + '//' + location.host + "/api/game/" + this.blogId + "/" + this.latestGameDate.getTime(),
             context: this,
             success: this.updateScore,
             error: function () {
@@ -64,17 +65,21 @@ LiveBlogFeed.prototype = {
         })
     },
     updateScore: function (gameObject) {
-        this.score1.innerHTML = gameObject.team1goals;
-        this.score2.innerHTML = gameObject.team2goals;
+        if (gameObject && !$j.isEmptyObject(gameObject)) {
+            this.score1.innerHTML = gameObject.team1goals;
+            this.score2.innerHTML = gameObject.team2goals;
 
-        this.shots1.innerHTML = "Shots: " + gameObject.team1sog;
-        this.shots2.innerHTML = "Shots: " + gameObject.team2sog;
+            this.shots1.innerHTML = "Shots: " + gameObject.team1sog;
+            this.shots2.innerHTML = "Shots: " + gameObject.team2sog;
 
-        gameObject.team1pp ? $j(this.t1pp).slideDown() : $j(this.t1pp).slideUp();
-        gameObject.team2pp ? $j(this.t2pp).slideDown() : $j(this.t2pp).slideUp();
+            gameObject.team1pp ? $j(this.t1pp).slideDown() : $j(this.t1pp).slideUp();
+            gameObject.team2pp ? $j(this.t2pp).slideDown() : $j(this.t2pp).slideUp();
 
-        this.timer.innerHTML = gameObject.time;
-        this.period.innerHTML = "Per " + gameObject.period;
+            this.timer.innerHTML = gameObject.time;
+            this.period.innerHTML = "Per " + gameObject.period;
+
+            this.latestGameDate = new Date(gameObject.lastUpdated);
+        }
     },
 	addMessage: function (message) {
 		var panel = document.createElement("div");

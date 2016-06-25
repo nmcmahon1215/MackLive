@@ -69,6 +69,23 @@ public class GameService {
 		return g.toJSON();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/{idNum}/{date}")
+	public String getGameUpdate(@PathParam("idNum") long gameId, @PathParam("date") long dateMillis) {
+		Game g = DataManager.getInstance().getGame(gameId);
+
+		if (g == null) {
+			return "{}";
+		}
+
+		if (g.getLastUpdated().getTime() > dateMillis) {
+			return g.toJSON();
+		}
+
+		return "{}";
+	}
+
 	@POST
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
