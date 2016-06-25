@@ -14,7 +14,7 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
 
     private String name;
     private String abbr;
-    private Blob logo;
+    private transient Blob logo;
 
     /**
      * Constructor for a team. This does not set the team's logo
@@ -59,8 +59,8 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
         }
         
         e.setProperty("Name", this.name);
-        e.setProperty("Abbr", this.abbr);
-        e.setProperty("Logo", this.logo);
+        e.setUnindexedProperty("Abbr", this.abbr);
+        e.setUnindexedProperty("Logo", this.logo);
         
         return e;
     }

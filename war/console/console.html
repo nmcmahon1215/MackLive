@@ -5,6 +5,7 @@
     <title>Mack Report Live</title>
     <link rel="Stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="Stylesheet" href="/css/console.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <script language='javascript' type="text/javascript" src='/api/js/console'></script>
     <script language='javascript' type="text/javascript">
         var adminConsole;
@@ -13,7 +14,7 @@
         var commentApproval;
         var scoreBoard;
         $j(document).ready(function () {
-            adminConsole = new Console();
+            adminConsole = new AdminConsole();
             liveConsole = new LiveBlogConsole("liveBlogContainer");
             liveConsole.render();
             scoreBoard = new ScoreBoardConsole("scoreBoardContainer");
@@ -42,7 +43,7 @@
         <div class="consoleScrollerComments"></div>
     </div>
     <div id='scoreBoardContainer' class='halfHeight userBoxStyle'>
-        <h2>Scoreboard Control</h2>
+        <h2>Scoreboard Control <i id="scoreIndicator" class="fa" aria-hidden="true"></i></h2>
         <a id="teamManageLink" href="#" class="topRight">Manage Teams</a>
         <table class="table-bordered" style="font-size:12px; width: 95%; table-layout: fixed; margin:auto;">
             <tbody>
@@ -77,7 +78,8 @@
             <tr>
                 <td>Time</td>
                 <td colspan="4"><input id="timeControl" class="form-control" pattern="\d{2}:\d{2}" type="text"
-                                       style="width: 100px; margin: auto; padding-top: 3px; padding-bottom: 3px; height: auto;"/>
+                                       value="20:00" placeholder="MM:SS"
+                                       style="text-align:center; width: 100px; margin: auto; padding-top: 3px; padding-bottom: 3px; height: auto;"/>
                 </td>
             </tr>
             <tr>

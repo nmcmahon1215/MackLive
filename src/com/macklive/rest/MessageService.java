@@ -1,10 +1,5 @@
 package com.macklive.rest;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,15 +9,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Message;
+import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Rest end point for getting new game messages.
@@ -87,9 +85,9 @@ public class MessageService {
     private String formResponse(List<Message> messages) {
         Gson gs = GsonUtility.getGson();
 
-        HashMap<String, Object> hm = new HashMap<String, Object>();
-        
-        List<Message> responseMessages = new ArrayList<Message>();
+        HashMap<String, Object> hm = new HashMap<>();
+
+        List<Message> responseMessages = new ArrayList<>();
         
         for (Message m : messages) {
             if (m.isApproved()) {

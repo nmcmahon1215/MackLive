@@ -56,6 +56,10 @@ a:hover {
     border-radius: 5px;
     position: absolute;
     left: 265px;
+    max-width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .fadeBG {
@@ -81,7 +85,7 @@ a:hover {
 
 .userBoxSize {
     height: calc(100% - 76px);
-    width: calc(50% - 40px);
+    width: calc(50% - 30px);
 }
 
 .userBoxStyle {
@@ -114,6 +118,7 @@ a:hover {
 .consoleScrollerFeed {
     height: calc(97% - 203px);
     width: calc(100% - 20px);
+    overflow: hidden;
 }
 
 .liveInput {
@@ -139,6 +144,31 @@ a:hover {
 
 .teamSelect {
     width: 100%;
+}
+
+.fa-check {
+    color: #5cb85c;
+}
+
+.fa-refresh {
+    animation: spin 1s linear infinite;
+}
+
+.fa-times {
+    color: red;
+}
+
+.fa-code {
+    text-decoration: underline;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .topRight {

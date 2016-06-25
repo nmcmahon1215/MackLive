@@ -11,7 +11,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -56,46 +55,6 @@ public class DataManager {
         cacheManager.load(k, toStore);
 
         return k;
-    }
-
-    /**
-     * Finds a team by its name in the data store
-     *
-     * @param name Unique name of the team
-     * @return The team with the given name.
-     * @throws TooManyResultsException If more than one team with the give name exists
-     */
-    public Team getTeamByName(String name) throws TooManyResultsException {
-        Query q = new Query("Team");
-        q.setFilter(CompositeFilterOperator.and(
-                new FilterPredicate("Name", FilterOperator.EQUAL, name),
-                new FilterPredicate("owner", FilterOperator.EQUAL,
-                        userService.getCurrentUser().getUserId())));
-        q.setKeysOnly();
-        //Keys only queries are free, so we will check the cache and fetch entity only if necessary.
-
-        Entity e = dstore.prepare(q).asSingleEntity();
-
-        if (e == null) {
-            return null;
-        }
-
-        Key key = e.getKey();
-
-
-        try {
-            Entity entity = cacheManager.get(key);
-            if (entity != null) {
-                return new Team(entity);
-            }
-
-            Team t = new Team(getEntityWithKey(key));
-            cacheManager.load(t);
-            return t;
-        } catch (EntityMismatchException | EntityNotFoundException e1) {
-            e1.printStackTrace();
-            return null;
-        }
     }
 
     /**

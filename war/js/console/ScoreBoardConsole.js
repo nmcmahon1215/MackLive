@@ -32,6 +32,17 @@ ScoreBoardConsole.prototype = {
 		this.team2PowerPlay = document.getElementById("team2pp");
 		this.timeBox = document.getElementById("timeControl");
 		this.periodBox = document.getElementById("periodControl");
+		this.scoreIndicator = document.getElementById("scoreIndicator");
+
+		$j(this.team1ScoreBox).change(this.queueUpdate.bind(this));
+		$j(this.team2ScoreBox).change(this.queueUpdate.bind(this));
+		$j(this.team1ShotsBox).change(this.queueUpdate.bind(this));
+		$j(this.team2ShotsBox).change(this.queueUpdate.bind(this));
+		$j(this.team1PowerPlay).change(this.queueUpdate.bind(this));
+		$j(this.team2PowerPlay).change(this.queueUpdate.bind(this));
+		$j(this.timeBox).change(this.queueUpdate.bind(this));
+		$j(this.periodBox).change(this.queueUpdate.bind(this));
+
 	},
 	initializeTeams: function(){
 		$j.ajax({
@@ -80,12 +91,54 @@ ScoreBoardConsole.prototype = {
 				$j(this.team1Selector).trigger("change");
 			},
 			error: function (response) {
-				alert("Could not fetch teams!");
+				console.error("Could not fetch teams!");
 			}
 			
 		})
 	},
-	updateInfo: function (game) {
+	queueUpdate: function () {
+		if (!adminConsole.gameId) {
+			return;
+		}
+
+		$j(this.scoreIndicator).removeClass("fa-check fa-times").addClass("fa-refresh");
+		if (this.timeout) {
+			clearTimeout(this.timeout);
+		}
+		this.timeout = setTimeout(this.sendUpdate.bind(this), 5000);
+	},
+	sendUpdate: function () {
+		var payload = {
+			team1goals: this.team1ScoreBox.value,
+			team2goals: this.team2ScoreBox.value,
+			team1sog: this.team1ShotsBox.value,
+			team2sog: this.team2ShotsBox.value,
+			team1pp: this.team1PowerPlay.checked,
+			team2pp: this.team2PowerPlay.checked,
+			time: this.timeBox.value,
+			period: this.periodBox.value,
+		}
+
+		$j.ajax({
+			url: location.protocol + '//' + location.host + "/api/game/" + adminConsole.gameId,
+			method: "POST",
+			contentType: "application/json",
+			dataType: "json",
+			data: JSON.stringify(payload),
+			context: this,
+			success: function (response) {
+				this.loadScoreInfo(response);
+				$j(this.scoreIndicator).removeClass("fa-refresh fa-times").addClass("fa-check");
+			},
+			error: function () {
+				$j(this.scoreIndicator).removeClass("fa-refresh fa-check").addClass("fa-times");
+				console.error("Failed to send score update. Retrying in 10 seconds");
+				this.timeout = setTimeout(this.sendUpdate.bind(this), 10000);
+			}
+
+		})
+	},
+	loadTeams: function (game) {
 		var t1id = game.team1.key.id;
 		var t2id = game.team2.key.id;
 		var t1found = false;
@@ -110,18 +163,18 @@ ScoreBoardConsole.prototype = {
 		}
 		
 		if (!t1found || !t2found) {
-			alert("Error loading game: " + game.name);
+			console.error("Error loading game: " + game.name);
 		}
-		
+	},
+	loadScoreInfo: function (game) {
 		this.team1ScoreBox.value = game.team1goals;
 		this.team2ScoreBox.value = game.team2goals;
 		this.team1ShotsBox.value = game.team1sog;
 		this.team2ShotsBox.value = game.team2sog;
-		this.team1PowerPlay.checked = game.team1penalty;
-		this.team2PowerPlay.checked = game.team2penalty;
+		this.team1PowerPlay.checked = game.team1pp;
+		this.team2PowerPlay.checked = game.team2pp;
 		this.timeBox.value = game.time;
 		this.periodBox.value = game.period;
-		
 	},
 	updateTeam: function(){
 		if (!adminConsole || !adminConsole.gameId){
@@ -152,7 +205,7 @@ ScoreBoardConsole.prototype = {
 				adminConsole.setGameName(response.name);
 			},
 			error : function(response, errorType, errorThrown) {
-				alert("Failed to update Game.");
+				console.error("Failed to update Game.");
 			},
 		})
 	}

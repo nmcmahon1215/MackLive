@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -25,13 +26,15 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
-import com.macklive.objects.GsonUtility;
 import com.macklive.objects.Team;
+import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/teams")
 public class TeamService {
+
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -42,13 +45,13 @@ public class TeamService {
 
         byte[] buffer = new byte[8192];
         Blob teamLogo = null;
-        if (logoStream != null){
+        if (logoStream != null) {
             try {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                while (logoStream.read(buffer) != -1){
+                while (logoStream.read(buffer) != -1) {
                     bs.write(buffer);
                 }
-                teamLogo = new Blob (bs.toByteArray());
+                teamLogo = new Blob(bs.toByteArray());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,24 +76,24 @@ public class TeamService {
 
         return Response.status(204).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON
-            )
-    public String getTeamNames(){
+    )
+    public String getTeamNames() {
         List<Team> teams = DataManager.getInstance().getTeams();
-        Collections.sort(teams, new Comparator<Team>(){
+        Collections.sort(teams, new Comparator<Team>() {
 
             @Override
             public int compare(Team t1, Team t2) {
                 return t1.getName().compareTo(t2.getName());
             }
-            
+
         });
         Gson gs = GsonUtility.getGson();
         return gs.toJson(teams);
     }
-    
+
     @GET
     @Path("/image/{id}")
     public Response getImage(@PathParam("id") long id) {
@@ -98,8 +101,13 @@ public class TeamService {
         try {
             Team t = new Team(DataManager.getInstance()
                     .getEntityWithKey(KeyFactory.createKey("Team", id)));
+            if (t.getLogo() == null) {
+                logger.warning("No logo for team " + id);
+                builder.status(404);
+                return builder.build();
+            }
             final byte[] imageBytes = t.getLogo().getBytes();
-            builder.status(200).type("image/png").entity(new StreamingOutput(){
+            builder.status(200).type("image/png").entity(new StreamingOutput() {
 
                 @Override
                 public void write(OutputStream output) throws IOException,
@@ -107,12 +115,12 @@ public class TeamService {
                     output.write(imageBytes);
                     output.flush();
                 }
-                
+
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return builder.build();
     }
 
