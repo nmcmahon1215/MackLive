@@ -45,13 +45,13 @@ public class TeamService {
 
         byte[] buffer = new byte[8192];
         Blob teamLogo = null;
-        if (logoStream != null){
+        if (logoStream != null) {
             try {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                while (logoStream.read(buffer) != -1){
+                while (logoStream.read(buffer) != -1) {
                     bs.write(buffer);
                 }
-                teamLogo = new Blob (bs.toByteArray());
+                teamLogo = new Blob(bs.toByteArray());
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -76,24 +76,24 @@ public class TeamService {
 
         return Response.status(204).build();
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON
-            )
-    public String getTeamNames(){
+    )
+    public String getTeamNames() {
         List<Team> teams = DataManager.getInstance().getTeams();
-        Collections.sort(teams, new Comparator<Team>(){
+        Collections.sort(teams, new Comparator<Team>() {
 
             @Override
             public int compare(Team t1, Team t2) {
                 return t1.getName().compareTo(t2.getName());
             }
-            
+
         });
         Gson gs = GsonUtility.getGson();
         return gs.toJson(teams);
     }
-    
+
     @GET
     @Path("/image/{id}")
     public Response getImage(@PathParam("id") long id) {
@@ -107,7 +107,7 @@ public class TeamService {
                 return builder.build();
             }
             final byte[] imageBytes = t.getLogo().getBytes();
-            builder.status(200).type("image/png").entity(new StreamingOutput(){
+            builder.status(200).type("image/png").entity(new StreamingOutput() {
 
                 @Override
                 public void write(OutputStream output) throws IOException,
@@ -115,12 +115,12 @@ public class TeamService {
                     output.write(imageBytes);
                     output.flush();
                 }
-                
+
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return builder.build();
     }
 
