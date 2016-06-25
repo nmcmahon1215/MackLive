@@ -149,7 +149,11 @@ public class DataManager {
      */
     public List<Message> getMessagesForGame(long gameId) {
         Query q = new Query("Message");
-        q.setFilter(new FilterPredicate("game", FilterOperator.EQUAL, gameId));
+        q.setFilter(
+                CompositeFilterOperator.and(
+                        new FilterPredicate("game", FilterOperator.EQUAL, gameId),
+                        new FilterPredicate("approved", FilterOperator.EQUAL, true))
+        );
         q.addSort("time", SortDirection.ASCENDING);
 
         return getMessageByQuery(q);
@@ -169,8 +173,12 @@ public class DataManager {
 
         Query q = new Query("Message");
 
-        q.setFilter(CompositeFilterOperator.and(new FilterPredicate("game", FilterOperator.EQUAL, gameId),
-                new FilterPredicate("time", FilterOperator.GREATER_THAN, date)));
+        q.setFilter(
+                CompositeFilterOperator.and(
+                        new FilterPredicate("game", FilterOperator.EQUAL, gameId),
+                        new FilterPredicate("time", FilterOperator.GREATER_THAN, date),
+                        new FilterPredicate("approved", FilterOperator.EQUAL, true)
+                ));
         q.addSort("time", SortDirection.ASCENDING);
 
         messages = getMessageByQuery(q);

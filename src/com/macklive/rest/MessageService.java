@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.macklive.objects.Message;
@@ -35,11 +36,14 @@ public class MessageService {
             JSONObject jso = new JSONObject(messageJSON);
 
             long gameId = jso.getLong("game");
-            String currentUID = UserServiceFactory.getUserService().getCurrentUser().getUserId();
-            String gameOwnerUID = DataManager.getInstance().getGame(gameId).getOwnerId();
+            User currentUser = UserServiceFactory.getUserService().getCurrentUser();
+            boolean userComment = false;
 
-            boolean userComment = !currentUID.equals(gameOwnerUID);
-
+            if (currentUser != null) {
+                String currentUID = UserServiceFactory.getUserService().getCurrentUser().getUserId();
+                String gameOwnerUID = DataManager.getInstance().getGame(gameId).getOwnerId();
+                userComment = !currentUID.equals(gameOwnerUID);
+            }
 
             Message newMessage = new Message(jso.getString("author"), jso.getString("text"), gameId,
                     userComment);
