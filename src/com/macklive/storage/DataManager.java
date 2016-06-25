@@ -148,11 +148,22 @@ public class DataManager {
      * @return A list of messages for the game.
      */
     public List<Message> getMessagesForGame(long gameId) {
+        return getMessagesForGame(gameId, true);
+    }
+
+    /**
+     * Gets the messages belonging to a particular game
+     *
+     * @param gameId   Id of the game
+     * @param approved True to get approved messages, false to get pending messages
+     * @return A list of messages for the game
+     */
+    public List<Message> getMessagesForGame(long gameId, boolean approved) {
         Query q = new Query("Message");
         q.setFilter(
                 CompositeFilterOperator.and(
                         new FilterPredicate("game", FilterOperator.EQUAL, gameId),
-                        new FilterPredicate("approved", FilterOperator.EQUAL, true))
+                        new FilterPredicate("approved", FilterOperator.EQUAL, approved))
         );
         q.addSort("time", SortDirection.ASCENDING);
 
@@ -168,6 +179,19 @@ public class DataManager {
      * @return A list of messages for the game posted after the given date.
      */
     public List<Message> getMessagesForGameAfterDate(long gameId, Date date) {
+        return getMessagesForGameAfterDate(gameId, date, true);
+    }
+
+    /**
+     * Gets all the messages belonging to a particular game, and time-stamped
+     * after the given date (and time).
+     *
+     * @param gameId   The ID of the game
+     * @param date     Date starting date
+     * @param approved True to get approved messages, false for pending messages
+     * @return A list of messages for the game posted after the given date.
+     */
+    public List<Message> getMessagesForGameAfterDate(long gameId, Date date, boolean approved) {
         List<Message> messages;
         List<Message> result = new ArrayList<>();
 
@@ -177,7 +201,7 @@ public class DataManager {
                 CompositeFilterOperator.and(
                         new FilterPredicate("game", FilterOperator.EQUAL, gameId),
                         new FilterPredicate("time", FilterOperator.GREATER_THAN, date),
-                        new FilterPredicate("approved", FilterOperator.EQUAL, true)
+                        new FilterPredicate("approved", FilterOperator.EQUAL, approved)
                 ));
         q.addSort("time", SortDirection.ASCENDING);
 
@@ -193,7 +217,6 @@ public class DataManager {
         }
 
         return result;
-
     }
 
     /**

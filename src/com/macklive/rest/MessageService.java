@@ -29,6 +29,13 @@ import org.json.JSONObject;
 @Path("/messages")
 public class MessageService {
 
+    /**
+     * Posts a message to a game
+     *
+     * @param messageJSON     A json representation of the message
+     * @param servletResponse Used for building the response
+     * @return A status message describing if the message was successfully posted or errored.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public String postMessage(String messageJSON, @Context HttpServletResponse servletResponse) {
@@ -62,7 +69,8 @@ public class MessageService {
 
     /**
      * Gets all the messages for a particular game.
-     * 
+     *
+     * @param gameId The id of the game
      * @return A JSON representation of all game messages.
      */
     @GET
@@ -72,11 +80,38 @@ public class MessageService {
         return formResponse(DataManager.getInstance().getMessagesForGame(gameId));
     }
 
+    /**
+     * Gets all the messages for a particular game after a certain date
+     *
+     * @param gameId The id of the game
+     * @param millis The date, represented in milliseconds from epoch
+     * @return A JSON representation of the appropriate messages
+     */
     @GET
     @Path("/{gameId}/{date}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGameMessagesAfterDate(@PathParam("gameId") long gameId, @PathParam("date") long millis) {
         return formResponse(DataManager.getInstance().getMessagesForGameAfterDate(gameId, new Date(millis)));
+    }
+
+    /**
+     * Gets all of the non approved messages for a game
+     *
+     * @param gameId The id of the game
+     * @return A JSON representation of the messages
+     */
+    @GET
+    @Path("/pending/{gameId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPendingMessages(@PathParam("gameId") long gameId) {
+        return formResponse(DataManager.getInstance().getMessagesForGame(gameId, false));
+    }
+
+    @GET
+    @Path("/pending/{gameId}/{date}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getPendingMessagesAfterDate(@PathParam("gameId") long gameId, @PathParam("date") long date) {
+        return formResponse(DataManager.getInstance().getMessagesForGameAfterDate(gameId, new Date(date), false));
     }
 
     /**
