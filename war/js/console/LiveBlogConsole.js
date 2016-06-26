@@ -13,6 +13,7 @@ LiveBlogConsole.prototype = {
 		render: function() {
 
 			this.liveBlogFeed = document.getElementById("liveBlogFeed");
+			this.liveBlogFeed.src = "";
 			this.form = document.getElementById("liveBlogForm");
 			this.textArea = document.getElementById("liveBlogInput");
 
