@@ -13,7 +13,9 @@
         var liveConsole;
         var commentApproval;
         var scoreBoard;
+        var commentFeed;
         $j(document).ready(function () {
+            commentFeed = new CommentFeed("commentApprovals");
             adminConsole = new AdminConsole();
             liveConsole = new LiveBlogConsole("liveBlogContainer");
             liveConsole.render();
@@ -40,7 +42,7 @@
      style="clear: left; margin-right: 10px;">
     <div id='commentApprovalContainer' class="halfHeight userBoxStyle">
         <h2>Comment Approvals</h2>
-        <div class="consoleScrollerComments"></div>
+        <div id="commentApprovals" class="consoleScrollerComments"></div>
     </div>
     <div id='scoreBoardContainer' class='halfHeight userBoxStyle'>
         <h2>Scoreboard Control <i id="scoreIndicator" class="fa" aria-hidden="true"></i></h2>

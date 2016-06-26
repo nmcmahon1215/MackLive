@@ -129,5 +129,6 @@ AdminConsole.prototype = {
 		scoreBoard.loadScoreInfo(gameData);
 		liveConsole.initialize();
 		this.modal.setSource(location.protocol + "//" + location.host + "/client/clientApp.html?gameId=" + id);
+		commentFeed.initialize();
 	},
 };

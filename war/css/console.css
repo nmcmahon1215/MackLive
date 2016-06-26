@@ -222,3 +222,12 @@ a:hover {
     right: 10px;
     bottom: 10px;
 }
+
+.panel {
+    margin: 10px 5px 10px 5px;
+    color: black;
+}
+
+.panel * {
+    padding: 5px;
+}
