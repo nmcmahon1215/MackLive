@@ -240,3 +240,19 @@ a:hover {
     padding: 0px 5px 0px 5px;
     margin-left: 5px;
 }
+
+.commentButton {
+    width: calc(50% - 10px);
+}
+
+.bottomRight {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.bottomLeft {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}

@@ -30,18 +30,19 @@ CommentFeed.prototype = {
         var approveButton = document.createElement("input");
         approveButton.type = "button";
         approveButton.value = "Approve"
-        approveButton.className = "floatR btn btn-success btn-sm";
+        approveButton.className = "floatR btn btn-success btn-sm commentButton bottomLeft";
 
         var deleteButton = document.createElement("input");
         deleteButton.type = "button";
         deleteButton.value = "Delete";
-        deleteButton.className = "floatR btn btn-danger btn-sm";
+        deleteButton.className = "floatR btn btn-danger btn-sm commentButton bottomRight";
 
         panel.appendChild(header);
         panel.appendChild(content);
 
         var modalPanel = panel.cloneNode(true);
 
+        content.style.paddingBottom = '30px';
         content.appendChild(deleteButton);
         content.appendChild(approveButton);
 
