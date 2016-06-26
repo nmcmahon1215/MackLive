@@ -120,7 +120,7 @@ LiveBlogFeed.prototype = {
 				}.bind(this));
 				
 				if (result.latestTime){
-					this.lastMessageDate = new Date(result.latestTime);
+					this.latestMessageDate = new Date(result.latestTime);
 				}
 
                 $j(this.container).animate({
@@ -136,15 +136,15 @@ LiveBlogFeed.prototype = {
 	},
 	fetchNewMessages: function() {
 		$j.ajax({
-			url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.lastMessageDate.getTime(),
+			url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.latestMessageDate.getTime(),
 			success: function(result) {
 				var messages = result.messages;
 				messages.forEach(function(message){
 					this.addMessage(message);
 				}.bind(this));
-				
-				if (result.latestTime){ 
-					this.lastMessageDate = new Date(result.latestTime);
+
+				if (result.latestTime) {
+					this.latestMessageDate = new Date(result.latestTime);
 				}
 
 				if (messages.length > 0) {
