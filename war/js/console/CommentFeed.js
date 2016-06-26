@@ -3,9 +3,7 @@
  */
 CommentFeed = function (container) {
     this.container = document.getElementById(container);
-    this.$container = $j(this.container);
     this.latestMessageDate = new Date(0);
-    this.latestGameDate = new Date(0);
 };
 
 CommentFeed.prototype = {
@@ -22,17 +20,80 @@ CommentFeed.prototype = {
         var header = document.createElement("div");
         var content = document.createElement("div");
 
+        panel.id = "message_" + message.key.id;
         panel.className = "panel panel-warning";
         header.className = "panel-heading";
-        content.className = "panel-body";
 
-        header.innerHTML = message.author;
+        header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
         content.innerHTML = message.text;
+
+        var approveButton = document.createElement("input");
+        approveButton.type = "button";
+        approveButton.value = "Approve"
+        approveButton.className = "floatR btn btn-success btn-sm";
+
+        var deleteButton = document.createElement("input");
+        deleteButton.type = "button";
+        deleteButton.value = "Delete";
+        deleteButton.className = "floatR btn btn-danger btn-sm";
 
         panel.appendChild(header);
         panel.appendChild(content);
 
+        var modalPanel = panel.cloneNode(true);
+
+        content.appendChild(deleteButton);
+        content.appendChild(approveButton);
+
+        $j(deleteButton).on("click", function () {
+            $j("#confirmModalContent").html("");
+            $j("#confirmModalContent").append(modalPanel);
+            $j("#confirmModalYes").one("click", function () {
+                this.deleteMessage(message.key.id);
+            }.bind(this));
+            $j("#confirmModal").modal();
+        }.bind(this));
+
+        $j(approveButton).on("click", function () {
+            this.approveMessage(message.key.id);
+        }.bind(this));
+
+        panel.style.display = "none";
         this.container.appendChild(panel);
+
+        $j(panel).slideDown(700, function () {
+            $j(this.container).animate({
+                scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+            });
+        }.bind(this));
+    },
+    deleteMessage: function (messageId) {
+        $j.ajax({
+            url: location.protocol + '//' + location.host + "/api/messages/delete/" + messageId,
+            context: this,
+            success: function () {
+                $j("#message_" + messageId).slideUp(700, function () {
+                    $j(this).remove();
+                });
+            },
+            error: function () {
+                console.error("Could not delete message " + messageId);
+            }
+        });
+    },
+    approveMessage: function (messageId) {
+        $j.ajax({
+            url: location.protocol + '//' + location.host + "/api/messages/approve/" + messageId,
+            context: this,
+            success: function () {
+                $j("#message_" + messageId).slideUp(700, function () {
+                    $j(this).remove();
+                });
+            },
+            error: function () {
+                console.error("Could not approve message " + messageId);
+            }
+        });
     },
     fetchAllMessages: function () {
         $j.ajax({
@@ -44,12 +105,8 @@ CommentFeed.prototype = {
                 }.bind(this));
 
                 if (result.latestTime) {
-                    this.lastMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = new Date(result.latestTime);
                 }
-
-                $j(this.container).animate({
-                    scrollTop: this.container.scrollHeight - this.container.offsetHeight,
-                });
 
             }.bind(this),
             error: function (result, error, desc) {
@@ -60,7 +117,7 @@ CommentFeed.prototype = {
     },
     fetchNewMessages: function () {
         $j.ajax({
-            url: location.protocol + "//" + location.host + "/api/messages/pending/" + adminConsole.gameId + "/" + this.lastMessageDate.getTime(),
+            url: location.protocol + "//" + location.host + "/api/messages/pending/" + adminConsole.gameId + "/" + this.latestMessageDate.getTime(),
             success: function (result) {
                 var messages = result.messages;
                 messages.forEach(function (message) {
@@ -68,7 +125,7 @@ CommentFeed.prototype = {
                 }.bind(this));
 
                 if (result.latestTime) {
-                    this.lastMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = new Date(result.latestTime);
                 }
 
                 if (messages.length > 0) {
