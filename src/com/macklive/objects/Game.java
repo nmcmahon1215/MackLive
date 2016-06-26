@@ -93,15 +93,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
                 this.team2goals = ((Number) e.getProperty("T2Score")).intValue();
                 this.team1sog = ((Number) e.getProperty("T1SOG")).intValue();
                 this.team2sog = ((Number) e.getProperty("T2SOG")).intValue();
-                try {
-                    this.team1pp = (boolean) e.getProperty("T1PP");
-                    this.team2pp = (boolean) e.getProperty("T2PP");
-                } catch (Exception ex) {
-                    //TODO Remove these lines (Only here for backwards compatibility)
-                    this.team1pp = (boolean) e.getProperty("T1Penalty");
-                    this.team2pp = (boolean) e.getProperty("T2Penalty");
-                }
-
+                this.team1pp = (boolean) e.getProperty("T1PP");
+                this.team2pp = (boolean) e.getProperty("T2PP");
                 this.time = (String) e.getProperty("Time");
                 this.period = ((Number) e.getProperty("Period")).intValue();
                 this.created = (Date) e.getProperty("Date");
