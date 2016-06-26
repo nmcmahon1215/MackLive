@@ -268,4 +268,34 @@ public class DataManager {
             return null;
         }
     }
+
+    /**
+     * Gets a message with the given ID number
+     *
+     * @param idNum ID of the message to retrieve
+     * @return A message corresponding to the ID, or null if one does not exist.
+     */
+    public Message getMessage(long idNum) {
+        try {
+            Key k = KeyFactory.createKey("Message", idNum);
+            Entity e = cacheManager.get(k);
+
+            if (e != null) {
+                return new Message(e);
+            } else {
+                return new Message(this.getEntityWithKey(k));
+            }
+        } catch (EntityMismatchException | EntityNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Deletes entity with the given key
+     *
+     * @param k Key of the entity to delete
+     */
+    public void deleteEntity(Key k) {
+        dstore.delete(k);
+    }
 }

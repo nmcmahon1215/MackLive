@@ -1,22 +1,21 @@
 package com.macklive.rest;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
+import com.macklive.objects.Game;
 import com.macklive.objects.Message;
 import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
@@ -38,32 +37,23 @@ public class MessageService {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public String postMessage(String messageJSON, @Context HttpServletResponse servletResponse) {
+    public Response postMessage(String messageJSON) {
         try {
             JSONObject jso = new JSONObject(messageJSON);
 
             long gameId = jso.getLong("game");
-            User currentUser = UserServiceFactory.getUserService().getCurrentUser();
-            boolean userComment = false;
-
-            if (currentUser != null) {
-                String currentUID = UserServiceFactory.getUserService().getCurrentUser().getUserId();
-                String gameOwnerUID = DataManager.getInstance().getGame(gameId).getOwnerId();
-                userComment = !currentUID.equals(gameOwnerUID);
-            }
+            boolean userComment = !AuthenticationUtility.authenticate(DataManager.getInstance().getGame(gameId).getOwnerId());
 
             Message newMessage = new Message(jso.getString("author"), jso.getString("text"), gameId,
                     userComment);
 
             DataManager.getInstance().storeItem(newMessage);
 
-            return "OK";
+            return Response.status(Response.Status.OK).build();
 
         } catch (JSONException e) {
             e.printStackTrace();
-            servletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-
-            return "Bad Request";
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -104,6 +94,7 @@ public class MessageService {
     @Path("/pending/{gameId}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getPendingMessages(@PathParam("gameId") long gameId) {
+
         return formResponse(DataManager.getInstance().getMessagesForGame(gameId, false));
     }
 
@@ -112,6 +103,51 @@ public class MessageService {
     @Produces(MediaType.APPLICATION_JSON)
     public String getPendingMessagesAfterDate(@PathParam("gameId") long gameId, @PathParam("date") long date) {
         return formResponse(DataManager.getInstance().getMessagesForGameAfterDate(gameId, new Date(date), false));
+    }
+
+    @GET
+    @Path("/delete/{messageId}")
+    public Response deleteMessage(@PathParam("messageId") long messageId) {
+
+        DataManager dm = DataManager.getInstance();
+        Message m = dm.getMessage(messageId);
+
+        if (m == null) {
+            return Response.status(500).build();
+        }
+
+        Game g = dm.getGame(m.getGameId());
+
+        if (AuthenticationUtility.authenticate(g.getOwnerId())) {
+            Key k = KeyFactory.createKey("Message", messageId);
+            dm.deleteEntity(k);
+            return Response.status(200).build();
+        } else {
+            return Response.status(403).build();
+        }
+    }
+
+    @GET
+    @Path("/approve/{messageId}")
+    public Response approveMessage(@PathParam("messageId") long messageId) {
+        DataManager dm = DataManager.getInstance();
+
+        Message m = dm.getMessage(messageId);
+
+        if (m == null) {
+            return Response.status(500).build();
+        }
+
+        Game g = dm.getGame(m.getGameId());
+
+        if (AuthenticationUtility.authenticate(g.getOwnerId())) {
+            m.approve();
+            m.setTime(new Date());
+            dm.storeItem(m);
+            return Response.status(200).build();
+        }
+
+        return Response.status(403).build();
     }
 
     /**
@@ -126,17 +162,9 @@ public class MessageService {
 
         HashMap<String, Object> hm = new HashMap<>();
 
-        List<Message> responseMessages = new ArrayList<>();
-        
-        for (Message m : messages) {
-            if (m.isApproved()) {
-                responseMessages.add(m);
-            }
-        }
-
-        hm.put("messages", responseMessages);
-        if (responseMessages.size() > 0) {
-            hm.put("latestTime", responseMessages.get(responseMessages.size() - 1).getTime().getTime());
+        hm.put("messages", messages);
+        if (messages.size() > 0) {
+            hm.put("latestTime", messages.get(messages.size() - 1).getTime().getTime());
         }
 
         return gs.toJson(hm);
