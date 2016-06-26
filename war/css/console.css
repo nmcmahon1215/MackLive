@@ -68,6 +68,7 @@ a:hover {
     font-family: Monospace;
     border: 1px solid black;
     background-color: lightgoldenrodyellow;
+    margin-top: 10px;
 }
 
 .fadeBG {
@@ -194,20 +195,18 @@ a:hover {
     margin-left: 25px;
 }
 
-.scoreBox {
+.embedBox,
+.numberBox {
     width: 60px;
+    height: auto;
+    margin: auto;
     padding-top: 3px;
     padding-bottom: 3px;
-    margin: auto;
-    height: auto;
 }
 
-.shotsBox {
-    width: 60px;
-    height: auto;
-    margin: auto;
-    padding-top: 3px;
-    padding-bottom: 3px;
+.embedBox {
+    display: inline-block;
+    width: 100px;
 }
 
 .absoluteVerticalCentered {

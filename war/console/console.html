@@ -60,16 +60,16 @@
             </tr>
             <tr>
                 <td>Score</td>
-                <td colspan="2"><input id="team1scorebox" class="scoreBox form-control" type="number" min="0"
+                <td colspan="2"><input id="team1scorebox" class="numberBox form-control" type="number" min="0"
                                        value="0"/></td>
-                <td colspan="2"><input id="team2scorebox" class="scoreBox form-control" type="number" min="0"
+                <td colspan="2"><input id="team2scorebox" class="numberBox form-control" type="number" min="0"
                                        value="0"/></td>
             </tr>
             <tr>
                 <td>Shots</td>
-                <td colspan="2"><input id="team1shotsbox" class="shotsBox form-control" type="number" min="0"
+                <td colspan="2"><input id="team1shotsbox" class="numberBox form-control" type="number" min="0"
                                        value="0"/></td>
-                <td colspan="2"><input id="team2shotsbox" class="shotsBox form-control" type="number" min="0"
+                <td colspan="2"><input id="team2shotsbox" class="numberBox form-control" type="number" min="0"
                                        value="0"/></td>
             </tr>
             <tr>
@@ -86,7 +86,7 @@
             </tr>
             <tr>
                 <td>Period</td>
-                <td colspan="4"><input id="periodControl" class="shotsBox form-control" type="number" min="1"
+                <td colspan="4"><input id="periodControl" class="numberBox form-control" type="number" min="1"
                                        max="5" value="1" title="Pattern must be: MM:SS"/>
                 </td>
             </tr>
@@ -119,6 +119,10 @@
                 <h4 class="modal-title" id="embedModalLabel">Embed Code</h4>
             </div>
             <div id='embedCodeModal' class="modal-body">
+                <label for="embedHeight">Height: </label>
+                <input id="embedHeight" class="form-control embedBox" type="number" min="400">
+                <label for="embedWidth" style="margin-left: 10px;">Width: </label>
+                <input id="embedWidth" class="form-control embedBox" type="number" min="400">
                 <textarea id="embedCode" readonly></textarea>
             </div>
             <div class="modal-footer">
