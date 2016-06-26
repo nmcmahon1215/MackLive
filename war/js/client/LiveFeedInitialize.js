@@ -24,7 +24,7 @@ $j(document).ready(function () {
     liveFeed = document.getElementById("liveBlogFeed");
     liveFeed.src = "/client/liveBlogFeed.html?gameId=" + gameId;
 
-    commentController = new CommentController(gameId);
+    commentController = new ClientLiveFeed(gameId);
     commentController.render();
     commentController.initialize();
 });

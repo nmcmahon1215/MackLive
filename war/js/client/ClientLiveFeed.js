@@ -2,11 +2,12 @@
  * This is the javascript for building and operating the console window
  */
 
-CommentController = function (gameId) {
+ClientLiveFeed = function (gameId) {
+    this.gameId = gameId;
     this.form = null;
 };
 
-CommentController.prototype = {
+ClientLiveFeed.prototype = {
     render: function () {
         this.form = document.getElementById("commentForm");
         this.textArea = document.getElementById("commentInput");
@@ -63,7 +64,6 @@ CommentController.prototype = {
                     this.textArea.classList.add("fadeBG");
                 }.bind(this), 100);
 
-                this.liveBlogFeed.contentWindow.liveFeed.fetchNewMessages();
             },
             error: function (result) {
                 alert("Could not post message!");
