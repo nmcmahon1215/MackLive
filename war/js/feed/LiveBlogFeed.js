@@ -89,8 +89,8 @@ LiveBlogFeed.prototype = {
 		panel.className = "panel panel-info";
 		header.className = "panel-heading";
 		content.className = "panel-body";
-		
-		header.innerHTML = message.author;
+
+		header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
 		content.innerHTML = message.text;
 		
 		panel.appendChild(header);

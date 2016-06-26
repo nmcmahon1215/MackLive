@@ -161,3 +161,8 @@ body {
 .panel * {
 	padding: 5px;
 }
+
+.panel-right {
+    padding: 0;
+    float: right;
+}
