@@ -85,8 +85,13 @@ LiveBlogFeed.prototype = {
 		var panel = document.createElement("div");
 		var header = document.createElement("div");
 		var content = document.createElement("div");
-		
-		panel.className = "panel panel-info";
+
+		if (message.isUserComment) {
+			panel.className = "panel panel-warning";
+		} else {
+			panel.className = "panel panel-info";
+		}
+
 		header.className = "panel-heading";
 		content.className = "panel-body";
 
@@ -95,8 +100,15 @@ LiveBlogFeed.prototype = {
 		
 		panel.appendChild(header);
 		panel.appendChild(content);
-		
+
+		panel.style.display = "none";
 		this.container.appendChild(panel);
+
+		$j(panel).slideDown(700, function () {
+			$j(this.container).animate({
+				scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+			});
+		}.bind(this));
 	},
 	fetchAllMessages: function() {
 		$j.ajax({
