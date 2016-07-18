@@ -31,7 +31,7 @@ public class DataManager {
     private UserService userService;
     private DataCache cacheManager;
 
-    public static DataManager getInstance() {
+    public synchronized static DataManager getInstance() {
         if (instance == null) {
             instance = new DataManager();
         }

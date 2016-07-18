@@ -33,7 +33,7 @@ public class DataCache {
      *
      * @return The single instance of the cache manager
      */
-    static DataCache getInstance() {
+    public synchronized static DataCache getInstance() {
         if (instance == null) {
             instance = new DataCache();
         }
