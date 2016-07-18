@@ -12,6 +12,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Team Management</title>
+	<link rel="Stylesheet" href="/css/bootstrap.min.css"/>
 	<link rel="Stylesheet" href="/css/console.css" type="text/css"/>
 	<style>
 		body {
@@ -29,14 +30,14 @@
 	</script>
 </head>
 
-<body>
+<body style="min-height: 250px; min-width: 650px">
 <div>
 	<img class="]floatL headerImage" src="/images/mllogo.png">
-	<h1 style="position: absolute; top: 10px; right: 25px; color: white;">
+	<h1 style="color: white; margin-top: 5px; margin-bottom: 0px;" class="floatR">
 		Team Management</h1>
 </div>
 <div id='teamContainer' class='userBoxStyle'
-	 style="height: calc(100% - 106px); width: calc(100% - 70px); padding: 15px; margin: auto; margin-top: 10px;">
+	 style="padding: 15px; margin: auto; margin-top: 10px;">
 	<div>
 		<label for="teamPicker">Team: </label>
 		<select id="teamPicker">
@@ -64,8 +65,8 @@
 		<input id='teamAbbrInput' type="text" style="font-size:20px;" placeholder="Short Name">
 	</div>
 	<div class='absoluteBottomRight'>
-		<input id='deleteButton' class='red' type='button' value='Delete' disabled>
-		<input id='saveButton' class='action' style='margin-left:10px;' type='button' value='Save' disabled>
+		<input id='deleteButton' class='btn btn-danger' type='button' value='Delete' disabled>
+		<input id='saveButton' class='btn btn-primary' style='margin-left:10px;' type='button' value='Save' disabled>
 	</div>
 </div>
 </body>

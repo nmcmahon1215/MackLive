@@ -13,7 +13,7 @@ ScoreBoardConsole.prototype = {
 	render: function() {
 		var teamManageLink = document.getElementById("teamManageLink");
 		teamManageLink.onclick = function() {
-			window.open('teamManager.jsp', 'newwindow', 'width=650px, height=350px');
+			window.open('teamManager.jsp', 'newwindow', 'width=650px, height=250px');
 		};
 
 		this.team1Selector = document.getElementById("team1select");
