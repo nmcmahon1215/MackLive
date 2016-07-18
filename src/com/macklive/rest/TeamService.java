@@ -24,6 +24,10 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Team;
@@ -44,14 +48,14 @@ public class TeamService {
                                @FormDataParam("teamLogo") InputStream logoStream) {
 
         byte[] buffer = new byte[8192];
-        Blob teamLogo = null;
+        byte[] teamLogo = null;
         if (logoStream != null) {
             try {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 while (logoStream.read(buffer) != -1) {
                     bs.write(buffer);
                 }
-                teamLogo = new Blob(bs.toByteArray());
+                teamLogo = bs.toByteArray();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -59,11 +63,13 @@ public class TeamService {
             }
         }
 
+        teamLogo = resizeImage(teamLogo, 150, 150);
+
         Team t = new Team(name, abbr);
 
-
         if (teamLogo != null) {
-            t.setLogo(teamLogo);
+            Blob logoBlob = new Blob(teamLogo);
+            t.setLogo(logoBlob);
         }
 
         //0 is the default value for a long
@@ -75,6 +81,32 @@ public class TeamService {
         DataManager.getInstance().storeItem(t);
 
         return Response.status(204).build();
+    }
+
+    /**
+     * Resizes the image to the given height and width. Only downscales the image.
+     *
+     * @param originalImage The image to resize
+     * @param height        Height of the resulting image
+     * @param width         Width of the resulting image
+     * @return A byte array representing the transformed image
+     */
+    private byte[] resizeImage(byte[] originalImage, int height, int width) {
+
+        if (originalImage == null) {
+            return null;
+        }
+
+        ImagesService imageService = ImagesServiceFactory.getImagesService();
+        Image original = ImagesServiceFactory.makeImage(originalImage);
+
+        if (original.getHeight() < height || original.getWidth() < width) {
+            return originalImage;
+        }
+
+        Transform t = ImagesServiceFactory.makeResize(height, width);
+
+        return imageService.applyTransform(t, original).getImageData();
     }
 
     @GET
