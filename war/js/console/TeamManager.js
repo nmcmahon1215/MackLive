@@ -23,10 +23,25 @@ TeamManagerConsole.prototype = {
 		render: function() {
 			$j(this.teamName).keyup(this.validateSave.bind(this));
 			$j(this.teamAbbr).keyup(this.validateSave.bind(this));
+			$j(this.teamAbbr).keypress(this.trimAbbr);
+			$j(this.teamAbbr).change(this.trimAbbr);
 			$j(this.uploadButton).on("change", this.previewImage.bind(this));
 			$j(this.uploadButton).on("change", this.validateSave.bind(this));
 			$j(this.saveButton).click(this.saveTeam.bind(this));
 			$j(this.teamPicker).change(this.loadTeam.bind(this));
+		},
+		/**
+		 * Trims the abbreviation in the team name. Prevents more than 4 characters
+		 * from being entered into the box
+		 *
+		 * @param event
+		 * @returns {boolean}
+		 */
+		trimAbbr: function (event) {
+			if (this.value.length >= 4) {
+				this.value = this.value.substr(0, 3);
+				return false;
+			}
 		},
 		/**
 		 * Determines if the save button should be enabled and applies it

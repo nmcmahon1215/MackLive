@@ -9,6 +9,7 @@ AdminConsole = function () {
 	this.loadButton = document.getElementById("loadButton");
 	this.createButton = document.getElementById("createButton");
 	this.initialize();
+	this.modal = new Modal();
 };
 
 AdminConsole.prototype = {
@@ -90,11 +91,7 @@ AdminConsole.prototype = {
 			dataType : "json",
 			context : this,
 			success : function(response) {
-				this.gameId = game.id;
-				this.setGameName(game.value);
-				scoreBoard.loadTeams(response);
-				scoreBoard.loadScoreInfo(response);
-				liveConsole.initialize();
+				this.initializeGame(game.value, game.id, response);
 			},
 			error : function(response, errorType, errorStuff) {
 				alert("Error loading game!");
@@ -118,12 +115,20 @@ AdminConsole.prototype = {
 			context : this,
 			timeout : 2000,
 			success : function(response) {
-				this.gameId = response.key.id;
-				this.setGameName(response.name);
+				this.initializeGame(response.name, response.key.id, response);
 			},
 			error : function(response, errorType, errorThrown) {
 				alert("Failed to create new game.");
 			},
 		})
-	}
+	},
+	initializeGame: function (name, id, gameData) {
+		this.gameId = id;
+		this.setGameName(name);
+		scoreBoard.loadTeams(gameData);
+		scoreBoard.loadScoreInfo(gameData);
+		liveConsole.initialize();
+		this.modal.setSource(location.protocol + "//" + location.host + "/client/clientApp.html?gameId=" + id);
+		commentFeed.initialize();
+	},
 };

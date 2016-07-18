@@ -4,7 +4,6 @@ body {
 	background-color: transparent;
 	padding: 0px;
     min-width: 395px;
-	min-height: 400px;
 }
 
 html {
@@ -22,10 +21,10 @@ body {
 }
 
 .consoleScrollerFeed {
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
 	background-color: #eeeeee;
     overflow-y: auto;
-    padding-bottom: 25px;
+    padding-bottom: 10px;
     border-top: 1px solid black;
 }
 
@@ -58,6 +57,7 @@ body {
     text-align: center;
     display: inline-block;
     background: linear-gradient(to bottom, #3b679e 0%, #2b88d9 50%, #207cca 51%, #7db9e8 100%);
+    border-bottom: 1px solid white;
 }
 
 .shots {
@@ -160,4 +160,9 @@ body {
 
 .panel * {
 	padding: 5px;
+}
+
+.panel-right {
+    padding: 0;
+    float: right;
 }

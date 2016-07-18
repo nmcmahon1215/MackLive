@@ -85,18 +85,30 @@ LiveBlogFeed.prototype = {
 		var panel = document.createElement("div");
 		var header = document.createElement("div");
 		var content = document.createElement("div");
-		
-		panel.className = "panel panel-info";
+
+		if (message.isUserComment) {
+			panel.className = "panel panel-warning";
+		} else {
+			panel.className = "panel panel-info";
+		}
+
 		header.className = "panel-heading";
 		content.className = "panel-body";
-		
-		header.innerHTML = message.author;
+
+		header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
 		content.innerHTML = message.text;
 		
 		panel.appendChild(header);
 		panel.appendChild(content);
-		
+
+		panel.style.display = "none";
 		this.container.appendChild(panel);
+
+		$j(panel).slideDown(700, function () {
+			$j(this.container).animate({
+				scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+			});
+		}.bind(this));
 	},
 	fetchAllMessages: function() {
 		$j.ajax({
@@ -108,7 +120,7 @@ LiveBlogFeed.prototype = {
 				}.bind(this));
 				
 				if (result.latestTime){
-					this.lastMessageDate = new Date(result.latestTime);
+					this.latestMessageDate = new Date(result.latestTime);
 				}
 
                 $j(this.container).animate({
@@ -124,15 +136,15 @@ LiveBlogFeed.prototype = {
 	},
 	fetchNewMessages: function() {
 		$j.ajax({
-			url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.lastMessageDate.getTime(),
+			url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.latestMessageDate.getTime(),
 			success: function(result) {
 				var messages = result.messages;
 				messages.forEach(function(message){
 					this.addMessage(message);
 				}.bind(this));
-				
-				if (result.latestTime){ 
-					this.lastMessageDate = new Date(result.latestTime);
+
+				if (result.latestTime) {
+					this.latestMessageDate = new Date(result.latestTime);
 				}
 
 				if (messages.length > 0) {

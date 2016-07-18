@@ -13,6 +13,7 @@ LiveBlogConsole.prototype = {
 		render: function() {
 
 			this.liveBlogFeed = document.getElementById("liveBlogFeed");
+			this.liveBlogFeed.src = "";
 			this.form = document.getElementById("liveBlogForm");
 			this.textArea = document.getElementById("liveBlogInput");
 
@@ -41,7 +42,7 @@ LiveBlogConsole.prototype = {
 		initialize: function () {
             this.initialized = true;
             this.validateButton();
-			this.liveBlogFeed.src = "/liveBlogFeed.html?gameId=" + adminConsole.gameId;
+			this.liveBlogFeed.src = "/client/liveBlogFeed.html?gameId=" + adminConsole.gameId;
         },
 		submitMessage: function () {
             if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "") {

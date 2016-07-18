@@ -30,7 +30,7 @@ public class Message extends AbsBusinessObject {
         this.isUserComment = isUserComment;
         this.time = new Date();
         this.gameId = gameId;
-        this.approved = false;
+        this.approved = !isUserComment;
     }
 
     /**
@@ -52,11 +52,12 @@ public class Message extends AbsBusinessObject {
             e = new Entity("Message");
         }
 
-        e.setProperty("author", author);
+        e.setUnindexedProperty("author", author);
         e.setUnindexedProperty("text", text);
         e.setProperty("time", time);
         e.setProperty("game", gameId);
         e.setProperty("approved", approved);
+        e.setProperty("userComment", isUserComment);
         return e;
     }
 
@@ -69,6 +70,7 @@ public class Message extends AbsBusinessObject {
             this.time = (Date) e.getProperty("time");
             this.gameId = (long) e.getProperty("game");
             this.approved = (boolean) e.getProperty("approved");
+            this.isUserComment = (boolean) e.getProperty("userComment");
             this.key = e.getKey();
 
         } else {
@@ -116,6 +118,10 @@ public class Message extends AbsBusinessObject {
      */
     public void approve() {
         this.approved = true;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mack Live Client</title>
+    <link rel="Stylesheet" href="/css/bootstrap.min.css" type="text/css"/>
+    <link rel="Stylesheet" href="/css/console.css" type="text/css"/>
+    <link rel="Stylesheet" href="/css/clientApp.css" type="text/css"/>
+    <script language='javascript' type="text/javascript" src='/api/js/client'></script>
+</head>
+<body>
+<iframe id="liveBlogFeed" class="liveFeed">
+
+</iframe>
+<form id="commentForm" onsubmit="return false;">
+    <div class="input-group" style="margin: 10px">
+        <span id="nameLabel" class="input-group-addon">Public Name:</span>
+        <input id="nameInput" type="text" class="form-control" placeholder="Your name"
+               aria-describedby="nameLabel"/>
+    </div>
+    <textarea id="commentInput" class="liveInput fadeBG form-control" placeholder="Enter a commment"></textarea>
+    <input id="commentSubmitButton" type="submit" value="Submit Comment" class="action floatR btn btn-primary"
+           style="margin:10px" disabled/>
+</form>
+
+</body>
+</html>
