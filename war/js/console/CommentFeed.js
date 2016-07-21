@@ -4,6 +4,7 @@
 CommentFeed = function (container) {
     this.container = document.getElementById(container);
     this.latestMessageDate = new Date(0);
+    this.initialized = false;
 };
 
 CommentFeed.prototype = {
@@ -62,11 +63,15 @@ CommentFeed.prototype = {
         panel.style.display = "none";
         this.container.appendChild(panel);
 
-        $j(panel).slideDown(700, function () {
-            $j(this.container).animate({
-                scrollTop: this.container.scrollHeight - this.container.offsetHeight,
-            });
-        }.bind(this));
+        if (this.initialized) {
+            $j(panel).slideDown(700, function () {
+                $j(this.container).animate({
+                    scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+                });
+            }.bind(this));
+        } else {
+            panel.style.display = "";
+        }
     },
     deleteMessage: function (messageId) {
         $j.ajax({
@@ -108,7 +113,7 @@ CommentFeed.prototype = {
                 if (result.latestTime) {
                     this.latestMessageDate = new Date(result.latestTime);
                 }
-
+                this.initialized = true;
             }.bind(this),
             error: function (result, error, desc) {
                 console.error("Error: " + desc);

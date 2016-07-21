@@ -7,6 +7,7 @@ LiveBlogFeed = function(container, blogId) {
 	this.$container = $j(this.container);
 	this.latestMessageDate = new Date(0);
     this.latestGameDate = new Date(0);
+	this.initialized = false;
 };
 
 LiveBlogFeed.prototype = {
@@ -104,11 +105,16 @@ LiveBlogFeed.prototype = {
 		panel.style.display = "none";
 		this.container.appendChild(panel);
 
-		$j(panel).slideDown(700, function () {
-			$j(this.container).animate({
-				scrollTop: this.container.scrollHeight - this.container.offsetHeight,
-			});
-		}.bind(this));
+		if (this.initialized) {
+			$j(panel).slideDown(700, function () {
+				$j(this.container).animate({
+					scrollTop: this.container.scrollHeight - this.container.offsetHeight,
+				});
+			}.bind(this));
+		} else {
+			panel.style.display = "";
+		}
+
 	},
 	fetchAllMessages: function() {
 		$j.ajax({
@@ -126,7 +132,7 @@ LiveBlogFeed.prototype = {
                 $j(this.container).animate({
                     scrollTop: this.container.scrollHeight - this.container.offsetHeight,
                 });
-				
+				this.initialized = true;
 			}.bind(this),
 			error: function (result, error, desc){
                 console.error("Error: " + desc);
