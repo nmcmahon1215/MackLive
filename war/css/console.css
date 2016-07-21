@@ -47,6 +47,10 @@ a:hover {
     color: white;
 }
 
+input[type='text'] {
+    color: black;
+}
+
 #gameTitle {
     color: white;
     font-size: 25px;
