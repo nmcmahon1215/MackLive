@@ -88,7 +88,7 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.jvnet.mimepull/mimepull/jars/mimepull-1.9.6.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.google.code.gson/gson/jars/gson-2.6.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.json/json/bundles/json-20160212.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.37.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.40.jar!/" />
         </CLASSES>
         <JAVADOC>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-api/javadocs/hk2-api-2.4.0-javadoc.jar!/" />
@@ -114,6 +114,9 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.jvnet.mimepull/mimepull/javadocs/mimepull-1.9.6-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.google.code.gson/gson/javadocs/gson-2.6.2-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.json/json/javadocs/json-20160212-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.ws.rs/javax.ws.rs-api/javadocs/javax.ws.rs-api-2.0.1-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.annotation/javax.annotation-api/javadocs/javax.annotation-api-1.2-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.validation/validation-api/javadocs/validation-api-1.1.0.Final-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-api/sources/hk2-api-2.4.0-sources.jar!/" />
@@ -142,6 +145,9 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.jvnet.mimepull/mimepull/sources/mimepull-1.9.6-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.google.code.gson/gson/sources/gson-2.6.2-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.json/json/sources/json-20160212-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.ws.rs/javax.ws.rs-api/sources/javax.ws.rs-api-2.0.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.annotation/javax.annotation-api/sources/javax.annotation-api-1.2-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/javax.validation/validation-api/sources/validation-api-1.1.0.Final-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
