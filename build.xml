@@ -10,6 +10,8 @@
     <property name="ivy.jar.dir" value="${ivy.home}/lib"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
     <property name="src" location="src"/>
+    <property name="test" location="test"/>
+    <property name="testbuild" location="testbuild"/>
     <property name="build" location="build"/>
     <property name="dist" location="dist"/>
 
@@ -57,11 +59,35 @@
     <target name="compile" depends="init,download-deps"
             description="compile the source">
         <!-- Compile the java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${build}">
+        <javac includeantruntime="false" srcdir="${src}" destdir="${build}">
             <classpath>
                 <path refid="external.classpath"/>
             </classpath>
         </javac>
+    </target>
+
+    <target name="clean-test" depends="clean,test"/>
+
+    <target name="test" depends="compile" description="Runs unit tests">
+        <mkdir dir="${testbuild}"/>
+
+        <javac includeantruntime="false" srcdir="${test}" destdir="${build}">
+            <src path="${src}"/>
+            <src path="${test}"/>
+            <classpath>
+                <path refid="external.classpath"/>
+            </classpath>
+        </javac>
+
+        <junit printsummary="on" haltonfailure="no" failureproperty="test.failed">
+            <formatter type="plain" usefile="false"/>
+            <classpath>
+                <path refid="external.classpath"/>
+                <pathelement path="${build}"/>
+            </classpath>
+            <test name="com.macklive.JUnitTestSuite"/>
+        </junit>
+        <fail message="Test failure detected, check test results." if="test.failed"/>
     </target>
 
     <target name="clean">

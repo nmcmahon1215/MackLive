@@ -2,6 +2,9 @@
   <info organisation="com.macklive" module="maclive"/>
 	<dependencies>
 		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-testing" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-api-labs" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-api-stubs" rev="latest.release"/>
 		<dependency org="org.glassfish.hk2" name="hk2-api" rev="2.4.0"/>
 		<dependency org="org.glassfish.hk2" name="hk2-locator" rev="2.4.0"/>
 		<dependency org="org.glassfish.hk2" name="hk2-utils" rev="2.4.0"/>
@@ -18,5 +21,6 @@
 		<dependency org="org.glassfish.jersey.media" name="jersey-media-multipart" rev="2.22.2"/>
 		<dependency org="com.google.code.gson" name="gson" rev="2.6.2"/>
 		<dependency org="org.json" name="json" rev="20160212"/>
+		<dependency org="junit" name="junit" rev="4.12"/>
 	</dependencies>
 </ivy-module>
