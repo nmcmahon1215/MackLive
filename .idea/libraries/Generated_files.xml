@@ -1,0 +1,34 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/war/js/client/LiveFeedInitialize.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/common/jqueryReassign.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/client/ClientLiveFeed.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/Console.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/CommentFeed.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/Modal.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/LiveBlogConsole.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/TeamManager.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/console/ScoreBoardConsole.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/feed/LiveFeedInitialize.min.js" />
+        <item url="file://$PROJECT_DIR$/war/js/feed/LiveBlogFeed.min.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/war/js/client/LiveFeedInitialize.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/common/jqueryReassign.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/client/ClientLiveFeed.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/Console.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/CommentFeed.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/Modal.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/LiveBlogConsole.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/TeamManager.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/console/ScoreBoardConsole.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/feed/LiveFeedInitialize.min.js" />
+      <root url="file://$PROJECT_DIR$/war/js/feed/LiveBlogFeed.min.js" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
