@@ -3,20 +3,27 @@
  */
 package com.macklive.rest;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 @Path("/js")
 public class JavaScriptService {
+
+    private Logger log = Logger.getLogger(this.getClass().getName());
+    private MemcacheService memcache = MemcacheServiceFactory.getMemcacheService();
 
     /**
      * Gets the common JavaScript files and returns them.
@@ -26,18 +33,42 @@ public class JavaScriptService {
      */
     @GET
     @Produces("text/javascript")
-    public String getBaseJavaScript(@Context ServletContext context) throws IOException {
+    public Response getBaseJavaScript(@Context ServletContext context) throws Exception {
+        String result = getConcatJavascript("common", context);
+        return Response.ok(result).build();
+    }
+
+    /**
+     * Concatenates javascript in the corresponsing subfolder
+     *
+     * @param subFolder Subfolder to obtain javascript from
+     * @param context   ServletContext for determining the root path
+     * @return A string of the concatenated javascript.
+     * @throws IOException
+     */
+    private String getConcatJavascript(String subFolder, ServletContext context) throws IOException {
         String result = "";
 
-        //Get Common Files
-        String pathName = context.getRealPath("/js/common");
+        String cachedFile = (String) this.memcache.get(subFolder);
+        if (cachedFile != null) {
+            this.log.info("Retrieving JS bundle '" + subFolder + "' from memcache");
+            return cachedFile;
+        }
 
-        if (pathName != null){
-            File commonFiles = new File(context.getRealPath("/js/common"));
-            for (File f : commonFiles.listFiles()){
-                result += this.getFileString(f);
+        this.log.info("Cache miss for JS bundle: " + subFolder);
+        if (subFolder != null && !subFolder.isEmpty()) {
+            String pathName = context.getRealPath("/js/" + subFolder);
+            if (pathName != null) {
+                File requestedFiles = new File(pathName);
+                for (File f : requestedFiles.listFiles()) {
+                    if (f.getName().matches(".*\\.min\\.js$")) {
+                        result += this.getFileString(f);
+                    }
+                }
             }
         }
+
+        this.memcache.put(subFolder, result);
 
         return result;
     }
@@ -52,21 +83,11 @@ public class JavaScriptService {
     @GET
     @Path("/{subFolder}")
     @Produces("text/javascript")
-    public String getAdditionalJavaScript(@PathParam("subFolder") String subFolder, @Context ServletContext context) throws IOException{
-        String result = this.getBaseJavaScript(context);
+    public Response getAdditionalJavaScript(@PathParam("subFolder") String subFolder, @Context ServletContext context) throws Exception {
+        String result = this.getConcatJavascript("common", context);
+        result += this.getConcatJavascript(subFolder, context);
 
-        //Get additional files, if any
-        if (subFolder != null && !subFolder.isEmpty()){
-            String pathName = context.getRealPath("/js/" + subFolder);
-            if (pathName != null){
-                File requestedFiles = new File(context.getRealPath("/js/" + subFolder));
-                for (File f : requestedFiles.listFiles()){
-                    result += this.getFileString(f);
-                }
-            }
-        }
-
-        return result;
+        return Response.ok(result).build();
     }
 
     /**
