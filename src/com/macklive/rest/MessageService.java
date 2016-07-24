@@ -32,7 +32,6 @@ public class MessageService {
      * Posts a message to a game
      *
      * @param messageJSON     A json representation of the message
-     * @param servletResponse Used for building the response
      * @return A status message describing if the message was successfully posted or errored.
      */
     @POST
