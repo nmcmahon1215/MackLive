@@ -1,5 +1,7 @@
 language: java
 jdk:
   - oraclejdk7
-before_script: ant clean-all
-script: ant compile
+before_install: ant clean-all
+install: ant compile
+script: ant test
+

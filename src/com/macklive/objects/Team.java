@@ -87,7 +87,7 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -95,7 +95,7 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
     }
 
     public String getAbbr() {
-        return abbr;
+        return this.abbr;
     }
 
     public void setAbbr(String abbr) {
@@ -103,7 +103,7 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
     }
 
     public Blob getLogo() {
-        return logo;
+        return this.logo;
     }
 
     public void setLogo(Blob logo) {
@@ -116,5 +116,26 @@ public class Team extends AbsBusinessObject implements IBusinessObject {
     @Override
     public String toString(){
         return this.toJSON();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        if (!this.name.equals(team.name)) return false;
+        if (!this.abbr.equals(team.abbr)) return false;
+        return this.logo != null ? this.logo.equals(team.logo) : team.logo == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = this.name.hashCode();
+        result = 31 * result + this.abbr.hashCode();
+        result = 31 * result + (this.logo != null ? this.logo.hashCode() : 0);
+        return result;
     }
 }
