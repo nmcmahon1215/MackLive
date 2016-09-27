@@ -4,7 +4,6 @@
 		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="latest.release"/>
 		<dependency org="com.google.appengine" name="appengine-testing" rev="latest.release"/>
 		<dependency org="com.google.appengine" name="appengine-api-labs" rev="latest.release"/>
-		<dependency org="com.google.appengine" name="appengine-api-stubs" rev="latest.release"/>
 		<dependency org="org.glassfish.hk2" name="hk2-api" rev="2.4.0"/>
 		<dependency org="org.glassfish.hk2" name="hk2-locator" rev="2.4.0"/>
 		<dependency org="org.glassfish.hk2" name="hk2-utils" rev="2.4.0"/>
