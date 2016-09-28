@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MackLive.iml" filepath="$PROJECT_DIR$/MackLive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MackLiveMain/MackLiveMain.iml" filepath="$PROJECT_DIR$/MackLiveMain/MackLiveMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MackLiveTest/MackLiveTest.iml" filepath="$PROJECT_DIR$/MackLiveTest/MackLiveTest.iml" />
     </modules>
   </component>
 </project>

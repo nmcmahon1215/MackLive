@@ -1,0 +1,26 @@
+<ivy-module version="2.0">
+  <info organisation="com.macklive" module="maclive"/>
+	<dependencies>
+		<dependency org="com.google.appengine" name="appengine-api-1.0-sdk" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-testing" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-api-labs" rev="latest.release"/>
+		<dependency org="com.google.appengine" name="appengine-api-stubs" rev="latest.release"/>
+		<dependency org="org.glassfish.hk2" name="hk2-api" rev="2.4.0"/>
+		<dependency org="org.glassfish.hk2" name="hk2-locator" rev="2.4.0"/>
+		<dependency org="org.glassfish.hk2" name="hk2-utils" rev="2.4.0"/>
+		<dependency org="javax.ws.rs" name="javax.ws.rs-api" rev="2.0.1"/>
+		<dependency org="javax.annotation" name="javax.annotation-api" rev="1.2"/>
+		<dependency org="javax.validation" name="validation-api" rev="1.1.0.Final"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-client" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-common" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.core" name="jersey-server" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.media" name="jersey-media-jaxb" rev="2.22.2"/>
+		<dependency org="org.glassfish.jersey.bundles.repackaged" name="jersey-guava" rev="2.6"/>
+		<dependency org="org.glassfish.jersey.media" name="jersey-media-multipart" rev="2.22.2"/>
+		<dependency org="com.google.code.gson" name="gson" rev="2.6.2"/>
+		<dependency org="org.json" name="json" rev="20160212"/>
+		<dependency org="junit" name="junit" rev="4.12"/>
+	</dependencies>
+</ivy-module>

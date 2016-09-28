@@ -11,6 +11,7 @@
         <option name="sourcesTypes" value="source, src, sources, srcs" />
       </ArtifactTypeSettings>
     </option>
+    <option name="useCustomIvySettings" value="false" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />

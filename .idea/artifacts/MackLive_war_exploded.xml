@@ -1,14 +1,22 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="MackLive:war exploded">
+  <artifact type="exploded-war" build-on-make="true" name="MackLive:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/MackLive_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="MackLive" />
-          <element id="file-copy" path="$PROJECT_DIR$/war/WEB-INF/jersey-multipart-config.properties" />
+          <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/jersey-multipart-config.properties" />
+          <element id="module-output" name="MackLiveMain" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="module" name="IvyIDEA" module-name="MackLiveMain" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/logging.properties" />
+        <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/jersey-multipart-config.properties" />
+        <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/appengine-web.xml" />
+        <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/web.xml" output-file-name="web.xml" />
       </element>
       <element id="javaee-facet-resources" facet="MackLive/web/Web" />
+      <element id="javaee-facet-resources" facet="MackLiveMain/web/Web" />
     </root>
   </artifact>
 </component>
