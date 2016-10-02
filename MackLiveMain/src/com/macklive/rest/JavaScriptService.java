@@ -14,10 +14,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.utils.SystemProperty;
 
 @Path("/js")
 public class JavaScriptService {
@@ -60,8 +65,10 @@ public class JavaScriptService {
             String pathName = context.getRealPath("/js/" + subFolder);
             if (pathName != null) {
                 File requestedFiles = new File(pathName);
-                for (File f : requestedFiles.listFiles()) {
-                    if (f.getName().matches(".*\\.min\\.js$")) {
+                for (File f : sortFiles(requestedFiles.listFiles())) {
+                    if (f.getName().matches(".*\\.min\\.js$") && isProduction()) {
+                        result += this.getFileString(f);
+                    } else if (!isProduction()) {
                         result += this.getFileString(f);
                     }
                 }
@@ -71,6 +78,34 @@ public class JavaScriptService {
         this.memcache.put(subFolder, result);
 
         return result;
+    }
+
+    /**
+     * Determines if we are running in development mode or in production
+     *
+     * @return True if running in production, false otherwise
+     */
+    private boolean isProduction() {
+        return SystemProperty.environment.value() == SystemProperty.Environment.Value.Production;
+    }
+
+    /**
+     * Sorts the array of files by name
+     *
+     * @param array Array of files
+     * @return Sorted list of files
+     */
+    private List<File> sortFiles(File[] array) {
+        List<File> fileList = Arrays.asList(array);
+        Collections.sort(fileList, new Comparator<File>() {
+
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        return fileList;
     }
 
     /**
