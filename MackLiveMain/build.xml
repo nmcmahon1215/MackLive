@@ -10,11 +10,11 @@
     <property name="ivy.home" value="${user.home}/.ant"/>
     <property name="ivy.jar.dir" value="${ivy.home}/lib"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
-    <property name="lib" value="lib/"/>
+    <property name="lib" value="${basedir}/lib/"/>
     <property name="src" location="src"/>
     <property name="test" location="../MackLiveTest/test"/>
     <property name="testbuild" location="testbuild"/>
-    <property name="build" location="../build"/>
+    <property name="build" location="${basedir}/../build"/>
     <property name="dist" location="dist"/>
 
     <target name="download-ivy" unless="offline">
@@ -103,8 +103,8 @@
 
     <target name="js.minify" depends="download-deps">
         <apply executable="java" parallel="false">
-            <fileset dir="." includes="war/main/js/**/*.js"
-                     excludes="war/main/js/**/*.min.js, war/main/js/**/*-gen-min.js"/>
+            <fileset dir="${basedir}" includes="${basedir}/war/main/js/**/*.js"
+                     excludes="${basedir}/war/main/js/**/*.min.js, ${basedir}/war/main/js/**/*-gen-min.js"/>
             <arg line="-jar"/>
             <arg path="lib/yuicompressor.jar"/>
             <srcfile/>
@@ -116,8 +116,8 @@
 
     <target name="css.minify" depends="download-deps">
         <apply executable="java" parallel="false">
-            <fileset dir="." includes="war/main/css/**/*.css"
-                     excludes="war/main/css/**/*.min.css, war/main/css/**/*-gen-min.css"/>
+            <fileset dir="${basedir}" includes="${basedir}/war/main/css/**/*.css"
+                     excludes="${basedir}/war/main/css/**/*.min.css, ${basedir}/war/main/css/**/*-gen-min.css"/>
             <arg line="-jar"/>
             <arg path="lib/yuicompressor.jar"/>
             <srcfile/>
