@@ -66,9 +66,8 @@ public class JavaScriptService {
             if (pathName != null) {
                 File requestedFiles = new File(pathName);
                 for (File f : sortFiles(requestedFiles.listFiles())) {
-                    if (f.getName().matches(".*\\.min\\.js$") && isProduction()) {
-                        result += this.getFileString(f);
-                    } else if (!isProduction()) {
+                    if ((f.getName().matches(".*\\.-gen-min\\.js$") == isProduction())
+                            || f.getName().matches(".*\\.min\\.js$")) {
                         result += this.getFileString(f);
                     }
                 }
