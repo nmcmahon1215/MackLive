@@ -10,6 +10,7 @@
     <property name="ivy.home" value="${user.home}/.ant"/>
     <property name="ivy.jar.dir" value="${ivy.home}/lib"/>
     <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar"/>
+    <property name="lib" value="lib/"/>
     <property name="src" location="src"/>
     <property name="test" location="../MackLiveTest/test"/>
     <property name="testbuild" location="testbuild"/>
@@ -42,7 +43,7 @@
     <target name="download-deps" depends="init-ivy"
             description="-->download dependecy">
         <ivy:resolve/> <!-- Tell Ivy to resolve dependencies -->
-        <ivy:retrieve/> <!-- Load dependencies to the project -->
+        <ivy:retrieve pattern="${lib}/[artifact](-[classifier]).[ext]"/> <!-- Load dependencies to the project -->
     </target>
 
     <target name="init">
@@ -93,10 +94,35 @@
 
     <target name="clean">
         <delete dir="${build}"/>
+        <delete dir="${lib}"/>
     </target>
 
     <target name="clean-all" depends="init-ivy,clean">
         <ivy:cleancache/>
+    </target>
+
+    <target name="js.minify" depends="download-deps">
+        <apply executable="java" parallel="false">
+            <fileset dir="." includes="war/main/js/**/*.js" excludes="war/main/js/**/*.min.js"/>
+            <arg line="-jar"/>
+            <arg path="lib/yuicompressor.jar"/>
+            <srcfile/>
+            <arg line="-o"/>
+            <mapper type="glob" from="*.js" to="*.min.js"/>
+            <targetfile/>
+        </apply>
+    </target>
+
+    <target name="css.minify" depends="download-deps">
+        <apply executable="java" parallel="false">
+            <fileset dir="." includes="war/main/css/**/*.css" excludes="war/main/css/**/*.min.css"/>
+            <arg line="-jar"/>
+            <arg path="lib/yuicompressor.jar"/>
+            <srcfile/>
+            <arg line="-o"/>
+            <mapper type="glob" from="*.css" to="*.min.css"/>
+            <targetfile/>
+        </apply>
     </target>
 
     <target name="all" depends="compile"/>
