@@ -31,5 +31,6 @@
         <dependency org="com.google.code.gson" name="gson" rev="2.6.2" conf="common->*"/>
         <dependency org="org.json" name="json" rev="20160212" conf="common->*"/>
         <dependency org="junit" name="junit" rev="4.12" conf="common->*"/>
+        <dependency org="com.yahoo.platform.yui" name="yuicompressor" rev="2.4.7" conf="common->*"/>
 	</dependencies>
 </ivy-module>
