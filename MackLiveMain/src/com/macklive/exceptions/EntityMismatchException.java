@@ -5,10 +5,10 @@ package com.macklive.exceptions;
  * encountered.
  */
 public class EntityMismatchException extends Exception {
-    
+
     private static final long serialVersionUID = 4611623211080717456L;
 
-    public EntityMismatchException(String message){
+    public EntityMismatchException(String message) {
         super(message);
     }
 }

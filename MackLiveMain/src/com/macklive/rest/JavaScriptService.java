@@ -3,6 +3,10 @@
  */
 package com.macklive.rest;
 
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.utils.SystemProperty;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,10 +24,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.utils.SystemProperty;
-
 @Path("/js")
 public class JavaScriptService {
 
@@ -32,6 +32,7 @@ public class JavaScriptService {
 
     /**
      * Gets the common JavaScript files and returns them.
+     *
      * @param context ServletContext used for finding the JS files
      * @return The combined JavaScript
      * @throws IOException if the files cannot be read.
@@ -109,15 +110,17 @@ public class JavaScriptService {
 
     /**
      * Gets common JavaScript files and those in the given subfolder.
+     *
      * @param subFolder The subfolder to search for.
-     * @param context Servlet context for finding the JS files.
+     * @param context   Servlet context for finding the JS files.
      * @return The combined JavaScript.
      * @throws IOException
      */
     @GET
     @Path("/{subFolder}")
     @Produces("text/javascript")
-    public Response getAdditionalJavaScript(@PathParam("subFolder") String subFolder, @Context ServletContext context) throws Exception {
+    public Response getAdditionalJavaScript(@PathParam("subFolder") String subFolder,
+                                            @Context ServletContext context) throws Exception {
         String result = this.getConcatJavascript("common", context);
         result += this.getConcatJavascript(subFolder, context);
 
@@ -126,6 +129,7 @@ public class JavaScriptService {
 
     /**
      * Returns a string version of the contents of a file
+     *
      * @param f File to stringify
      * @return A string containing the file's contents
      * @throws IOException if I/O error occurs
@@ -134,7 +138,7 @@ public class JavaScriptService {
         BufferedReader br = new BufferedReader(new FileReader(f));
         String line = br.readLine();
         String contents = "";
-        while(line != null){
+        while (line != null) {
             contents += line;
             contents += "\n";
             line = br.readLine();

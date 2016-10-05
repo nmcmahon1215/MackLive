@@ -44,7 +44,8 @@ public class TwitterService {
 
     @GET
     @Path("/signin")
-    public Response signIn(@Context UriInfo uriInfo, @Context HttpServletRequest request) throws EntityNotFoundException, EntityMismatchException, TwitterException {
+    public Response signIn(@Context UriInfo uriInfo, @Context HttpServletRequest request) throws
+            EntityNotFoundException, EntityMismatchException, TwitterException {
         TwitterManager tm = TwitterManager.getInstance();
         String callbackUrl = uriInfo.getAbsolutePath().toString().replace("signin", "callback");
         return Response.temporaryRedirect(tm.getAuthorizeUri(callbackUrl, request.getSession())).build();
@@ -52,13 +53,15 @@ public class TwitterService {
 
     @GET
     @Path("/callback")
-    public Response callback(@Context HttpServletRequest request, @Context UriInfo uriInfo, @QueryParam("oauth_verifier") String verifier) {
+    public Response callback(@Context HttpServletRequest request, @Context UriInfo uriInfo,
+                             @QueryParam("oauth_verifier") String verifier) {
         try {
             TwitterManager tm = TwitterManager.getInstance();
             HttpSession session = request.getSession();
             tm.createAuthToken((RequestToken) session.getAttribute("twitterRequestToken"), verifier);
             session.removeAttribute("twitterRequestToken");
-            return Response.temporaryRedirect(URI.create(uriInfo.getBaseUri().toString() + "/console/console.html")).build();
+            return Response.temporaryRedirect(URI.create(
+                    uriInfo.getBaseUri().toString() + "/console/console.html")).build();
         } catch (TwitterException e) {
             return Response.serverError().build();
         }

@@ -1,20 +1,20 @@
 body {
-	background-color: #333;
-	font-family: "Open Sans", Arial;
-	font-size: 12px;
-	min-width: 700px;
-	text-align: center;
+    background-color: #333;
+    font-family: "Open Sans", Arial;
+    font-size: 12px;
+    min-width: 700px;
+    text-align: center;
 }
 
 .mainContainer {
-	padding: 15px;
-	margin: auto;
-	width:50%;
-	height:50%;
-	position:absolute;
-	top:50%;
-	left: 50%;
-	transform:translate(-50%, -50%);
+    padding: 15px;
+    margin: auto;
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .headerImage {
@@ -23,26 +23,26 @@ body {
 }
 
 #login {
-	width: 191px;
-	height: 46px;
-	display: block;
-	background-repeat: no-repeat;
-	background-image: url("/images/btn_google_signin_light_normal_web.png");
-	margin: auto;
+    width: 191px;
+    height: 46px;
+    display: block;
+    background-repeat: no-repeat;
+    background-image: url("/images/btn_google_signin_light_normal_web.png");
+    margin: auto;
 }
 
 #login:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 #login:focus {
-	background-image: url("/images/btn_google_signin_light_focus_web.png");
+    background-image: url("/images/btn_google_signin_light_focus_web.png");
 }
 
 #login:disabled {
-	background-image: url("/images/btn_google_signin_light_disabled_web.png");
+    background-image: url("/images/btn_google_signin_light_disabled_web.png");
 }
 
 #login:active {
-	background-image: url("/images/btn_google_signin_light_pressed_web.png");
+    background-image: url("/images/btn_google_signin_light_pressed_web.png");
 }

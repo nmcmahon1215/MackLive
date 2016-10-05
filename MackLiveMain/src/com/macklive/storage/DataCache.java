@@ -1,10 +1,5 @@
 package com.macklive.storage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
@@ -14,6 +9,11 @@ import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
 import com.macklive.objects.Message;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class is used for caching results from the data store. This will greatly
@@ -33,7 +33,7 @@ public class DataCache {
      *
      * @return The single instance of the cache manager
      */
-    public synchronized static DataCache getInstance() {
+    public static synchronized DataCache getInstance() {
         if (instance == null) {
             instance = new DataCache();
         }

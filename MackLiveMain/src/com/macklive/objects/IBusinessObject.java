@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.macklive.objects;
 
@@ -9,49 +9,51 @@ import com.macklive.exceptions.EntityMismatchException;
 
 /**
  * Describes a typical object. These objects can be stored in the data store
- *
  */
 public interface IBusinessObject {
 
     /**
      * Gets the entity representation of the current object. This allows the object
      * to be stored in the datastore.
+     *
      * @return The Entity representation of the object.
      */
-    public Entity getEntity();
+    Entity getEntity();
 
     /**
      * Sets the key of the object
+     *
      * @param k The datastore key
      */
-    public void setKey(Key k);
+    void setKey(Key k);
 
     /**
      * Gets the key for the object. May return null if a key is not yet set.
-     * 
+     *
      * @return Key Datastore key identifier.
      */
-    public Key getKey();
+    Key getKey();
 
 
     /**
      * Loads an entity into the calling IBusinessObject. This will set all
      * values according to the entity's information
+     *
      * @param e The entity to load
      * @throws EntityMismatchException if an unexpected entity is passed
      */
-    public void loadEntity(Entity e) throws EntityMismatchException;
+    void loadEntity(Entity e) throws EntityMismatchException;
 
     /**
      * Converts the Java object to JSON representation
-     * 
+     *
      * @return JSON representation of the object.
      */
-    public String toJSON();
+    String toJSON();
 
     /**
      * @return True if the object has an owner (a User). False otherwise.
      */
-    public boolean hasOwner();
+    boolean hasOwner();
 
 }
