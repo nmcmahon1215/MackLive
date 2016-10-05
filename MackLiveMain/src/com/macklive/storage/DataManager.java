@@ -1,17 +1,6 @@
 package com.macklive.storage;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -19,10 +8,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
-import com.macklive.objects.Game;
-import com.macklive.objects.IBusinessObject;
-import com.macklive.objects.Message;
-import com.macklive.objects.Team;
+import com.macklive.objects.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DataManager {
 
@@ -297,5 +287,15 @@ public class DataManager {
      */
     public void deleteEntity(Key k) {
         dstore.delete(k);
+    }
+
+    public TwitterAuthorization getTwitterAuth() throws EntityMismatchException, EntityNotFoundException {
+        Entity e;
+        Key k = KeyFactory.createKey("TwitterAuth", UserServiceFactory.getUserService().getCurrentUser().getUserId());
+        if ((e = this.cacheManager.get(k)) == null) {
+            e = this.dstore.get(k);
+            this.cacheManager.load(k, e);
+        }
+        return new TwitterAuthorization(e);
     }
 }
