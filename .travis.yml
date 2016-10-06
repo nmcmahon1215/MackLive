@@ -7,4 +7,10 @@ before_install:
   - ant css.minify
 install: ant compile
 script: ant test
+notifications:
+  email:
+    recipients:
+      - npm.mcmahon@gmail.com
+    on_success: always
+    on_failure: always
 
