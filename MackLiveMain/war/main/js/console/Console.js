@@ -83,15 +83,16 @@ AdminConsole.prototype = {
     },
     loadGame: function () {
         var game = this.gamePicker.children[this.gamePicker.selectedIndex];
-
+        this.loadGameById(game.id)
+    },
+    loadGameById: function (id) {
         $j.ajax({
-            url: location.protocol + '//' + location.host + "/api/game/"
-            + game.id,
+            url: location.protocol + '//' + location.host + "/api/game/" + id,
             method: "GET",
             dataType: "json",
             context: this,
             success: function (response) {
-                this.initializeGame(game.value, game.id, response);
+                this.initializeGame(response.name, response.key.id, response);
             },
             error: function (response, errorType, errorStuff) {
                 alert("Error loading game!");
@@ -130,5 +131,6 @@ AdminConsole.prototype = {
         liveConsole.initialize(gameData);
         this.modal.setSource(location.protocol + "//" + location.host + "/client/clientApp.html?gameId=" + id);
         commentFeed.initialize();
+        localStorage['gameid'] = this.gameId;
     },
 };

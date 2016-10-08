@@ -22,6 +22,10 @@
             liveConsole.render();
             scoreBoard = new ScoreBoardConsole("scoreBoardContainer");
             scoreBoard.render();
+            var gameId = localStorage['gameid'];
+            if (gameId) {
+                adminConsole.loadGameById(gameId);
+            }
         });
     </script>
 </head>
