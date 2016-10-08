@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -49,6 +50,21 @@ public class GameService {
         dm.storeItem(game);
 
         return game.toJSON();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{gameId}/link")
+    public Response updateGameLink(@PathParam("gameId") long gameId, String data) {
+        DataManager dm = DataManager.getInstance();
+
+        JSONObject jso = new JSONObject(data);
+        Game game = dm.getGame(gameId);
+        game.setLink(jso.getString("link"));
+
+        dm.storeItem(game);
+
+        return Response.ok(game.toJSON(), MediaType.APPLICATION_JSON).build();
     }
 
     @GET

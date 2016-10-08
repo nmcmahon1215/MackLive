@@ -108,13 +108,14 @@
         <textarea id="liveBlogInput" class="liveInput fadeBG form-control" placeholder="Enter a post"></textarea>
         <div>
             <div class="floatL">
-                <span id="char-count" class="char-count">140</span>
+                <span id="char-count" class="char-count" style="visibility: hidden">140</span>
             </div>
             <div class="floatR">
                 <a id="twitter-sign-in" class="link-button hide inline toggle" href="/api/twitter/signin">
                     <img src="/images/twitter-sign-in.png" alt="Sign Into Twitter">
                 </a>
                 <div id="twitter-switch-wrap" class="hide inline">
+                    <a id="twitter-modal-link" class="hide">Set Twitter Card</a>
                     <input id="twitter-switch" type="checkbox" data-toggle="toggle"
                            data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
                            data-off=""/>
@@ -144,6 +145,25 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Twitter Link -->
+<div class="modal fade" id="twitterModal" tabindex="-1" role="dialog" aria-labelledby="twitterModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="twitterModalLabel">Embed Code</h4>
+            </div>
+            <div id='twitterModalBody' class="modal-body">
+                <h4>Enter a link to embed include twitter cards</h4>
+                <input id="twitter-link" type="text" class="form-control" placeholder="Website"/>
+            </div>
+            <div class="modal-footer">
+                <button id="save-link-button" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
             </div>
         </div>
     </div>

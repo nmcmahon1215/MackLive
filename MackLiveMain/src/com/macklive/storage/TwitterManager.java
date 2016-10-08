@@ -1,6 +1,9 @@
 package com.macklive.storage;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.TwitterAuthorization;
 import twitter4j.Twitter;
@@ -12,6 +15,8 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import javax.servlet.http.HttpSession;
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Nick on 10/4/16.
@@ -24,7 +29,11 @@ public class TwitterManager {
 
     private static final String CONSUMER_SECRET = "QGoXhYxdq4MtyGgg0hZUnDjzzBLNdfYOudGw04oijro8h42z5l";
 
+    private static int TWITTER_LIMIT = 140;
+
     private Twitter twitter;
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
 
     private TwitterManager() {
@@ -114,5 +123,33 @@ public class TwitterManager {
         twitter.setOAuthAccessToken(at);
         twitter.verifyCredentials();
         DataManager.getInstance().storeItem(new TwitterAuthorization(at));
+    }
+
+    /**
+     * Gets the character limit for a tweet, depending on the game.
+     * This can change depending on if a link is included
+     *
+     * @return The character limit for a tweet
+     */
+    public int getLimit() {
+        MemcacheService memcache = MemcacheServiceFactory.getMemcacheService();
+        Integer limit = (Integer) memcache.get("twitter_limit");
+
+        if (limit != null) {
+            logger.info("Retrieving twitter limit from the cache");
+            return limit;
+        }
+
+        try {
+            twitter.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
+            limit = TWITTER_LIMIT - twitter.getAPIConfiguration().getShortURLLengthHttps() - 1;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            limit = TWITTER_LIMIT;
+        }
+        memcache.put("twitter_limit", limit, Expiration.byDeltaSeconds(60 * 60 * 24));
+        logger.info("Retrieved twitter limit from API");
+
+        return limit;
     }
 }

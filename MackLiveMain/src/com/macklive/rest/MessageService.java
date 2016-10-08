@@ -45,7 +45,12 @@ public class MessageService {
             boolean shouldTweet = jso.getBoolean("twitter");
             boolean result = true;
             if (shouldTweet) {
-                result = TwitterManager.getInstance().tweet(newMessage.getText());
+                String text = newMessage.getText();
+                String link = DataManager.getInstance().getGame(gameId).getLink();
+                if (link != null) {
+                    text += " " + link;
+                }
+                result = TwitterManager.getInstance().tweet(text);
             }
 
             DataManager.getInstance().storeItem(newMessage);

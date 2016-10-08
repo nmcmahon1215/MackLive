@@ -127,7 +127,7 @@ AdminConsole.prototype = {
         this.setGameName(name);
         scoreBoard.loadTeams(gameData);
         scoreBoard.loadScoreInfo(gameData);
-        liveConsole.initialize();
+        liveConsole.initialize(gameData);
         this.modal.setSource(location.protocol + "//" + location.host + "/client/clientApp.html?gameId=" + id);
         commentFeed.initialize();
     },

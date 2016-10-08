@@ -1,13 +1,13 @@
 package com.macklive.objects;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.DataManager;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Game extends AbsBusinessObject implements IBusinessObject {
 
@@ -24,6 +24,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private String time;
     private int period;
     private String name;
+    private String link;
     private transient String ownerId;
 
     /**
@@ -78,7 +79,8 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         e.setUnindexedProperty("Period", this.period);
         e.setProperty("Date", this.created);
         e.setProperty("LastUpdated", this.lastUpdated);
-        e.setProperty("Name", this.getName());
+        e.setUnindexedProperty("Name", this.getName());
+        e.setUnindexedProperty("Link", this.link);
         return e;
     }
 
@@ -101,6 +103,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
                 this.lastUpdated = (Date) e.getProperty("LastUpdated");
                 this.key = e.getKey();
                 this.ownerId = (String) e.getProperty("owner");
+                this.link = (String) e.getProperty("Link");
 
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
@@ -192,5 +195,13 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
 
     public Date getLastUpdated() {
         return lastUpdated;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

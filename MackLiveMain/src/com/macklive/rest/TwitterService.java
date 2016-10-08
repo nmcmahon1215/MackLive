@@ -3,6 +3,7 @@ package com.macklive.rest;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.storage.TwitterManager;
+import org.json.JSONObject;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -15,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -71,5 +73,13 @@ public class TwitterService {
     public Response getStatus() throws EntityNotFoundException, EntityMismatchException {
         TwitterManager tm = TwitterManager.getInstance();
         return Response.status(tm.verifyCredentials() ? Response.Status.OK : Response.Status.UNAUTHORIZED).build();
+    }
+
+    @GET
+    @Path("/limit")
+    public Response getLimit() {
+        JSONObject jso = new JSONObject();
+        jso.put("limit", TwitterManager.getInstance().getLimit());
+        return Response.ok(jso.toString(), MediaType.APPLICATION_JSON).build();
     }
 }
