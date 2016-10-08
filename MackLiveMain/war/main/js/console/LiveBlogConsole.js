@@ -122,7 +122,7 @@ LiveBlogConsole.prototype = {
         if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "" || !this.initialized) {
             this.submitButton.disabled = true;
         } else {
-            this.submitButton.disabled = this.twitterSwitch.checked && this.textArea.value.length > this.twitterLimit;
+            this.submitButton.disabled = this.twitterSwitch.checked && this.textArea.value.trim().length > this.twitterLimit;
         }
 
         this.charCount.style.visibility = this.twitterSwitch.checked ? "visible" : "hidden"
