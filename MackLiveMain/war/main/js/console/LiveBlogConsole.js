@@ -128,7 +128,7 @@ LiveBlogConsole.prototype = {
         this.charCount.style.visibility = this.twitterSwitch.checked ? "visible" : "hidden"
     },
     updateCharCount: function () {
-        this.charCount.innerHTML = this.twitterLimit - this.textArea.value.length.trim();
+        this.charCount.innerHTML = this.twitterLimit - this.textArea.value.trim().length;
 
         if (this.charCount.innerHTML < 0) {
             this.charCount.style.color = "red"
