@@ -56,7 +56,7 @@ public class JavaScriptService {
         String result = "";
 
         String cachedFile = (String) this.memcache.get(subFolder);
-        if (cachedFile != null) {
+        if (cachedFile != null && isProduction()) {
             this.log.info("Retrieving JS bundle '" + subFolder + "' from memcache");
             return cachedFile;
         }
@@ -66,6 +66,9 @@ public class JavaScriptService {
             String pathName = context.getRealPath("/js/" + subFolder);
             if (pathName != null) {
                 File requestedFiles = new File(pathName);
+                if (!requestedFiles.exists()) {
+                    return "";
+                }
                 for (File f : sortFiles(requestedFiles.listFiles())) {
                     if ((f.getName().matches(".*-gen-min\\.js$") == isProduction())
                             || f.getName().matches(".*\\.min\\.js$")) {
