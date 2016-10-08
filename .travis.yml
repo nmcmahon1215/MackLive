@@ -3,8 +3,8 @@ jdk:
   - oraclejdk7
 before_install:
   - ant clean-all
-  - ant js.minify
-  - ant css.minify
+  - ant -v js.minify
+  - ant -v css.minify
 install: ant compile
 script: ant test
 notifications:
