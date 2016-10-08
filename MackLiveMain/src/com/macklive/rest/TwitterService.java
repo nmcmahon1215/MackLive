@@ -60,8 +60,7 @@ public class TwitterService {
             HttpSession session = request.getSession();
             tm.createAuthToken((RequestToken) session.getAttribute("twitterRequestToken"), verifier);
             session.removeAttribute("twitterRequestToken");
-            return Response.temporaryRedirect(URI.create(
-                    uriInfo.getBaseUri().toString() + "/console/console.html")).build();
+            return Response.temporaryRedirect(URI.create("/console/console.html")).build();
         } catch (TwitterException e) {
             return Response.serverError().build();
         }

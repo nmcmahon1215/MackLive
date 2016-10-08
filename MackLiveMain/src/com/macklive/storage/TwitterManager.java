@@ -61,7 +61,7 @@ public class TwitterManager {
                 return true;
             }
             return false;
-        } catch (TwitterException | EntityMismatchException | EntityNotFoundException e) {
+        } catch (Exception e) {
             return false;
         }
     }

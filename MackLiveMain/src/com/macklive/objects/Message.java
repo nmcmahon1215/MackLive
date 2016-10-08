@@ -124,4 +124,7 @@ public class Message extends AbsBusinessObject {
         this.time = time;
     }
 
+    public String getText() {
+        return text;
+    }
 }

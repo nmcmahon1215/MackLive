@@ -4,6 +4,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Mack Live</title>
     <link rel="Stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-toggle.min.css"/>
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="Stylesheet" href="/css/console.css" type="text/css"/>
     <script language='javascript' type="text/javascript" src='/api/js/console'></script>
@@ -105,8 +106,24 @@
                    aria-describedby="nameLabel"/>
         </div>
         <textarea id="liveBlogInput" class="liveInput fadeBG form-control" placeholder="Enter a post"></textarea>
-        <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
-               style="margin:10px" disabled/>
+        <div>
+            <div class="floatL">
+                <span id="char-count" class="char-count">140</span>
+            </div>
+            <div class="floatR">
+                <a id="twitter-sign-in" class="link-button hide inline toggle" href="/api/twitter/signin">
+                    <img src="/images/twitter-sign-in.png" alt="Sign Into Twitter">
+                </a>
+                <div id="twitter-switch-wrap" class="hide inline">
+                    <input id="twitter-switch" type="checkbox" data-toggle="toggle"
+                           data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
+                           data-off=""/>
+                </div>
+                <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
+                       style="margin:10px" disabled/>
+            </div>
+        </div>
+
     </form>
 </div>
 <!-- Modal -->

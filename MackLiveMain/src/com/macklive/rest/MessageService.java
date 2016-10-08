@@ -1,17 +1,5 @@
 package com.macklive.rest;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
@@ -19,8 +7,16 @@ import com.macklive.objects.Game;
 import com.macklive.objects.Message;
 import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
+import com.macklive.storage.TwitterManager;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Rest end point for getting new game messages.
@@ -46,9 +42,15 @@ public class MessageService {
             Message newMessage = new Message(jso.getString("author"), jso.getString("text"), gameId,
                     userComment);
 
+            boolean shouldTweet = jso.getBoolean("twitter");
+            boolean result = true;
+            if (shouldTweet) {
+                result = TwitterManager.getInstance().tweet(newMessage.getText());
+            }
+
             DataManager.getInstance().storeItem(newMessage);
 
-            return Response.status(Response.Status.OK).build();
+            return result ? Response.status(Response.Status.OK).build() : Response.status(Response.Status.UNAUTHORIZED).build();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -151,7 +153,7 @@ public class MessageService {
 
     /**
      * Forms a response with a list of messages
-     * 
+     *
      * @param messages
      *            The list of messages to include, sorted oldest first
      * @return A JSON representation of the messages and the timestamp in ms.

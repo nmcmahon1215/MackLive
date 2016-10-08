@@ -260,3 +260,30 @@ input[type='text'] {
     bottom: 5px;
     left: 5px;
 }
+
+.fa-twitter {
+    line-height: 100%;
+}
+
+.toggle {
+    margin: 10px;
+}
+
+.char-count {
+    margin: 5px 0 0 10px;
+    display: block;
+}
+
+.hide {
+    display: none !important;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.link-button,
+.link-button:active,
+.link-button:hover {
+    text-decoration: none;
+}
