@@ -114,7 +114,10 @@
         </apply>
     </target>
 
-    <target name="css.minify" depends="download-deps">
+    <target name="css.minify" depends="download-deps,css.minify-nodeps">
+    </target>
+
+    <target name="css.minify-nodeps">
         <apply executable="java" parallel="false" dest="${basedir}">
             <fileset dir="${basedir}" includes="war/main/css/**/*.css"
                      excludes="war/main/css/**/*.min.css,war/main/css/**/*-gen-min.css"/>
