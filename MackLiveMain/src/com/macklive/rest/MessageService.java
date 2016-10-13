@@ -42,7 +42,7 @@ public class MessageService {
             Message newMessage = new Message(jso.getString("author"), jso.getString("text"), gameId,
                     userComment);
 
-            boolean shouldTweet = jso.getBoolean("twitter");
+            boolean shouldTweet = !jso.isNull("twitter") && jso.getBoolean("twitter");
             boolean result = true;
             if (shouldTweet) {
                 String text = newMessage.getText();
