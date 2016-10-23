@@ -4,8 +4,8 @@
 
 Modal = function () {
     this.source = "";
-    this.width = 400;
-    this.height = 800;
+    this.width = localStorage['preferredWidth'] || 400;
+    this.height = localStorage['preferredHeight'] || 800;
     this.container = document.getElementById("embedCode")
     $j(this.container).on("click", function () {
         this.focus();
@@ -33,10 +33,10 @@ Modal = function () {
 
 Modal.prototype = {
     updateModal: function () {
-        this.container.value = "<iframe src=\"" + this.source +
+        this.container.value = "<div><iframe src=\"" + this.source +
             "\" height=\"" + this.height +
             "\" width=\"" + this.width +
-            "\" frameborder=\"0\" />";
+            "\" frameborder=\"0\" /></div>";
     },
     setSource: function (source) {
         this.source = source;
@@ -44,10 +44,12 @@ Modal.prototype = {
     },
     setHeight: function (height) {
         this.height = height;
+        localStorage['preferredHeight'] = this.height;
         this.updateModal();
     },
     setWidth: function (width) {
         this.width = width;
+        localStorage['preferredWidth'] = this.width;
         this.updateModal();
     }
 }
