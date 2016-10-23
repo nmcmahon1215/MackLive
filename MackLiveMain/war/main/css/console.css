@@ -202,15 +202,17 @@ input[type='text'] {
 .embedBox,
 .numberBox {
     width: 60px;
-    height: auto;
     margin: auto;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding-top: 4px;
 }
 
 .embedBox {
     display: inline-block;
     width: 100px;
+}
+
+select.embedBox {
+    width: auto;
 }
 
 .absoluteVerticalCentered {

@@ -143,9 +143,17 @@
             <div id='embedCodeModal' class="modal-body">
                 <label for="embedHeight">Height: </label>
                 <input id="embedHeight" class="form-control embedBox" type="number" min="400">
+                <select id="embedHeightUnit" class="form-control embedBox">
+                    <option>px</option>
+                    <option>%</option>
+                </select>
                 <label for="embedWidth" style="margin-left: 10px;">Width: </label>
                 <input id="embedWidth" class="form-control embedBox" type="number" min="400">
-                <textarea id="embedCode" readonly></textarea>
+                <select id="embedWidthUnit" class="form-control embedBox">
+                    <option>px</option>
+                    <option>%</option>
+                </select>
+                <textarea id="embedCode" rows="4" readonly></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

@@ -4,7 +4,7 @@
 
 Modal = function () {
     this.source = "";
-    this.width = localStorage['preferredWidth'] || 400;
+    this.width = localStorage['preferredWidth'] || 100;
     this.height = localStorage['preferredHeight'] || 800;
     this.container = document.getElementById("embedCode")
     $j(this.container).on("click", function () {
@@ -14,42 +14,59 @@ Modal = function () {
 
     this.widthBox = document.getElementById("embedWidth");
     this.heightBox = document.getElementById("embedHeight");
+    this.widthUnitBox = document.getElementById("embedWidthUnit");
+    this.heightUnitBox = document.getElementById("embedHeightUnit");
 
     this.widthBox.value = this.width;
     this.heightBox.value = this.height;
 
+    this.heightUnit = localStorage['preferredHeightUnit'] || "px";
+    this.widthUnit = localStorage['preferredWidthUnit'] || "%";
+
+    this.heightUnitBox.value = this.heightUnit;
+    this.widthUnitBox.value = this.widthUnit;
+
     //Event Handlers
     var self = this;
 
-    $j(this.widthBox).on("change", function () {
-        self.setWidth(this.value)
-    });
+    var heightChange = function () {
+        self.setHeight(this.heightBox.value, this.heightUnitBox.value);
+    }.bind(this);
 
-    $j(this.heightBox).on("change", function () {
-        self.setHeight(this.value)
-    });
+    var widthChange = function () {
+        self.setWidth(this.widthBox.value, this.widthUnitBox.value);
+    }.bind(this);
 
+    $j(this.widthBox).on("change", widthChange);
+    $j(this.widthUnitBox).on("change", widthChange);
+    $j(this.heightBox).on("change", heightChange);
+    $j(this.heightUnitBox).on("change", heightChange);
 }
 
 Modal.prototype = {
     updateModal: function () {
-        this.container.value = "<div><iframe src=\"" + this.source +
-            "\" height=\"" + this.height +
-            "\" width=\"" + this.width +
-            "\" frameborder=\"0\" /></div>";
+        this.container.value = "<div style='position:relative; width:" + this.width + this.widthUnit + "; " +
+            "height:" + this.height + this.heightUnit + "'>" +
+            "<iframe style='position: absolute; top: 0; left: 0; height: 100%; width: 100%' src=\"" +
+            "https://mackreportlive.appspot.com/client/clientApp.html?gameId=5639445604728832\" frameborder=\"0\">" +
+            "</iframe></div>";
     },
     setSource: function (source) {
         this.source = source;
         this.updateModal();
     },
-    setHeight: function (height) {
+    setHeight: function (height, unit) {
         this.height = height;
+        this.heightUnit = unit;
         localStorage['preferredHeight'] = this.height;
+        localStorage['preferredHeightUnit'] = this.heightUnit;
         this.updateModal();
     },
-    setWidth: function (width) {
+    setWidth: function (width, unit) {
         this.width = width;
+        this.widthUnit = unit;
         localStorage['preferredWidth'] = this.width;
+        localStorage['preferredWidthUnit'] = this.widthUnit;
         this.updateModal();
     }
 }
