@@ -48,7 +48,7 @@ Modal.prototype = {
         this.container.value = "<div style='position:relative; width:" + this.width + this.widthUnit + "; " +
             "height:" + this.height + this.heightUnit + "'>" +
             "<iframe style='position: absolute; top: 0; left: 0; height: 100%; width: 100%' src=\"" +
-            "https://mackreportlive.appspot.com/client/clientApp.html?gameId=5639445604728832\" frameborder=\"0\">" +
+            this.source + "\" frameborder=\"0\">" +
             "</iframe></div>";
     },
     setSource: function (source) {
