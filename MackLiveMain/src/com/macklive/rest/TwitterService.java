@@ -54,6 +54,13 @@ public class TwitterService {
     }
 
     @GET
+    @Path("/signout")
+    public Response signOut() {
+        TwitterManager.getInstance().signOut();
+        return Response.temporaryRedirect(URI.create("/console/console.html")).build();
+    }
+
+    @GET
     @Path("/callback")
     public Response callback(@Context HttpServletRequest request, @Context UriInfo uriInfo,
                              @QueryParam("oauth_verifier") String verifier) {

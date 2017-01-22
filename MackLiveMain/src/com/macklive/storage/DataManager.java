@@ -287,8 +287,16 @@ public class DataManager {
      */
     public void deleteEntity(Key k) {
         dstore.delete(k);
+        cacheManager.removeItem(k);
     }
 
+    /**
+     * Gets the twitter authorization object for the logged in user
+     *
+     * @return Twitter authorization for the current user
+     * @throws EntityMismatchException If there is an inconsistency in the data store
+     * @throws EntityNotFoundException If the twitter authorization does not exist
+     */
     public TwitterAuthorization getTwitterAuth() throws EntityMismatchException, EntityNotFoundException {
         Entity e;
         Key k = KeyFactory.createKey("TwitterAuth", UserServiceFactory.getUserService().getCurrentUser().getUserId());
@@ -297,5 +305,13 @@ public class DataManager {
             this.cacheManager.load(k, e);
         }
         return new TwitterAuthorization(e);
+    }
+
+    /**
+     * Deletes the twitter authentication token, essentially signing the user out of twitter.
+     */
+    public void deleteTwitterAuth() {
+        Key k = KeyFactory.createKey("TwitterAuth", UserServiceFactory.getUserService().getCurrentUser().getUserId());
+        deleteEntity(k);
     }
 }

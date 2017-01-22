@@ -153,4 +153,13 @@ public class DataCache {
         log.info("Retrieving object from cache: " + id.getKind() + " " + id.getId());
         return (Entity) obj;
     }
+
+    /**
+     * Removes the given item from the cache
+     *
+     * @param k Key of the item to remove
+     */
+    void removeItem(Key k) {
+        cache.delete(k);
+    }
 }
