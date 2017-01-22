@@ -13,7 +13,7 @@
     </facet>
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$USER_HOME$/SDKs/appengine-java-sdk-1.9.42</sdk-home-path>
+        <sdk-home-path>$MODULE_DIR$/../../../SDKs/appengine-java-sdk-1.9.48</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src" />
@@ -51,8 +51,6 @@
     <orderEntry type="module-library">
       <library name="IvyIDEA">
         <CLASSES>
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.42.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-labs/jars/appengine-api-labs-1.9.42.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-api/jars/hk2-api-2.4.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/javax.inject/javax.inject/jars/javax.inject-1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-utils/jars/hk2-utils-2.4.0.jar!/" />
@@ -91,6 +89,8 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/commons-logging/commons-logging-api/jars/commons-logging-api-1.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/log4j/log4j/bundles/log4j-1.2.17.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.apache.openejb/javaee-api/jars/javaee-api-5.0-2.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-1.0-sdk/jars/appengine-api-1.0-sdk-1.9.48.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.appengine/appengine-api-labs/jars/appengine-api-labs-1.9.48.jar!/" />
         </CLASSES>
         <JAVADOC>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.glassfish.hk2/hk2-api/javadocs/hk2-api-2.4.0-javadoc.jar!/" />
