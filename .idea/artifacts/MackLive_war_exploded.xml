@@ -16,7 +16,6 @@
         <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/appengine-web.xml" />
         <element id="file-copy" path="$PROJECT_DIR$/MackLiveMain/war/WEB-INF/web.xml" output-file-name="web.xml" />
       </element>
-      <element id="javaee-facet-resources" facet="MackLive/web/Web" />
       <element id="javaee-facet-resources" facet="MackLiveMain/web/Web" />
     </root>
   </artifact>

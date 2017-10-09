@@ -76,6 +76,13 @@ public class TwitterManager {
     }
 
     /**
+     * Disconnects the user's twitter account
+     */
+    public void signOut() {
+        DataManager.getInstance().deleteTwitterAuth();
+    }
+
+    /**
      * Tweets with the user in the current thread
      *
      * @param text Text of the tweet
