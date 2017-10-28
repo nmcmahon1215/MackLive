@@ -100,13 +100,7 @@ public class JavaScriptService {
      */
     private List<File> sortFiles(File[] array) {
         List<File> fileList = Arrays.asList(array);
-        Collections.sort(fileList, new Comparator<File>() {
-
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        fileList.sort(Comparator.comparing(File::getName));
 
         return fileList;
     }

@@ -114,14 +114,7 @@ public class TeamService {
     )
     public String getTeamNames() {
         List<Team> teams = DataManager.getInstance().getTeams();
-        Collections.sort(teams, new Comparator<Team>() {
-
-            @Override
-            public int compare(Team t1, Team t2) {
-                return t1.getName().compareTo(t2.getName());
-            }
-
-        });
+        teams.sort(Comparator.comparing(Team::getName));
         Gson gs = GsonUtility.getGson();
         return gs.toJson(teams);
     }
@@ -139,15 +132,9 @@ public class TeamService {
                 return builder.build();
             }
             final byte[] imageBytes = t.getLogo().getBytes();
-            builder.status(200).type("image/png").entity(new StreamingOutput() {
-
-                @Override
-                public void write(OutputStream output) throws IOException,
-                        WebApplicationException {
-                    output.write(imageBytes);
-                    output.flush();
-                }
-
+            builder.status(200).type("image/png").entity((StreamingOutput) output -> {
+                output.write(imageBytes);
+                output.flush();
             });
         } catch (Exception e) {
             e.printStackTrace();
