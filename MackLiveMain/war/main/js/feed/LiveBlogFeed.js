@@ -83,8 +83,7 @@ LiveBlogFeed.prototype = {
         }
     },
     addMessage: function (message) {
-        if (message.deleted) {
-            $j('#' + message.tweetId).remove();
+        if (message.hidden) {
             return;
         }
 
@@ -116,7 +115,15 @@ LiveBlogFeed.prototype = {
         panel.appendChild(content);
 
         panel.style.display = "none";
-        this.container.appendChild(panel);
+        if (message.tweetId) {
+            var linkWrap = document.createElement("a");
+            linkWrap.href = "https://twitter.com/" + message.author + "/status/" + message.tweetId;
+            linkWrap.className = "no-underline";
+            linkWrap.appendChild(panel);
+            this.container.appendChild(linkWrap);
+        } else {
+            this.container.appendChild(panel);
+        }
 
         if (this.initialized) {
             $j(panel).slideDown(700, function () {

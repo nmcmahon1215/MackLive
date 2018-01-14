@@ -19,10 +19,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.xml.crypto.Data;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -94,22 +93,25 @@ public class TwitterService {
         return Response.ok(jso.toString(), MediaType.APPLICATION_JSON).build();
     }
 
-    @GET
-    @Path("/stream/{gameId}")
-    public Response startStream(@PathParam("gameId") long gameId, @Context UriInfo uriInfo) {
-        try {
-            TwitterManager.getInstance().setUpTwitterStream(gameId, uriInfo.getBaseUri().toString());
-        } catch (Exception e) {
-            return Response.serverError().build();
+    @POST
+    @Path("/refresh/{gameId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response refreshTwitterFeeds(@PathParam("gameId") long gameId, String payload) {
+        Game g = DataManager.getInstance().getGame(gameId);
+        List<String> twitterHandles = g.getTwitterAccounts();
+
+        JSONObject jso = new JSONObject(payload);
+        Map<String, Long> handleToLatestTweet = new HashMap<>();
+        for (String key : jso.keySet()) {
+            handleToLatestTweet.put(key, Long.parseLong(jso.getString(key)));
         }
 
+        if (twitterHandles != null && !twitterHandles.isEmpty()) {
+            Map<String, String> tweetStatus = TwitterManager.getInstance().refreshTweets(gameId, twitterHandles, handleToLatestTweet);
+            return Response.ok(new JSONObject(tweetStatus).toString(), MediaType.APPLICATION_JSON).build();
+        }
         return Response.ok().build();
     }
 
-    @GET
-    @Path("/stream/cleanup")
-    public Response cleanupStreams() {
-        TwitterManager.getInstance().cleanUpTwitterStreams();
-        return Response.ok().build();
-    }
 }

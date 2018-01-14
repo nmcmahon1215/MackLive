@@ -5,9 +5,11 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.repackaged.com.google.common.base.Strings;
 import com.google.appengine.repackaged.org.joda.time.DateTimeUtils;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
+import com.macklive.objects.Tweet;
 import com.macklive.objects.TwitterAuthorization;
 import com.macklive.storage.DataManager;
 import twitter4j.*;
@@ -17,6 +19,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.crypto.Data;
+import javax.xml.ws.Response;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -39,11 +42,7 @@ public class TwitterManager {
 
     private static int TWITTER_LIMIT = 140;
 
-    private static long THREE_HOUR_MS = 10800000;
-
-    private Twitter twitter;
-
-    private Map<Long, TwitterStreamWrapper> streamMap;
+    private final Twitter twitter;
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -52,7 +51,6 @@ public class TwitterManager {
         cb.setOAuthConsumerKey(CONSUMER_KEY);
         cb.setOAuthConsumerSecret(CONSUMER_SECRET);
         twitter = new TwitterFactory(cb.build()).getInstance();
-        streamMap = new HashMap<>();
     }
 
     /**
@@ -77,8 +75,10 @@ public class TwitterManager {
             DataManager dmanager = DataManager.getInstance();
             TwitterAuthorization ta = dmanager.getTwitterAuth();
             if (ta != null) {
-                twitter.setOAuthAccessToken(ta.getAccessToken());
-                twitter.verifyCredentials();
+                synchronized (twitter) {
+                    twitter.setOAuthAccessToken(ta.getAccessToken());
+                    twitter.verifyCredentials();
+                }
                 return true;
             }
             return false;
@@ -104,8 +104,10 @@ public class TwitterManager {
         try {
             DataManager dmanager = DataManager.getInstance();
             TwitterAuthorization ta = dmanager.getTwitterAuth();
-            twitter.setOAuthAccessToken(ta.getAccessToken());
-            twitter.updateStatus(text);
+            synchronized (twitter) {
+                twitter.setOAuthAccessToken(ta.getAccessToken());
+                twitter.updateStatus(text);
+            }
             return true;
         } catch (TwitterException | EntityMismatchException | EntityNotFoundException e) {
             return false;
@@ -121,8 +123,11 @@ public class TwitterManager {
      */
     public URI getAuthorizeUri(String callbackUrl, HttpSession session) {
         try {
-            twitter.setOAuthAccessToken(null);
-            RequestToken rt = twitter.getOAuthRequestToken(callbackUrl);
+            RequestToken rt;
+            synchronized (twitter) {
+                twitter.setOAuthAccessToken(null);
+                rt = twitter.getOAuthRequestToken(callbackUrl);
+            }
             session.setAttribute("twitterRequestToken", rt);
             return URI.create(rt.getAuthenticationURL());
         } catch (TwitterException e) {
@@ -138,9 +143,12 @@ public class TwitterManager {
      * @throws TwitterException If an error occurs when verifying twitter credentials
      */
     public void createAuthToken(RequestToken twitterRequestToken, String verifier) throws TwitterException {
-        AccessToken at = twitter.getOAuthAccessToken(twitterRequestToken, verifier);
-        twitter.setOAuthAccessToken(at);
-        twitter.verifyCredentials();
+        AccessToken at;
+        synchronized (twitter) {
+            at = twitter.getOAuthAccessToken(twitterRequestToken, verifier);
+            twitter.setOAuthAccessToken(at);
+            twitter.verifyCredentials();
+        }
         DataManager.getInstance().storeItem(new TwitterAuthorization(at));
     }
 
@@ -160,8 +168,10 @@ public class TwitterManager {
         }
 
         try {
-            twitter.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
-            limit = TWITTER_LIMIT - twitter.getAPIConfiguration().getShortURLLengthHttps() - 1;
+            synchronized (twitter) {
+                twitter.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
+                limit = TWITTER_LIMIT - twitter.getAPIConfiguration().getShortURLLengthHttps() - 1;
+            }
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
             limit = TWITTER_LIMIT;
@@ -174,74 +184,52 @@ public class TwitterManager {
 
     private long[] getUserIds(List<String> twitterHandles) throws TwitterException {
         try {
-            List<User> users = twitter.lookupUsers(twitterHandles.toArray(new String[]{}));
-            return users.stream()
-                    .filter(Objects::nonNull)
-                    .mapToLong(User::getId)
-                    .toArray();
+            synchronized (twitter) {
+                List<User> users = twitter.lookupUsers(twitterHandles.toArray(new String[]{}));
+                return users.stream()
+                        .filter(Objects::nonNull)
+                        .mapToLong(User::getId)
+                        .toArray();
+            }
         } catch (TwitterException e) {
             logger.log(Level.SEVERE, e.getMessage());
             throw e;
         }
     }
 
-    /**
-     * Sets up twitter streaming for game
-     *
-     * @param gameId         Game ID
-     * @param twitterHandles Handles to follow
-     * @throws TwitterException when twitter service or network is unavailable
-     */
-    public synchronized void setUpTwitterStream(long gameId, List<String> twitterHandles, String url) throws
-            TwitterException,
-            EntityNotFoundException, EntityMismatchException {
-        if (twitterHandles.isEmpty()) {
-            return;
-        }
+    public Map<String, String> refreshTweets(long gameId, List<String> twitterHandles,
+                                             Map<String, Long> handleToLatestTweet) {
+        Map<String, Long> currentStatus = new HashMap<>(handleToLatestTweet);
+        synchronized (twitter) {
+            try {
+                twitter.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
+                for (String handle : twitterHandles) {
+                    Paging p = new Paging();
+                    boolean hasFirstTweet = handleToLatestTweet.containsKey(handle);
 
-        if (streamMap.containsKey(gameId)) {
-            List<String> currentHandles = streamMap.get(gameId).getHandles();
-            if (currentHandles.containsAll(twitterHandles) && twitterHandles.containsAll(currentHandles)) {
-                //No change, nothing to do
-                return;
+                    if (hasFirstTweet) {
+                        p.sinceId(handleToLatestTweet.get(handle));
+                    } else {
+                        p.count(1);
+                    }
+
+                    ResponseList<Status> statuses = twitter.timelines().getUserTimeline(handle, p);
+                    for (Status s : statuses) {
+                        DataManager.getInstance().storeItem(new Tweet(gameId, s, !hasFirstTweet || !isValid(s)));
+                        currentStatus.compute(handle, (k, v) -> Math.max(v == null ? 0 : v, s.getId()));
+                    }
+                }
+            } catch (Exception e) {
+                logger.severe(e.getMessage());
             }
-            streamMap.get(gameId).getStream().cleanUp();
-            streamMap.remove(gameId);
+
+            return currentStatus.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, entry -> Long.toString(entry.getValue())));
         }
 
-        TwitterStream stream = new TwitterStreamFactory(twitter.getConfiguration()).getInstance();
-        stream.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
-        stream.addListener(new TwitterListener(gameId, url, twitterHandles));
-
-        FilterQuery filter = new FilterQuery();
-        filter.follow(getUserIds(twitterHandles));
-
-        stream.filter(filter);
-        streamMap.put(gameId, new TwitterStreamWrapper(stream, twitterHandles));
     }
 
-    /**
-     * Sets up twitter streaming based on game data
-     *
-     * @param gameId Game ID
-     * @throws TwitterException when twitter service or network in unavailable
-     */
-    public synchronized void setUpTwitterStream(long gameId, String url) throws TwitterException,
-            EntityMismatchException,
-            EntityNotFoundException {
-        Game g = DataManager.getInstance().getGame(gameId);
-        setUpTwitterStream(gameId, g.getTwitterAccounts(), url);
+    private boolean isValid(Status s) {
+        return !s.isRetweet() && Strings.isNullOrEmpty(s.getInReplyToScreenName());
     }
-
-    public synchronized void cleanUpTwitterStreams() {
-        for (long gameId : streamMap.keySet()) {
-            Game g = DataManager.getInstance().getGame(gameId);
-            long timeRunning = System.currentTimeMillis() - g.getLastUpdated().getTime();
-            if (timeRunning >= THREE_HOUR_MS) {
-                streamMap.get(gameId).getStream().cleanUp();
-                streamMap.remove(gameId);
-            }
-        }
-    }
-
 }

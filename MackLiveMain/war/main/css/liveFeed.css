@@ -175,3 +175,9 @@ body {
     padding-top: 0 !important;
     font-size: 18px !important;
 }
+
+.no-underline,
+.no-underline:active,
+.no-underline:hover {
+    text-decoration: none;
+}

@@ -139,29 +139,6 @@ public class MessageService {
         }
     }
 
-    @POST
-    @Path("/twitter/{action}/{gameId}")
-    public Response handleTwitterEvent(@PathParam("action") String action, @PathParam("gameId") long gameId,
-                                       String payload) {
-        JSONObject jso = new JSONObject(payload);
-        if ("tweet".equals(action)) {
-            DataManager.getInstance().storeItem(
-                    new Tweet(gameId,
-                            jso.getJSONObject("user").getString("screenName"),
-                            jso.getString("text"),
-                            jso.getJSONObject("user").getString("profileImageUrl"),
-                            jso.getLong("id")
-                    ));
-        } else if ("delete".equals(action)) {
-            DataManager.getInstance().deleteTweet(jso.getLong("statusId"));
-            DataManager.getInstance().storeItem(new Tweet(gameId, jso.getLong("statusId")));
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        return Response.ok().build();
-    }
-
     @GET
     @Path("/approve/{messageId}")
     public Response approveMessage(@PathParam("messageId") long messageId) {

@@ -92,21 +92,39 @@ LiveBlogConsole.prototype = {
         }
         if (gameData.twitterAccounts && gameData.twitterAccounts.length > 0) {
             this.twitterFollowInput.innerHTML = gameData.twitterAccounts.join(',')
-            this.startTwitterStream()
+            this.twitterAccounts = gameData.twitterAccounts;
+            this.startTwitterPoll()
+        } else {
+            this.twitterFollowInput.innerHTML = "";
+            this.twitterAccounts = {}
+            this.twitterStatus = {}
+            if (this.twitterInterval) {
+                clearInterval(this.twitterInterval)
+                this.twitterInterval = null;
+            }
         }
     },
-    startTwitterStream: function () {
-        $j.ajax({
-            url: "/api/twitter/stream/" + adminConsole.gameId,
-            method: "GET",
-            context: this,
-            success: function () {
-                console.log("Successfully started twitter streaming for:" + this.twitterAccounts);
-            },
-            error: function () {
-                console.log("Failed to start twitter streaming for:" + this.twitterAccounts);
-            }
-        })
+    startTwitterPoll: function () {
+        this.isPolling = true;
+        if (!this.twitterStatus) {
+            this.twitterStatus = {}
+        }
+        this.twitterInterval = setInterval(function () {
+            var payload = this.twitterStatus;
+            $j.ajax({
+                url: "/api/twitter/refresh/" + adminConsole.gameId,
+                method: "POST",
+                context: this,
+                contentType: "application/json",
+                data: JSON.stringify(payload),
+                success: function (response) {
+                    this.twitterStatus = response;
+                },
+                error: function () {
+                    console.error("Failed to refresh twitter for:" + this.twitterAccounts);
+                }
+            })
+        }.bind(this), 10000)
     },
     submitMessage: function () {
         if (this.textArea.value.trim() == "" || this.nameField.value.trim() == "") {
@@ -179,14 +197,10 @@ LiveBlogConsole.prototype = {
             contentType: "application/json",
             data: JSON.stringify(payload),
             success: function (result) {
-                this.textArea.value = "";
-                this.textArea.classList.remove("fadeBG");
-
-                setTimeout(function () {
-                    this.textArea.classList.add("fadeBG");
-                }.bind(this), 100);
-
-                this.liveBlogFeed.contentWindow.liveFeed.fetchNewMessages();
+                console.log("Successfully updated game settings")
+                if (!this.isPolling && payload.twitterAccounts.trim().length > 0) {
+                    this.startTwitterPoll();
+                }
             },
         })
 

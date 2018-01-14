@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -78,9 +79,6 @@ public class GameService {
                         .map(String::trim)
                         .collect(Collectors.toList());
                 game.setTwitterAccounts(twitterHandles);
-
-                TwitterManager.getInstance().setUpTwitterStream(gameId, twitterHandles, uriInfo.getBaseUri().toString());
-
             }
         } catch (Exception e) {
             Logger.getLogger(getClass().getName()).severe(e.getMessage());
