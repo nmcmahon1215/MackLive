@@ -3,13 +3,19 @@ package com.macklive.rest;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.macklive.objects.Game;
 import com.macklive.objects.Message;
+import com.macklive.objects.Tweet;
 import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
-import com.macklive.storage.TwitterManager;
+import com.macklive.twitter.TwitterManager;
 import org.json.JSONException;
 import org.json.JSONObject;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.Twitter;
+import twitter4j.TwitterStream;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -131,6 +137,29 @@ public class MessageService {
         } else {
             return Response.status(403).build();
         }
+    }
+
+    @POST
+    @Path("/twitter/{action}/{gameId}")
+    public Response handleTwitterEvent(@PathParam("action") String action, @PathParam("gameId") long gameId,
+                                       String payload) {
+        JSONObject jso = new JSONObject(payload);
+        if ("tweet".equals(action)) {
+            DataManager.getInstance().storeItem(
+                    new Tweet(gameId,
+                            jso.getJSONObject("user").getString("screenName"),
+                            jso.getString("text"),
+                            jso.getJSONObject("user").getString("profileImageUrl"),
+                            jso.getLong("id")
+                    ));
+        } else if ("delete".equals(action)) {
+            DataManager.getInstance().deleteTweet(jso.getLong("statusId"));
+            DataManager.getInstance().storeItem(new Tweet(gameId, jso.getLong("statusId")));
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        return Response.ok().build();
     }
 
     @GET

@@ -8,6 +8,7 @@ import com.macklive.storage.DataManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class Game extends AbsBusinessObject implements IBusinessObject {
 
@@ -26,6 +27,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
     private String name;
     private String link;
     private transient String ownerId;
+    private List<String> twitterAccounts;
 
     /**
      * Constructor
@@ -81,10 +83,12 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
         e.setProperty("LastUpdated", this.lastUpdated);
         e.setUnindexedProperty("Name", this.getName());
         e.setUnindexedProperty("Link", this.link);
+        e.setUnindexedProperty("TwitterAccounts", this.twitterAccounts);
         return e;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void loadEntity(Entity e) throws EntityMismatchException {
         if (e.getKind().equals("Game")) {
             try {
@@ -104,6 +108,7 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
                 this.key = e.getKey();
                 this.ownerId = (String) e.getProperty("owner");
                 this.link = (String) e.getProperty("Link");
+                this.twitterAccounts = (List<String>) e.getProperty("TwitterAccounts");
 
             } catch (EntityNotFoundException e1) {
                 System.err.println("Could not find team!");
@@ -203,5 +208,13 @@ public class Game extends AbsBusinessObject implements IBusinessObject {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public List<String> getTwitterAccounts() {
+        return twitterAccounts;
+    }
+
+    public void setTwitterAccounts(List<String> twitterAccounts) {
+        this.twitterAccounts = twitterAccounts;
     }
 }

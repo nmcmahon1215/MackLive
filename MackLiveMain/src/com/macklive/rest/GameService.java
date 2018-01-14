@@ -3,18 +3,27 @@ package com.macklive.rest;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.repackaged.com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.Team;
 import com.macklive.serialize.GsonUtility;
 import com.macklive.storage.DataManager;
+import com.macklive.twitter.TwitterManager;
 import org.json.JSONObject;
+import twitter4j.TwitterException;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Rest endpoint for getting Game information
@@ -54,15 +63,31 @@ public class GameService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/{gameId}/link")
-    public Response updateGameLink(@PathParam("gameId") long gameId, String data) {
+    @Path("/{gameId}/options")
+    public Response updateGameOptions(@PathParam("gameId") long gameId, String data, @Context UriInfo uriInfo) {
         DataManager dm = DataManager.getInstance();
 
         JSONObject jso = new JSONObject(data);
         Game game = dm.getGame(gameId);
         game.setLink(jso.getString("link"));
 
-        dm.storeItem(game);
+        try {
+            String rawTwitter = jso.getString("twitterAccounts");
+            if (!Strings.isNullOrEmpty(rawTwitter)) {
+                List<String> twitterHandles = Stream.of(rawTwitter.split(","))
+                        .map(String::trim)
+                        .collect(Collectors.toList());
+                game.setTwitterAccounts(twitterHandles);
+
+                TwitterManager.getInstance().setUpTwitterStream(gameId, twitterHandles, uriInfo.getBaseUri().toString());
+
+            }
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).severe(e.getMessage());
+            return Response.serverError().build();
+        } finally {
+            dm.storeItem(game);
+        }
 
         return Response.ok(game.toJSON(), MediaType.APPLICATION_JSON).build();
     }

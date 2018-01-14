@@ -2,24 +2,27 @@ package com.macklive.rest;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.macklive.exceptions.EntityMismatchException;
-import com.macklive.storage.TwitterManager;
+import com.macklive.objects.Game;
+import com.macklive.storage.DataManager;
+import com.macklive.twitter.TwitterManager;
+import jdk.nashorn.internal.objects.annotations.Getter;
+import org.json.JSONArray;
 import org.json.JSONObject;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.xml.crypto.Data;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 /**
@@ -42,6 +45,7 @@ public class TwitterService {
             this.twitter = new TwitterFactory(cb.build()).getInstance();
         }
         return this.twitter;
+
     }
 
     @GET
@@ -88,5 +92,24 @@ public class TwitterService {
         JSONObject jso = new JSONObject();
         jso.put("limit", TwitterManager.getInstance().getLimit());
         return Response.ok(jso.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/stream/{gameId}")
+    public Response startStream(@PathParam("gameId") long gameId, @Context UriInfo uriInfo) {
+        try {
+            TwitterManager.getInstance().setUpTwitterStream(gameId, uriInfo.getBaseUri().toString());
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
+
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/stream/cleanup")
+    public Response cleanupStreams() {
+        TwitterManager.getInstance().cleanUpTwitterStreams();
+        return Response.ok().build();
     }
 }

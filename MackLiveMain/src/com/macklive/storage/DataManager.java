@@ -225,9 +225,9 @@ public class DataManager {
                 Key k = e.getKey();
                 Entity result = cacheManager.get(k);
                 if (result != null) {
-                    messages.add(new Message(result));
+                    messages.add(MessageFactory.fromEntity(result));
                 } else {
-                    messages.add(new Message(getEntityWithKey(k)));
+                    messages.add(MessageFactory.fromEntity(getEntityWithKey(k)));
                 }
             }
         } catch (EntityMismatchException | EntityNotFoundException e) {
@@ -271,9 +271,9 @@ public class DataManager {
             Entity e = cacheManager.get(k);
 
             if (e != null) {
-                return new Message(e);
+                return MessageFactory.fromEntity(e);
             } else {
-                return new Message(this.getEntityWithKey(k));
+                return MessageFactory.fromEntity(getEntityWithKey(k));
             }
         } catch (EntityMismatchException | EntityNotFoundException e) {
             return null;
@@ -314,4 +314,24 @@ public class DataManager {
         Key k = KeyFactory.createKey("TwitterAuth", UserServiceFactory.getUserService().getCurrentUser().getUserId());
         deleteEntity(k);
     }
+
+    /**
+     * Removes a tweet from cache and dstore
+     *
+     * @param statusId Tweet ID
+     */
+    public void deleteTweet(long statusId) {
+        Query q = new Query("Message");
+        q.setFilter(CompositeFilterOperator.and(
+                new FilterPredicate("tweetId", FilterOperator.EQUAL, statusId),
+                new FilterPredicate("deleted", FilterOperator.EQUAL, false)));
+        q.setKeysOnly();
+
+        for (Entity tweet : dstore.prepare(q).asIterable()) {
+            dstore.delete(tweet.getKey());
+            cacheManager.removeItem(tweet.getKey());
+        }
+    }
+
+
 }

@@ -9,6 +9,7 @@ import com.macklive.exceptions.EntityMismatchException;
 import com.macklive.objects.Game;
 import com.macklive.objects.IBusinessObject;
 import com.macklive.objects.Message;
+import com.macklive.objects.MessageFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class DataCache {
 
         if (messageEntity != null) {
             try {
-                return new Message(messageEntity);
+                return MessageFactory.fromEntity(messageEntity);
             } catch (EntityMismatchException e) {
                 e.printStackTrace();
                 log.severe("Entity mismatch when retrieving message from cache");
@@ -110,7 +111,7 @@ public class DataCache {
                 try {
                     Entity missingMessage = dstore.getEntityWithKey(k);
                     cache.put(k, missingMessage);
-                    result.add(new Message(missingMessage));
+                    result.add(MessageFactory.fromEntity(missingMessage));
                 } catch (EntityNotFoundException e) {
                     e.printStackTrace();
                     log.severe("Message not found with key: " + k);

@@ -6,7 +6,7 @@ import com.macklive.serialize.GsonUtility;
 
 public abstract class AbsBusinessObject implements IBusinessObject {
 
-    protected transient Gson gs = GsonUtility.getGson();
+    private transient Gson gs = GsonUtility.getGson();
     protected Key key;
 
     @Override

@@ -1,22 +1,30 @@
-package com.macklive.storage;
+package com.macklive.twitter;
 
+import com.google.appengine.api.datastore.DatastoreApiHelper;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.repackaged.org.joda.time.DateTimeUtils;
 import com.macklive.exceptions.EntityMismatchException;
+import com.macklive.objects.Game;
 import com.macklive.objects.TwitterAuthorization;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import com.macklive.storage.DataManager;
+import twitter4j.*;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Created by Nick on 10/4/16.
@@ -31,16 +39,20 @@ public class TwitterManager {
 
     private static int TWITTER_LIMIT = 140;
 
+    private static long THREE_HOUR_MS = 10800000;
+
     private Twitter twitter;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private Map<Long, TwitterStreamWrapper> streamMap;
 
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     private TwitterManager() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setOAuthConsumerKey(CONSUMER_KEY);
         cb.setOAuthConsumerSecret(CONSUMER_SECRET);
         twitter = new TwitterFactory(cb.build()).getInstance();
+        streamMap = new HashMap<>();
     }
 
     /**
@@ -159,4 +171,77 @@ public class TwitterManager {
 
         return limit;
     }
+
+    private long[] getUserIds(List<String> twitterHandles) throws TwitterException {
+        try {
+            List<User> users = twitter.lookupUsers(twitterHandles.toArray(new String[]{}));
+            return users.stream()
+                    .filter(Objects::nonNull)
+                    .mapToLong(User::getId)
+                    .toArray();
+        } catch (TwitterException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Sets up twitter streaming for game
+     *
+     * @param gameId         Game ID
+     * @param twitterHandles Handles to follow
+     * @throws TwitterException when twitter service or network is unavailable
+     */
+    public synchronized void setUpTwitterStream(long gameId, List<String> twitterHandles, String url) throws
+            TwitterException,
+            EntityNotFoundException, EntityMismatchException {
+        if (twitterHandles.isEmpty()) {
+            return;
+        }
+
+        if (streamMap.containsKey(gameId)) {
+            List<String> currentHandles = streamMap.get(gameId).getHandles();
+            if (currentHandles.containsAll(twitterHandles) && twitterHandles.containsAll(currentHandles)) {
+                //No change, nothing to do
+                return;
+            }
+            streamMap.get(gameId).getStream().cleanUp();
+            streamMap.remove(gameId);
+        }
+
+        TwitterStream stream = new TwitterStreamFactory(twitter.getConfiguration()).getInstance();
+        stream.setOAuthAccessToken(DataManager.getInstance().getTwitterAuth().getAccessToken());
+        stream.addListener(new TwitterListener(gameId, url, twitterHandles));
+
+        FilterQuery filter = new FilterQuery();
+        filter.follow(getUserIds(twitterHandles));
+
+        stream.filter(filter);
+        streamMap.put(gameId, new TwitterStreamWrapper(stream, twitterHandles));
+    }
+
+    /**
+     * Sets up twitter streaming based on game data
+     *
+     * @param gameId Game ID
+     * @throws TwitterException when twitter service or network in unavailable
+     */
+    public synchronized void setUpTwitterStream(long gameId, String url) throws TwitterException,
+            EntityMismatchException,
+            EntityNotFoundException {
+        Game g = DataManager.getInstance().getGame(gameId);
+        setUpTwitterStream(gameId, g.getTwitterAccounts(), url);
+    }
+
+    public synchronized void cleanUpTwitterStreams() {
+        for (long gameId : streamMap.keySet()) {
+            Game g = DataManager.getInstance().getGame(gameId);
+            long timeRunning = System.currentTimeMillis() - g.getLastUpdated().getTime();
+            if (timeRunning >= THREE_HOUR_MS) {
+                streamMap.get(gameId).getStream().cleanUp();
+                streamMap.remove(gameId);
+            }
+        }
+    }
+
 }

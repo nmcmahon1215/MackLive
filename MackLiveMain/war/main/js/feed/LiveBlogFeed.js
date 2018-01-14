@@ -83,18 +83,31 @@ LiveBlogFeed.prototype = {
         }
     },
     addMessage: function (message) {
+        if (message.deleted) {
+            $j('#' + message.tweetId).remove();
+            return;
+        }
+
+
         var panel = document.createElement("div");
         var header = document.createElement("div");
         var content = document.createElement("div");
 
         if (message.isUserComment) {
             panel.className = "panel panel-warning";
+        } else if (message.tweetId) {
+            panel.className = 'panel panel-info'
         } else {
-            panel.className = "panel panel-info";
+            panel.className = "panel panel-primary";
         }
 
         header.className = "panel-heading";
         content.className = "panel-body";
+
+        if (message.tweetId) {
+            message.author = "<i class=\"fa fa-twitter twitter-icon\" aria-hidden=\"true\"></i>" + '@' + message.author;
+            panel.id = message.tweetId;
+        }
 
         header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
         content.innerHTML = message.text;

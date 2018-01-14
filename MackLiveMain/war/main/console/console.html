@@ -118,13 +118,7 @@
                 <a id="twitter-sign-in" class="link-button hide inline toggle" href="/api/twitter/signin">
                     <img src="/images/twitter-sign-in.png" alt="Sign Into Twitter">
                 </a>
-                <div id="twitter-switch-wrap" class="hide inline">
-                    <a id="twitter-modal-link" class="hide">Set Twitter Card</a>
-                    <a href="/api/twitter/signout">Disconnect Twitter</a>
-                    <input id="twitter-switch" type="checkbox" data-toggle="toggle"
-                           data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
-                           data-off=""/>
-                </div>
+                <a id="twitter-options-link" class="hide">Twitter Options</a>
                 <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
                        style="margin:10px" disabled/>
             </div>
@@ -169,13 +163,32 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="twitterModalLabel">Embed Code</h4>
+                <h4 class="modal-title" id="twitterModalLabel">Twitter Options</h4>
             </div>
             <div id='twitterModalBody' class="modal-body">
-                <h4>Enter a link to embed include twitter cards</h4>
-                <input id="twitter-link" type="text" class="form-control" placeholder="Website"/>
+                <h4>Master Switch</h4>
+                <div id="twitter-switch-wrap" class="inline">
+                    <input id="twitter-switch" type="checkbox" data-toggle="toggle"
+                           data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
+                           data-off=""/>
+                </div>
+                <br/>
+                <br/>
+                <label for="twitter-link">Twitter Card</label>
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon3">URL</span>
+                    <input id="twitter-link" type="text" class="form-control" placeholder="Website"
+                           aria-describedby="basic-addon3"/>
+                </div>
+
+                <label for="twitter-follow-input">Twitter Feed</label>
+                <p>Enter a comma separated list of twitter handles here to auto post in the live feed.</p>
+                <textarea id="twitter-follow-input" class="form-control" rows="2"></textarea>
             </div>
             <div class="modal-footer">
+                <a href="/api/twitter/signout">
+                    <button type="button" class="btn btn-danger">Disconnect Twitter</button>
+                </a>
                 <button id="save-link-button" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
             </div>
         </div>
