@@ -5,6 +5,7 @@
     -->
     <threadsafe>true</threadsafe>
     <sessions-enabled>true</sessions-enabled>
+    <url-stream-handler>urlfetch</url-stream-handler>
 
     <!-- Configure java.util.logging -->
     <system-properties>
