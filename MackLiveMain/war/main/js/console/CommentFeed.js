@@ -3,7 +3,7 @@
  */
 CommentFeed = function (container) {
     this.container = document.getElementById(container);
-    this.latestMessageDate = new Date(0);
+    this.latestMessageDate = "0";
     this.initialized = false;
 };
 
@@ -25,7 +25,7 @@ CommentFeed.prototype = {
         panel.className = "panel panel-warning";
         header.className = "panel-heading";
 
-        header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
+        header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(+message.time).toLocaleTimeString() + "</span>";
         content.innerHTML = message.text;
 
         var approveButton = document.createElement("input");
@@ -111,7 +111,7 @@ CommentFeed.prototype = {
                 }.bind(this));
 
                 if (result.latestTime) {
-                    this.latestMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = result.latestTime;
                 }
                 this.initialized = true;
             }.bind(this),
@@ -123,7 +123,7 @@ CommentFeed.prototype = {
     },
     fetchNewMessages: function () {
         $j.ajax({
-            url: location.protocol + "//" + location.host + "/api/messages/pending/" + adminConsole.gameId + "/" + this.latestMessageDate.getTime(),
+            url: location.protocol + "//" + location.host + "/api/messages/pending/" + adminConsole.gameId + "/" + this.latestMessageDate,
             success: function (result) {
                 var messages = result.messages;
                 messages.forEach(function (message) {
@@ -131,7 +131,7 @@ CommentFeed.prototype = {
                 }.bind(this));
 
                 if (result.latestTime) {
-                    this.latestMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = result.latestTime;
                 }
 
                 if (messages.length > 0) {

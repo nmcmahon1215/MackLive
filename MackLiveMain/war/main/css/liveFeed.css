@@ -176,8 +176,6 @@ body {
     font-size: 18px !important;
 }
 
-.no-underline,
-.no-underline:active,
-.no-underline:hover {
-    text-decoration: none;
+.div-link:hover {
+    cursor: pointer;
 }

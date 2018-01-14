@@ -5,8 +5,8 @@ LiveBlogFeed = function (container, blogId) {
     this.blogId = blogId;
     this.container = container;
     this.$container = $j(this.container);
-    this.latestMessageDate = new Date(0);
-    this.latestGameDate = new Date(0);
+    this.latestMessageDate = "0";
+    this.latestGameDate = "0";
     this.initialized = false;
 };
 
@@ -57,7 +57,7 @@ LiveBlogFeed.prototype = {
     },
     refreshScore: function () {
         $j.ajax({
-            url: location.protocol + '//' + location.host + "/api/game/" + this.blogId + "/" + this.latestGameDate.getTime(),
+            url: location.protocol + '//' + location.host + "/api/game/" + this.blogId + "/" + this.latestGameDate,
             context: this,
             success: this.updateScore,
             error: function () {
@@ -79,14 +79,13 @@ LiveBlogFeed.prototype = {
             this.timer.innerHTML = gameObject.time;
             this.period.innerHTML = "Per " + gameObject.period;
 
-            this.latestGameDate = new Date(gameObject.lastUpdated);
+            this.latestGameDate = gameObject.lastUpdated;
         }
     },
     addMessage: function (message) {
         if (message.hidden) {
             return;
         }
-
 
         var panel = document.createElement("div");
         var header = document.createElement("div");
@@ -103,27 +102,25 @@ LiveBlogFeed.prototype = {
         header.className = "panel-heading";
         content.className = "panel-body";
 
+        var author = message.author;
         if (message.tweetId) {
-            message.author = "<i class=\"fa fa-twitter twitter-icon\" aria-hidden=\"true\"></i>" + '@' + message.author;
+            author = "<i class=\"fa fa-twitter twitter-icon\" aria-hidden=\"true\"></i>" + '@' + message.author;
             panel.id = message.tweetId;
         }
 
-        header.innerHTML = message.author + "<span class=\"panel-right\">" + new Date(message.time).toLocaleTimeString() + "</span>";
+        header.innerHTML = author + "<span class=\"panel-right\">" + new Date(+message.time).toLocaleTimeString() + "</span>";
         content.innerHTML = message.text;
-
-        panel.appendChild(header);
-        panel.appendChild(content);
 
         panel.style.display = "none";
         if (message.tweetId) {
-            var linkWrap = document.createElement("a");
-            linkWrap.href = "https://twitter.com/" + message.author + "/status/" + message.tweetId;
-            linkWrap.className = "no-underline";
-            linkWrap.appendChild(panel);
-            this.container.appendChild(linkWrap);
-        } else {
-            this.container.appendChild(panel);
+            header.onclick = function () {
+                window.open("https://twitter.com/" + message.author + "/status/" + message.tweetId, "'_blank");
+            }
+            header.classList.add("div-link")
         }
+        panel.appendChild(header);
+        panel.appendChild(content);
+        this.container.appendChild(panel);
 
         if (this.initialized) {
             $j(panel).slideDown(700, function () {
@@ -141,12 +138,16 @@ LiveBlogFeed.prototype = {
             url: location.protocol + '//' + location.host + "/api/messages/" + this.blogId,
             success: function (result) {
                 var messages = result.messages;
+                var lastTweets = {};
+
                 messages.forEach(function (message) {
-                    this.addMessage(message);
+                    this.processMessage(message, lastTweets);
                 }.bind(this));
 
+                this.twitterData = lastTweets;
+
                 if (result.latestTime) {
-                    this.latestMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = result.latestTime;
                 }
 
                 $j(this.container).animate({
@@ -160,17 +161,23 @@ LiveBlogFeed.prototype = {
 
         });
     },
+    processMessage: function (message, twitterData) {
+        this.addMessage(message);
+        if (message.tweetId && twitterData) {
+            twitterData[message.author] = message.tweetId;
+        }
+    },
     fetchNewMessages: function () {
         $j.ajax({
-            url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.latestMessageDate.getTime(),
+            url: location.protocol + "//" + location.host + "/api/messages/" + this.blogId + "/" + this.latestMessageDate,
             success: function (result) {
                 var messages = result.messages;
                 messages.forEach(function (message) {
-                    this.addMessage(message);
+                    this.processMessage(message);
                 }.bind(this));
 
                 if (result.latestTime) {
-                    this.latestMessageDate = new Date(result.latestTime);
+                    this.latestMessageDate = result.latestTime;
                 }
 
                 if (messages.length > 0) {

@@ -3,9 +3,10 @@ package com.macklive.objects;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.repackaged.com.google.common.primitives.Booleans;
 import com.macklive.exceptions.EntityMismatchException;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
+import com.macklive.twitter.TwitterManager;
+import twitter4j.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.Optional;
 
 public class Tweet extends Message {
@@ -15,7 +16,7 @@ public class Tweet extends Message {
     private boolean hidden;
 
     public Tweet(long gameId, Status status, boolean hidden) {
-        super(status.getUser().getScreenName(), status.getText(), gameId, false);
+        super(status.getUser().getScreenName(), TwitterManager.formatMessage(status), gameId, false);
         this.profilePictureUrl = status.getUser().getProfileImageURL();
         this.tweetId = status.getId();
         this.hidden = hidden;

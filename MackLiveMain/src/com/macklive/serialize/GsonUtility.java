@@ -1,9 +1,9 @@
 package com.macklive.serialize;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 
 public class GsonUtility {
 
@@ -11,7 +11,10 @@ public class GsonUtility {
 
     public static Gson getGson() {
         if (gs == null) {
-            gs = new GsonBuilder().registerTypeAdapter(Date.class, new DateAdapter()).create();
+            gs = new GsonBuilder()
+                    .registerTypeAdapter(Long.class, (JsonSerializer<Long>) (src, typeOfSrc, context) -> new JsonPrimitive(Long.toString(src)))
+                    .registerTypeAdapter(Date.class, (JsonSerializer<Date>) (src, typeOfSrc, context) -> new JsonPrimitive(Long.toString(src.getTime())))
+                    .create();
         }
         return gs;
     }

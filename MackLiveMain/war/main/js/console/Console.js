@@ -100,7 +100,6 @@ AdminConsole.prototype = {
         });
     },
     createGame: function () {
-        var today = new Date();
         var team1select = document.getElementById("team1select");
         var team2select = document.getElementById("team2select");
 

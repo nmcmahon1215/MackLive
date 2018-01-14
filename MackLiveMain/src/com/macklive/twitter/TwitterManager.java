@@ -232,4 +232,41 @@ public class TwitterManager {
     private boolean isValid(Status s) {
         return !s.isRetweet() && Strings.isNullOrEmpty(s.getInReplyToScreenName());
     }
+
+    /**
+     * Formats a tweet message to wrap links and hashtags in anchor elements for html. Media links are stripped out.
+     *
+     * @param status Status to format
+     * @return HTML for the response
+     */
+    public static String formatMessage(Status status) {
+        String text = status.getText();
+
+        for (MediaEntity media : status.getMediaEntities()) {
+            text = text.replace(media.getText(), "");
+        }
+
+        for (URLEntity url : status.getURLEntities()) {
+            text = text.replace(url.getText(), wrapInLink(url.getURL(), url.getDisplayURL()));
+        }
+
+        for (HashtagEntity hashtag : status.getHashtagEntities()) {
+            String hashtagText = "#" + hashtag.getText();
+            text = text.replace(hashtagText,
+                    wrapInLink("https://twitter.com/hashtag/" + hashtag.getText(), hashtagText));
+        }
+
+        return text;
+    }
+
+    /**
+     * Wraps the display text in an HTML anchor tag linking to the given URL
+     *
+     * @param url     URL to link
+     * @param display Display text
+     * @return A formatted string
+     */
+    private static String wrapInLink(String url, String display) {
+        return "<a href=\"" + url + "\" target=\"_blank\">" + display + "</a>";
+    }
 }

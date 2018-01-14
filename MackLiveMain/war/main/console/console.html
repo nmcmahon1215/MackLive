@@ -118,7 +118,12 @@
                 <a id="twitter-sign-in" class="link-button hide inline toggle" href="/api/twitter/signin">
                     <img src="/images/twitter-sign-in.png" alt="Sign Into Twitter">
                 </a>
-                <a id="twitter-options-link" class="hide">Twitter Options</a>
+                <div id="twitter-switch-wrap" class="inline hide">
+                    <a id="twitter-options-link">Twitter Options</a>
+                    <input id="twitter-switch" type="checkbox" data-toggle="toggle"
+                           data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
+                           data-off=""/>
+                </div>
                 <input id="liveBlogSubmitButton" type="submit" value="Submit" class="action floatR btn btn-primary"
                        style="margin:10px" disabled/>
             </div>
@@ -166,24 +171,21 @@
                 <h4 class="modal-title" id="twitterModalLabel">Twitter Options</h4>
             </div>
             <div id='twitterModalBody' class="modal-body">
-                <h4>Master Switch</h4>
-                <div id="twitter-switch-wrap" class="inline">
-                    <input id="twitter-switch" type="checkbox" data-toggle="toggle"
-                           data-on="&lt;i class='fa fa-twitter fa-lg'&gt;&lt;/i&gt;"
-                           data-off=""/>
-                </div>
-                <br/>
-                <br/>
                 <label for="twitter-link">Twitter Card</label>
                 <div class="input-group">
                     <span class="input-group-addon" id="basic-addon3">URL</span>
                     <input id="twitter-link" type="text" class="form-control" placeholder="Website"
                            aria-describedby="basic-addon3"/>
                 </div>
-
+                <br/>
+                <br/>
                 <label for="twitter-follow-input">Twitter Feed</label>
-                <p>Enter a comma separated list of twitter handles here to auto post in the live feed.</p>
-                <textarea id="twitter-follow-input" class="form-control" rows="2"></textarea>
+                <textarea id="twitter-follow-input" class="form-control" rows="2"
+                          aria-describedby="twitter-follow-desc"></textarea>
+                <small id="twitter-follow-desc" class="form-text text-muted">
+                    Enter a comma separated list of twitter handles here to auto post in the live feed. You're console
+                    must remain open to continue updating tweets.
+                </small>
             </div>
             <div class="modal-footer">
                 <a href="/api/twitter/signout">

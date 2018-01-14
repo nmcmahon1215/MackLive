@@ -40,6 +40,7 @@ LiveBlogConsole.prototype = {
         }
 
         this.twitterSwitch = document.getElementById("twitter-switch");
+        this.twitterSwitchWrap = document.getElementById("twitter-switch-wrap");
         this.charCount = document.getElementById("char-count");
         this.twitterSignIn = document.getElementById("twitter-sign-in");
         this.twitterLink = document.getElementById("twitter-options-link");
@@ -63,7 +64,7 @@ LiveBlogConsole.prototype = {
                 200: function () {
                     this.isValidTwitter = true
                     if (this.initialized) {
-                        this.twitterLink.classList.remove("hide")
+                        this.twitterSwitchWrap.classList.remove("hide")
                     }
                 }
             }
@@ -81,7 +82,7 @@ LiveBlogConsole.prototype = {
 
         //Show twitter options if we
         if (this.isValidTwitter) {
-            this.twitterLink.classList.remove("hide")
+            this.twitterSwitchWrap.classList.remove("hide")
         }
 
         if (gameData.link) {
@@ -93,32 +94,32 @@ LiveBlogConsole.prototype = {
         if (gameData.twitterAccounts && gameData.twitterAccounts.length > 0) {
             this.twitterFollowInput.innerHTML = gameData.twitterAccounts.join(',')
             this.twitterAccounts = gameData.twitterAccounts;
-            this.startTwitterPoll()
+            this.startTwitterPoll();
         } else {
             this.twitterFollowInput.innerHTML = "";
-            this.twitterAccounts = {}
-            this.twitterStatus = {}
+            this.twitterAccounts = {};
             if (this.twitterInterval) {
-                clearInterval(this.twitterInterval)
+                clearInterval(this.twitterInterval);
                 this.twitterInterval = null;
             }
         }
     },
     startTwitterPoll: function () {
-        this.isPolling = true;
-        if (!this.twitterStatus) {
-            this.twitterStatus = {}
-        }
         this.twitterInterval = setInterval(function () {
-            var payload = this.twitterStatus;
+            var twitterStatus;
+            if (this.liveBlogFeed.contentWindow.liveFeed) {
+                twitterStatus = this.liveBlogFeed.contentWindow.liveFeed.twitterData;
+            } else {
+                twitterStatus = {}
+            }
             $j.ajax({
                 url: "/api/twitter/refresh/" + adminConsole.gameId,
                 method: "POST",
                 context: this,
                 contentType: "application/json",
-                data: JSON.stringify(payload),
+                data: JSON.stringify(twitterStatus),
                 success: function (response) {
-                    this.twitterStatus = response;
+                    this.liveBlogFeed.contentWindow.liveFeed.twitterData = response;
                 },
                 error: function () {
                     console.error("Failed to refresh twitter for:" + this.twitterAccounts);
@@ -198,7 +199,7 @@ LiveBlogConsole.prototype = {
             data: JSON.stringify(payload),
             success: function (result) {
                 console.log("Successfully updated game settings")
-                if (!this.isPolling && payload.twitterAccounts.trim().length > 0) {
+                if (!this.twitterInterval && payload.twitterAccounts.trim().length > 0) {
                     this.startTwitterPoll();
                 }
             },
